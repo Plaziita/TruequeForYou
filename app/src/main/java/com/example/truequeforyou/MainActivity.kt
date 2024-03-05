@@ -33,3 +33,7 @@ class MainActivity : ComponentActivity() {
 fun PantallaMainPreview(){
     PantallaMain()
 }
+
+fun mariet(){
+    val a = 3
+}
