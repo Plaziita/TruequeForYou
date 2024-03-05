@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "522460107475",
+    "project_id": "truequeforyou",
+    "storage_bucket": "truequeforyou.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522460107475:android:357f3ef0f9fd891a927a26",
+        "android_client_info": {
+          "package_name": "com.example.truequeforyou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "522460107475-jsv2qebqlhdono830nnps3f4c5tdrnm6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhg2y5fZ_xUViRzH7Aq54B7GSOtpi2qyM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "522460107475-jsv2qebqlhdono830nnps3f4c5tdrnm6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
