@@ -46,7 +46,6 @@ fun BotonesDeNavegar(navController: NavHostController){
                 PantallaPerfil()
             }
         }
-
 }
 
 @Composable
