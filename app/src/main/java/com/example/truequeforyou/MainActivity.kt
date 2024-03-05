@@ -37,3 +37,7 @@ fun PantallaMainPreview(){
 fun mariet(){
     val a = 3
 }
+
+fun luk(){
+    val a = 10
+}
