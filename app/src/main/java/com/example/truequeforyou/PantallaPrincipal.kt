@@ -28,5 +28,9 @@ fun mariete(){
 
 }
 
+fun lukluk(){
+    val mensaje = "guapeton"
+}
+
 
 
