@@ -21,5 +21,9 @@ fun PantallaMain(){
     }
 }
 
+fun mariete(){
+    val mensaje = "tontotto"
+}
+
 
 
