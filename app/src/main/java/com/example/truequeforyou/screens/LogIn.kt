@@ -37,18 +37,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.FirebaseAuth
 
 @ExperimentalMaterial3Api
 @Composable
-fun InicioSesion(){
+fun InicioSesion() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Blue),
-    ){
-        Column (
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
@@ -89,10 +90,19 @@ fun InicioSesion(){
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 Button(
                     onClick = {
+                        if (email.isNotEmpty() && password.isNotEmpty()) {
+                            FirebaseAuth.getInstance()
+                                .createUserWithEmailAndPassword(email, password).addOnCompleteListener{
+                                    if(it.isSuccessful){
 
+                                    }else{
+
+                                    }
+                                }
+                        }
 
                     }
                 ) {
@@ -141,6 +151,6 @@ fun EditNumberField(
 @ExperimentalMaterial3Api
 @Composable
 @Preview
-fun InicioSesionPreview(){
+fun InicioSesionPreview() {
     InicioSesion()
 }

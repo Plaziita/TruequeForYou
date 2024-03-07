@@ -8,4 +8,5 @@ class UsuarioRepository {
     val usuarios = baseDatos.db.collection("Cromos");
 
 
+
 }
