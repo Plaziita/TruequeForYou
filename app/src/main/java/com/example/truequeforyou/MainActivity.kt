@@ -27,7 +27,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 @Preview
 fun PantallaMainPreview(){
