@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+@ExperimentalMaterial3Api
 @Composable
 fun InicioSesion(){
     var email by remember { mutableStateOf("") }
@@ -92,8 +93,6 @@ fun InicioSesion(){
                 Button(
                     onClick = {
 
-                        println("Correo electrónico: $email")
-                        println("Contraseña: $password")
 
                     }
                 ) {
@@ -139,6 +138,7 @@ fun EditNumberField(
     )
 }
 
+@ExperimentalMaterial3Api
 @Composable
 @Preview
 fun InicioSesionPreview(){
