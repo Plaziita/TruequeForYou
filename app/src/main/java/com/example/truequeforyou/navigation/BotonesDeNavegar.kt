@@ -1,4 +1,4 @@
-package com.example.truequeforyou.bottomBar
+package com.example.truequeforyou.navigation
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
@@ -25,7 +25,6 @@ import com.example.truequeforyou.screens.PantallaTradear
 
 @Composable
 fun BotonesDeNavegar(navController: NavHostController){
-
         NavHost(
             navController = navController,
             startDestination = BarraDeOpciones.Inicio.ruta

@@ -1,4 +1,4 @@
-package com.example.truequeforyou.bottomBar
+package com.example.truequeforyou.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
