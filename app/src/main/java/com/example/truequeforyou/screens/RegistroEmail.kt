@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.truequeforyou.navigation.manejadorRutas.Rutas
+import com.example.truequeforyou.navigation.ventanasRegistro.VentanasLogIn
 
 @Composable
 fun EmailScreen(navController: NavController){
@@ -66,6 +67,7 @@ fun datosInicio(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var nombreApellidos by remember { mutableStateOf("") }
     var estadoBoton by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
 
     OutlinedTextField(
@@ -118,12 +120,34 @@ fun datosInicio(navController: NavController) {
         ),
         enabled = estadoBoton,
         onClick = {
-            navController.navigate(Rutas.BARRANAVEGACION)
+            showDialog = true
         }
     ) {
         Text(
             fontSize = 24.sp,
             text = "Crear cuenta",
+        )
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showDialog = false
+            },
+            title = {
+                Text(text = "Registro con éxito!")
+            },
+            text = {
+                Text(text = "Usuario con email: $email , registrado con éxito!")
+            },
+            confirmButton = {
+                Button(onClick = {
+                    showDialog = false
+                    navController.navigate(VentanasLogIn.BienvenidosScreen.ruta)
+                }) {
+                    Text(text = "Aceptar")
+                }
+            }
         )
     }
 }

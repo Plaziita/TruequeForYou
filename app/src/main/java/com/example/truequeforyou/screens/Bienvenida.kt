@@ -3,6 +3,7 @@
 package com.example.truequeforyou.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,11 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.truequeforyou.R
 import com.example.truequeforyou.navigation.ventanasRegistro.VentanasLogIn
 
@@ -63,8 +69,33 @@ fun BienvenidoScreen(navController: NavController) {
                 )
             Spacer(modifier = Modifier.height(20.dp))
             botonesRegistro(navController)
+            Spacer(modifier = Modifier.height(20.dp))
+            TextoInicioSesion(navController)
         }
     }
+}
+
+@Composable
+fun TextoInicioSesion(navController: NavController) {
+    val text = buildAnnotatedString {
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Normal)) {
+            append("Puedes ")
+        }
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, textDecoration = TextDecoration.Underline, color = Color(0xFFFFA500))) {
+            append("Iniciar sesion")
+        }
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Normal)) {
+            append(" aqui con tu correo electronico!")
+        }
+    }
+    Text(
+        text = text,
+        fontSize = 20.sp,
+        color = Color(0xFFFFA500),
+        modifier = Modifier.clickable {
+            navController.navigate(VentanasLogIn.LoginEmailScreen.ruta)
+        }
+    )
 }
 
 @Composable
@@ -117,4 +148,5 @@ fun botonesRegistro(navController: NavController){
 @Composable
 @Preview
 fun BienvenidoPreview() {
+    BienvenidoScreen(rememberNavController())
 }

@@ -26,7 +26,7 @@ fun NavGraphBuilder.NavegacionLogin (navController: NavHostController){
             EmailScreen(navController)
         }
         composable(route = VentanasLogIn.LoginEmailScreen.ruta) {
-            LoginEmailScreen()
+            LoginEmailScreen(navController)
         }
 
     }
