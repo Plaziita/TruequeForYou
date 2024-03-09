@@ -1,28 +1,28 @@
 package com.example.truequeforyou.navigation.ventanasRegistro
 
-import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
+import com.example.truequeforyou.navigation.manejadorRutas.Rutas
 import com.example.truequeforyou.screens.BienvenidoScreen
 import com.example.truequeforyou.screens.EmailScreen
-import com.example.truequeforyou.screens.GmailScreen
+import com.example.truequeforyou.screens.LoginEmailScreen
 
-@Composable
-fun NavegacionLogin (navController: NavHostController){
+fun NavGraphBuilder.NavegacionLogin (navController: NavHostController){
 
-    NavHost(
-        navController = navController,
-        startDestination = VentanasLogIn.SplashScreen.ruta
+    navigation(
+        route = Rutas.REGISTRO,
+        startDestination = VentanasLogIn.BienvenidosScreen.ruta
     ){
         composable(route = VentanasLogIn.BienvenidosScreen.ruta) {
-            BienvenidoScreen()
+            BienvenidoScreen(navController)
         }
         composable(route = VentanasLogIn.EmailScreen.ruta) {
-            EmailScreen()
+            EmailScreen(navController)
         }
-        composable(route = VentanasLogIn.GmailScreen.ruta) {
-            GmailScreen()
+        composable(route = VentanasLogIn.LoginEmailScreen.ruta) {
+            LoginEmailScreen()
         }
 
     }

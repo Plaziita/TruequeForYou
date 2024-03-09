@@ -5,7 +5,7 @@ sealed class VentanasLogIn(
 ){
     object SplashScreen: VentanasLogIn(ruta = "splash_screen")
     object BienvenidosScreen: VentanasLogIn(ruta = "bienvenidos_screen")
-    object GmailScreen: VentanasLogIn(ruta = "gmail_screen")
-    object EmailScreen: VentanasLogIn(ruta = "email_screen")
+    object LoginEmailScreen: VentanasLogIn(ruta = "loginEmail_screen")
+    object EmailScreen: VentanasLogIn(ruta = "registerEmail_screen")
 
 }

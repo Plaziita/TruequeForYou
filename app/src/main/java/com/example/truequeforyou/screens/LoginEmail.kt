@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.truequeforyou.screens
 
 import androidx.compose.foundation.background
@@ -10,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
@@ -32,13 +33,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.truequeforyou.navigation.manejadorRutas.Rutas
 
 @Composable
-fun EmailScreen(navController: NavController){
-    val navController = navController
+fun LoginEmailScreen(){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -48,36 +45,22 @@ fun EmailScreen(navController: NavController){
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Empieza tu aventura!",
+                text = "Bienvenido de nuevo!",
                 fontSize = 30.sp,
                 color = Color(0xFFFFA500),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            datosInicio(navController)
+            recogidaDatos()
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun datosInicio(navController: NavController) {
+fun recogidaDatos(){
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var nombreApellidos by remember { mutableStateOf("") }
     var estadoBoton by remember { mutableStateOf(false) }
-
-
-    OutlinedTextField(
-        value = nombreApellidos,
-        onValueChange = { nombreApellidos = it },
-        label = { Text("Nombre y apellidos") },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
-    )
 
     OutlinedTextField(
         value = email,
@@ -102,11 +85,11 @@ fun datosInicio(navController: NavController) {
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
     )
 
-    Spacer(modifier = Modifier.height(16.dp))
-
-    if (email.isNotEmpty() && password.isNotEmpty() && nombreApellidos.isNotEmpty()){
+    if (email.isNotEmpty() && password.isNotEmpty()){
         estadoBoton = true
     }
+
+    Spacer(modifier = Modifier.height(16.dp))
 
     Button(
         modifier = Modifier
@@ -118,18 +101,22 @@ fun datosInicio(navController: NavController) {
         ),
         enabled = estadoBoton,
         onClick = {
-            navController.navigate(Rutas.BARRANAVEGACION)
         }
     ) {
         Text(
             fontSize = 24.sp,
-            text = "Crear cuenta",
+            text = "Iniciar sesion",
         )
     }
 }
 
 @Composable
+fun inicioSesion(){
+
+}
+
+@Composable
 @Preview
-fun EmailPreview(){
-    EmailScreen(rememberNavController())
+fun LoginScreenPreview(){
+    LoginEmailScreen()
 }

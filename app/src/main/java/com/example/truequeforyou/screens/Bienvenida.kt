@@ -27,14 +27,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.truequeforyou.R
 import com.example.truequeforyou.navigation.ventanasRegistro.VentanasLogIn
 
 @Composable
-fun BienvenidoScreen() {
-    val navController = rememberNavController()
-
+fun BienvenidoScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -77,7 +74,6 @@ fun botonesRegistro(navController: NavController){
             .fillMaxWidth()
             .height(50.dp),
         onClick = {
-            navController.navigate(VentanasLogIn.GmailScreen.ruta)
         }
     ) {
         Image(
@@ -120,6 +116,5 @@ fun botonesRegistro(navController: NavController){
 @ExperimentalMaterial3Api
 @Composable
 @Preview
-fun InicioSesionPreview() {
-    BienvenidoScreen()
+fun BienvenidoPreview() {
 }
