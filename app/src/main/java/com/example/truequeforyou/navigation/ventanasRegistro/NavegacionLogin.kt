@@ -8,13 +8,17 @@ import com.example.truequeforyou.navigation.manejadorRutas.Rutas
 import com.example.truequeforyou.screens.BienvenidoScreen
 import com.example.truequeforyou.screens.EmailScreen
 import com.example.truequeforyou.screens.LoginEmailScreen
+import com.example.truequeforyou.screens.SplashScreen
 
 fun NavGraphBuilder.NavegacionLogin (navController: NavHostController){
 
     navigation(
         route = Rutas.REGISTRO,
-        startDestination = VentanasLogIn.BienvenidosScreen.ruta
+        startDestination = VentanasLogIn.SplashScreen.ruta
     ){
+        composable(route = VentanasLogIn.SplashScreen.ruta) {
+            SplashScreen(navController)
+        }
         composable(route = VentanasLogIn.BienvenidosScreen.ruta) {
             BienvenidoScreen(navController)
         }
