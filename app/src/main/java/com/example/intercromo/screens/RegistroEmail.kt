@@ -165,10 +165,7 @@ fun datosInicio(navController: NavController) {
     }
 }
 
-private fun showAlert(){
-    val builder = AlertDialog.Builder()
-    builder.setTitle("Error")
-}
+
 
 
 
