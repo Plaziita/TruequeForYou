@@ -79,7 +79,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation ("androidx.navigation:navigation-compose:2.4.0-alpha10")
     implementation ("androidx.compose.material:material:1.1.0")
-    //noinspection GradleCompatible
-    implementation ("com.android.support:appcompat-v7:28.0.0") // Actualiza a la versión más reciente
+
 
 }
