@@ -48,6 +48,7 @@ fun BotonesDeNavegar(navController: NavHostController){
         }
 }
 
+/* funcion para cada vez q pulses a un elemento de la barra de abajo te lleve a su pantalla*/
 @Composable
 fun Barra (navController : NavHostController){
     val screens = listOf(
@@ -72,7 +73,7 @@ fun Barra (navController : NavHostController){
     }
 }
 
-/* funcion para cada vez q pulses a un elemento de la barra de abajo te lleve a su pantalla*/
+
 @Composable
 fun RowScope.AddItem(
     screen: BarraDeOpciones,

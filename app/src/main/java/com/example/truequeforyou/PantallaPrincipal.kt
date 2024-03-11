@@ -24,6 +24,8 @@ fun PantallaMain(){
         BotonesDeNavegar(navController = navController)
     }
 
+
+
 }
 
 
