@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.truequeforyou"
+    namespace = "com.example.intercromo"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.truequeforyou"
+        applicationId = "com.example.intercromo"
         minSdk = 25
         targetSdk = 34
         versionCode = 1

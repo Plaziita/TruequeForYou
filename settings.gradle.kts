@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TruequeForYou"
+rootProject.name = "InterCromo"
 include(":app")
