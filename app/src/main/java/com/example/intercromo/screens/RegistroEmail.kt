@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
 import com.example.truequeforyou.navigation.ventanasRegistro.VentanasLogIn
 import com.google.firebase.auth.FirebaseAuth
 
