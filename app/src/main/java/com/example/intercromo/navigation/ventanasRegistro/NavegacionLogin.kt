@@ -6,8 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.intercromo.navigation.manejadorRutas.Rutas
 import com.example.intercromo.screens.BienvenidoScreen
-import com.example.intercromo.screens.EmailScreen
-import com.example.intercromo.screens.LoginEmailScreen
+import com.example.intercromo.screens.registro.email.EmailScreen
+import com.example.intercromo.screens.registro.email.LoginEmailScreen
 import com.example.intercromo.screens.SplashScreen
 
 fun NavGraphBuilder.NavegacionLogin (navController: NavHostController){

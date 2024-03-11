@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.intercromo.screens
+package com.example.intercromo.screens.registro.email
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

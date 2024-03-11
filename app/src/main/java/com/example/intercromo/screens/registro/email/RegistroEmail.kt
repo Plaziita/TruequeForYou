@@ -1,6 +1,5 @@
-package com.example.truequeforyou.screens
+package com.example.intercromo.screens.registro.email
 
-import android.app.AlertDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -163,11 +162,6 @@ fun datosInicio(navController: NavController) {
         )
     }
 }
-
-
-
-
-
 
 @Composable
 @Preview
