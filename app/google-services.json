@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "522460107475",
-    "project_id": "truequeforyou",
-    "storage_bucket": "truequeforyou.appspot.com"
+    "project_id": "intercromo",
+    "storage_bucket": "intercromo.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:522460107475:android:357f3ef0f9fd891a927a26",
         "android_client_info": {
-          "package_name": "com.example.truequeforyou"
+          "package_name": "com.example.intercromo"
         }
       },
       "oauth_client": [
