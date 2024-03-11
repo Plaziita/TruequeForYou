@@ -10,11 +10,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.truequeforyou.navigation.barraNavegacion.Barra
 import com.example.truequeforyou.navigation.barraNavegacion.BotonesDeNavegar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PantallaMain(){
+    /* gestiona el estado de navegacion entre ellas*/
     val navController = rememberNavController()
 
+    /*Estructura la pantalla para poder añadilre una barra superior o inferior*/
     Scaffold(
         bottomBar = { Barra(navController = navController) }
     ) {

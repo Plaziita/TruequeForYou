@@ -42,13 +42,13 @@ fun BienvenidoScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Image(
+       /* Image(
             painter = painterResource(id = R.drawable.fondoinicio),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
-        )
+        )*/
         Column(
             modifier = Modifier
                 .padding(16.dp)

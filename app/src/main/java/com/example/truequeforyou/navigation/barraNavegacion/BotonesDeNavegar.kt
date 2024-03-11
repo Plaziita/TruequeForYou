@@ -22,7 +22,7 @@ import com.example.truequeforyou.screens.PantallaInicio
 import com.example.truequeforyou.screens.PantallaMensajes
 import com.example.truequeforyou.screens.PantallaPerfil
 import com.example.truequeforyou.screens.PantallaTradear
-
+/* Esta función gestiona como vamos  a navegar entre las pantallas de nuestra sealed class */
 @Composable
 fun BotonesDeNavegar(navController: NavHostController){
 
@@ -72,6 +72,7 @@ fun Barra (navController : NavHostController){
     }
 }
 
+/* funcion para cada vez q pulses a un elemento de la barra de abajo te lleve a su pantalla*/
 @Composable
 fun RowScope.AddItem(
     screen: BarraDeOpciones,

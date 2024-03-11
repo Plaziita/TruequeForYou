@@ -32,5 +32,5 @@ class MainActivity : ComponentActivity() {
 @Composable
 @Preview
 fun PantallaMainPreview(){
-    PantallaMain()
+    ManejadorRutas(navController = rememberNavController())
 }
