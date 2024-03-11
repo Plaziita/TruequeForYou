@@ -1,6 +1,7 @@
-package com.example.truequeforyou.screens
+@file:OptIn(ExperimentalMaterial3Api::class)
 
-import android.app.AlertDialog
+package com.example.intercromo.screens.registro.email
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,12 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
-import com.google.firebase.auth.FirebaseAuth
+import com.example.intercromo.navigation.manejadorRutas.Rutas
 
 @Composable
-fun EmailScreen(navController: NavController){
-    val navController = navController
+fun LoginEmailScreen(navController: NavController){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -51,37 +48,23 @@ fun EmailScreen(navController: NavController){
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Empieza tu aventura!",
+                text = "Bienvenido de nuevo!",
                 fontSize = 30.sp,
                 color = Color(0xFFFFA500),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            datosInicio(navController)
+            recogidaDatos(navController)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun datosInicio(navController: NavController) {
+fun recogidaDatos(navController: NavController){
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var nombreApellidos by remember { mutableStateOf("") }
     var estadoBoton by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
-
-
-    OutlinedTextField(
-        value = nombreApellidos,
-        onValueChange = { nombreApellidos = it },
-        label = { Text("Nombre y apellidos") },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
-    )
 
     OutlinedTextField(
         value = email,
@@ -106,11 +89,11 @@ fun datosInicio(navController: NavController) {
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
     )
 
-    Spacer(modifier = Modifier.height(16.dp))
-
-    if (email.isNotEmpty() && password.isNotEmpty() && nombreApellidos.isNotEmpty()){
+    if (email.isNotEmpty() && password.isNotEmpty()){
         estadoBoton = true
     }
+
+    Spacer(modifier = Modifier.height(16.dp))
 
     Button(
         modifier = Modifier
@@ -122,54 +105,23 @@ fun datosInicio(navController: NavController) {
         ),
         enabled = estadoBoton,
         onClick = {
-            if(email.isNotEmpty() && password.isNotEmpty()){
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                    if(it.isSuccessful){
-                        showDialog = true
-                    }else{
-
-                    }
-                }
-
-            }
-
+            navController.navigate(Rutas.BARRANAVEGACION)
         }
     ) {
         Text(
             fontSize = 24.sp,
-            text = "Crear cuenta",
-        )
-    }
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                showDialog = false
-            },
-            title = {
-                Text(text = "Registro con éxito!")
-            },
-            text = {
-                Text(text = "Usuario con email: $email , registrado con éxito!")
-            },
-            confirmButton = {
-                Button(onClick = {
-                    showDialog = false
-                    navController.navigate(VentanasLogIn.BienvenidosScreen.ruta)
-                }) {
-                    Text(text = "Aceptar")
-                }
-            }
+            text = "Iniciar sesion",
         )
     }
 }
 
+@Composable
+fun inicioSesion(){
 
-
-
+}
 
 @Composable
 @Preview
-fun EmailPreview(){
-    EmailScreen(rememberNavController())
+fun LoginScreenPreview(){
+    LoginEmailScreen(rememberNavController())
 }

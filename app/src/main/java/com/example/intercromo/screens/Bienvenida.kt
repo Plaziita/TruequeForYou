@@ -100,11 +100,13 @@ fun TextoInicioSesion(navController: NavController) {
 
 @Composable
 fun botonesRegistro(navController: NavController){
+
     OutlinedButton(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
         onClick = {
+
         }
     ) {
         Image(
