@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,6 +62,7 @@ fun EmailScreen(navController: NavController){
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun datosInicio(navController: NavController) {
@@ -70,6 +72,7 @@ fun datosInicio(navController: NavController) {
     var nombreApellidos by remember { mutableStateOf("") }
     var estadoBoton by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+
 
 
     OutlinedTextField(
@@ -123,10 +126,12 @@ fun datosInicio(navController: NavController) {
         enabled = estadoBoton,
         onClick = {
             if(email.isNotEmpty() && password.isNotEmpty()){
+
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                     if(it.isSuccessful){
                         showDialog = true
                     }else{
+
 
                     }
                 }
@@ -162,6 +167,8 @@ fun datosInicio(navController: NavController) {
             }
         )
     }
+
+
 }
 
 
