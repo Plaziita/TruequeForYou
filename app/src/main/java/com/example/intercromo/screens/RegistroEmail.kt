@@ -1,5 +1,6 @@
-package com.example.intercromo.screens
+package com.example.truequeforyou.screens
 
+import android.app.AlertDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun EmailScreen(navController: NavController){
@@ -120,7 +122,17 @@ fun datosInicio(navController: NavController) {
         ),
         enabled = estadoBoton,
         onClick = {
-            showDialog = true
+            if(email.isNotEmpty() && password.isNotEmpty()){
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                    if(it.isSuccessful){
+                        showDialog = true
+                    }else{
+
+                    }
+                }
+
+            }
+
         }
     ) {
         Text(
@@ -151,6 +163,10 @@ fun datosInicio(navController: NavController) {
         )
     }
 }
+
+
+
+
 
 @Composable
 @Preview
