@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.intercromo.dao.AuthRepository
 import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
 import com.google.firebase.auth.FirebaseAuth
 
@@ -60,6 +62,7 @@ fun EmailScreen(navController: NavController){
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun datosInicio(navController: NavController) {
@@ -69,6 +72,9 @@ fun datosInicio(navController: NavController) {
     var nombreApellidos by remember { mutableStateOf("") }
     var estadoBoton by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+
+    val auth = AuthRepository(navController)
+
 
 
     OutlinedTextField(
@@ -122,13 +128,8 @@ fun datosInicio(navController: NavController) {
         enabled = estadoBoton,
         onClick = {
             if(email.isNotEmpty() && password.isNotEmpty()){
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                    if(it.isSuccessful){
-                        showDialog = true
-                    }else{
 
-                    }
-                }
+                auth.registerEmailPassword(email, password)
 
             }
 
@@ -161,6 +162,8 @@ fun datosInicio(navController: NavController) {
             }
         )
     }
+
+
 }
 
 @Composable
