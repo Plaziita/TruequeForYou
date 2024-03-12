@@ -17,8 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberImagePainter
 
 import com.example.intercromo.dao.AuthGoogleRepository
 
@@ -60,11 +60,11 @@ navController: NavController
 
         if (currentUser != null) {
             if (userProfileImageUrl != null) {
-                /*Image(
-                    //painter = rememberImagePainter(userProfileImageUrl),
+                Image(
+                    painter = rememberImagePainter(userProfileImageUrl),
                     contentDescription = "User Profile Image",
                     modifier = Modifier.size(200.dp)
-                )*/
+                )
                 Text(
                     text = "Nombre: ${currentUser.displayName}",
                     modifier = Modifier.padding(bottom = 8.dp)
