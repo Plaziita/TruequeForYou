@@ -2,6 +2,9 @@
 
 package com.example.intercromo.screens
 
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -34,7 +39,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.intercromo.R
+import com.example.intercromo.dao.AuthGoogleRepository
+import com.example.intercromo.navigation.manejadorRutas.Rutas
 import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
 
 @Composable
 fun BienvenidoScreen(navController: NavController) {
@@ -99,14 +110,50 @@ fun TextoInicioSesion(navController: NavController) {
 }
 
 @Composable
-fun botonesRegistro(navController: NavController){
+fun botonesRegistro(
+    navController: NavController,
+    viewModel: AuthGoogleRepository = androidx.lifecycle.viewmodel.compose.viewModel()
+){
+    //Nuestro webID
+    val token = stringResource(R.string.idWeb)
+    val context = LocalContext.current
+
+    //Creamos una nueva actividad para hacer el login con Google
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts
+            .StartActivityForResult()
+    ){
+        //Creamos el usuario
+        val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+
+        //Generamos las credenciales del usuario
+        try{
+            val account = task.getResult(ApiException::class.java)
+            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+            viewModel.signInWithGoogleCredential(credential){
+                navController.navigate(Rutas.BARRANAVEGACION)
+            }
+        }
+        catch (ex: Exception){
+            Log.d("InterCromo", "Registro con google fallo!")
+        }
+    }
 
     OutlinedButton(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
         onClick = {
+            val opciones = GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN
+            )
+                .requestIdToken(token)
+                .requestEmail()
+                .build()
 
+        //Creamos el cliente con las diferentes opciones
+            val googleSignInCliente = GoogleSignIn.getClient(context, opciones)
+            launcher.launch(googleSignInCliente.signInIntent)
         }
     ) {
         Image(
@@ -143,8 +190,6 @@ fun botonesRegistro(navController: NavController){
         )
     }
 }
-
-
 
 @ExperimentalMaterial3Api
 @Composable

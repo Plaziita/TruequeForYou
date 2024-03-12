@@ -2,6 +2,7 @@ package com.example.intercromo.dao
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.intercromo.model.Usuario
 import com.example.intercromo.navigation.manejadorRutas.Rutas
@@ -11,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class AuthRepository(navController: NavController) {
+class AuthRepository(navController: NavController): ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
     private val loading = MutableLiveData(false)/*Para que no se introduzcan dos iguales */
     private val navegar = navController
