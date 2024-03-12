@@ -40,7 +40,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.intercromo.R
 import com.example.intercromo.dao.AuthGoogleRepository
-import com.example.intercromo.navigation.manejadorRutas.Rutas
 import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -131,8 +130,6 @@ fun botonesRegistro(
             val account = task.getResult(ApiException::class.java)
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
             authGoogle.signInWithGoogleCredential(credential)
-
-
         }
         catch (ex: Exception){
             Log.d("InterCromo", "Registro con google fallo!")
@@ -154,6 +151,7 @@ fun botonesRegistro(
         //Creamos el cliente con las diferentes opciones
             val googleSignInCliente = GoogleSignIn.getClient(context, opciones)
             launcher.launch(googleSignInCliente.signInIntent)
+
         }
     ) {
         Image(

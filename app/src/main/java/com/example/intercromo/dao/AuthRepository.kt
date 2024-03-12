@@ -53,8 +53,6 @@ class AuthRepository(navController: NavController): ViewModel() {
         }.addOnFailureListener {
             Log.d("InterCromo", "Error")
         }
-
-
     }
 
 
