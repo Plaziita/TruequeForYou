@@ -112,11 +112,11 @@ fun TextoInicioSesion(navController: NavController) {
 @Composable
 fun botonesRegistro(
     navController: NavController,
-    viewModel: AuthGoogleRepository = androidx.lifecycle.viewmodel.compose.viewModel()
 ){
     //Nuestro webID
     val token = stringResource(R.string.idWeb)
     val context = LocalContext.current
+    val authGoogle = AuthGoogleRepository(navController)
 
     //Creamos una nueva actividad para hacer el login con Google
     val launcher = rememberLauncherForActivityResult(
@@ -130,9 +130,9 @@ fun botonesRegistro(
         try{
             val account = task.getResult(ApiException::class.java)
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-            viewModel.signInWithGoogleCredential(credential){
-                navController.navigate(Rutas.BARRANAVEGACION)
-            }
+            authGoogle.signInWithGoogleCredential(credential)
+
+
         }
         catch (ex: Exception){
             Log.d("InterCromo", "Registro con google fallo!")
