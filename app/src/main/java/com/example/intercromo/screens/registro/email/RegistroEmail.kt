@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.intercromo.dao.AuthRepository
 import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
 import com.google.firebase.auth.FirebaseAuth
 
@@ -71,6 +72,8 @@ fun datosInicio(navController: NavController) {
     var nombreApellidos by remember { mutableStateOf("") }
     var estadoBoton by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+
+    val auth = AuthRepository(navController)
 
 
 
@@ -126,14 +129,7 @@ fun datosInicio(navController: NavController) {
         onClick = {
             if(email.isNotEmpty() && password.isNotEmpty()){
 
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                    if(it.isSuccessful){
-                        showDialog = true
-                    }else{
-
-
-                    }
-                }
+                auth.registerEmailPassword(email, password)
 
             }
 
