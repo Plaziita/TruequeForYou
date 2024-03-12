@@ -41,7 +41,7 @@ import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun EmailScreen(navController: NavController){
+fun EmailScreen(navController: NavController) {
     val navController = navController
     Box(
         modifier = Modifier
@@ -113,7 +113,7 @@ fun datosInicio(navController: NavController) {
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    if (email.isNotEmpty() && password.isNotEmpty() && nombreApellidos.isNotEmpty()){
+    if (email.isNotEmpty() && password.isNotEmpty() && nombreApellidos.isNotEmpty()) {
         estadoBoton = true
     }
 
@@ -127,9 +127,9 @@ fun datosInicio(navController: NavController) {
         ),
         enabled = estadoBoton,
         onClick = {
-            if(email.isNotEmpty() && password.isNotEmpty()){
+            if (email.isNotEmpty() && password.isNotEmpty()) {
 
-                auth.registerEmailPassword(email, password)
+                auth.registerEmailPassword(email, password, nombreApellidos)
 
             }
 
@@ -141,6 +141,7 @@ fun datosInicio(navController: NavController) {
         )
     }
 
+    /*
     if (showDialog) {
         AlertDialog(
             onDismissRequest = {
@@ -163,11 +164,13 @@ fun datosInicio(navController: NavController) {
         )
     }
 
+     */
+
 
 }
 
 @Composable
 @Preview
-fun EmailPreview(){
+fun EmailPreview() {
     EmailScreen(rememberNavController())
 }
