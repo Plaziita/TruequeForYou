@@ -9,5 +9,4 @@ data class Usuario(
     val nickname: String,
     val valoracion: Double,
     val cromo: List<Cromo>
-
 )
