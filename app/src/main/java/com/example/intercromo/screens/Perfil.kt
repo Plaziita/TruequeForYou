@@ -16,7 +16,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+
 import com.example.intercromo.dao.AuthGoogleRepository
 
 @Composable
@@ -27,16 +30,18 @@ fun PantallaPerfil(){
             .background(Color.Blue),
         contentAlignment = Alignment.Center
     ){
-        ProfileScreen()
+        val navController = rememberNavController()
+        ProfileScreen(navController)
     }
 }
 @Composable
 fun ProfileScreen(
-    viewModel: AuthGoogleRepository = androidx.lifecycle.viewmodel.compose.viewModel()
+navController: NavController
 ) {
+    val authGoogle = AuthGoogleRepository(navController)
     // Obtener el usuario actualmente autenticado
-    val currentUser = viewModel.currentUser
-    val userProfileImageUrl = viewModel.getUserProfileImageUrl()
+    val currentUser = authGoogle.currentUser
+    val userProfileImageUrl = authGoogle.getUserProfileImageUrl()
 
 
     Column(
@@ -55,11 +60,11 @@ fun ProfileScreen(
 
         if (currentUser != null) {
             if (userProfileImageUrl != null) {
-                Image(
-                    painter = rememberImagePainter(userProfileImageUrl),
+                /*Image(
+                    //painter = rememberImagePainter(userProfileImageUrl),
                     contentDescription = "User Profile Image",
                     modifier = Modifier.size(200.dp)
-                )
+                )*/
                 Text(
                     text = "Nombre: ${currentUser.displayName}",
                     modifier = Modifier.padding(bottom = 8.dp)
