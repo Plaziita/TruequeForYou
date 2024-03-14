@@ -17,7 +17,7 @@ fun ManejadorRutas(navController: NavHostController) {
     ){
         NavegacionLogin(navController = navController)
         composable(route = Rutas.BARRANAVEGACION) {
-            PantallaMain()
+            PantallaMain(navController)
         }
     }
 }

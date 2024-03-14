@@ -9,6 +9,7 @@ import com.example.intercromo.navigation.manejadorRutas.Rutas
 import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -16,6 +17,9 @@ class AuthRepository(navController: NavController): ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
     private val loading = MutableLiveData(false)/*Para que no se introduzcan dos iguales */
     private val navegar = navController
+
+    val currentUser: FirebaseUser?
+        get() = auth.currentUser
 
     fun signInEmailPassword(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {

@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.intercromo.dao.AuthRepository
-import com.example.intercromo.navigation.manejadorRutas.Rutas
 
 @Composable
 fun LoginEmailScreen(navController: NavController){
