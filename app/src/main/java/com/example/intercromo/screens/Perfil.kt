@@ -43,7 +43,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.intercromo.R
 import com.example.intercromo.dao.AuthGoogleRepository
-import com.example.intercromo.dao.AuthRepository
+import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.valoracion.RatingBar
 
 @Composable
@@ -276,7 +276,7 @@ fun OpcionesIntercambios(){
 fun DatosUsuario(navController: NavController){
 
     val authGoogle = AuthGoogleRepository(navController)
-    val authEmail = AuthRepository(navController)
+    val authEmail = UsuarioRepository(navController)
     val currentUser = authGoogle.currentUser
     val currentUserEmail = authEmail.currentUser
     val userProfileImageUrl = authGoogle.getUserProfileImageUrl()
@@ -321,7 +321,7 @@ fun DatosUsuario(navController: NavController){
                         )
                     }else{
                         Text(
-                            text = "$currentUserEmail",
+                            text = "${authEmail.getNombreUsuario()}",
                             color = Color.Black,
                             fontWeight = FontWeight.Bold,
                             fontSize = 30.sp

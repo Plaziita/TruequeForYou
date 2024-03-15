@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.intercromo.dao.AuthRepository
+import com.example.intercromo.dao.UsuarioRepository
 
 @Composable
 fun EmailScreen(navController: NavController) {
@@ -69,7 +69,7 @@ fun datosInicio(navController: NavController) {
     var estadoBoton by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
 
-    val auth = AuthRepository(navController)
+    val auth = UsuarioRepository(navController)
 
     OutlinedTextField(
         value = nombreApellidos,
