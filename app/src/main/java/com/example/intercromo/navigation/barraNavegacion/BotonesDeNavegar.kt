@@ -23,11 +23,12 @@ import androidx.wear.compose.material.ContentAlpha
 import com.example.intercromo.screens.PantallaFavoritos
 import com.example.intercromo.screens.PantallaInicio
 import com.example.intercromo.screens.PantallaMensajes
-import com.example.intercromo.screens.PantallaPerfil
 import com.example.intercromo.screens.PantallaTradear
+import com.example.intercromo.screens.perfil.PantallaPerfil
 /* Esta función gestiona como vamos  a navegar entre las pantallas de nuestra sealed class */
 @Composable
-fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostController){
+
+fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostController,navController3: NavHostController){
 
     //El nuevo navController2 es el de VentanasLogin
 

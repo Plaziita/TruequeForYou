@@ -1,7 +1,8 @@
-package com.example.intercromo.screens
+package com.example.intercromo.screens.perfil
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.History
@@ -22,7 +25,10 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,13 +43,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.intercromo.R
 import com.example.intercromo.dao.AuthGoogleRepository
 import com.example.intercromo.dao.UsuarioRepository
+import com.example.intercromo.navigation.rutaPerfil.BottomBarPerfil
+import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
 import com.example.intercromo.valoracion.RatingBar
 
 @Composable
@@ -55,14 +65,15 @@ fun PantallaPerfil(navController: NavController){
     ) {
         DatosUsuario(navController)
         Spacer(modifier = Modifier.height(20.dp))
-        Intercambios()
+        Intercambios(navController)
         Configuracion()
         BotonCerrarSesion(navController)
+
     }
 }
 
 @Composable
-fun Intercambios(){
+fun Intercambios(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -79,11 +90,14 @@ fun Intercambios(){
             modifier = Modifier.padding(8.dp)
         )
     }
-    OpcionesIntercambios()
+    OpcionesIntercambios(navController)
 }
 
 @Composable
 fun Configuracion(){
+
+    val barraAbajo: BottomBarPerfil = viewModel()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,7 +114,8 @@ fun Configuracion(){
             modifier = Modifier.padding(8.dp)
         )
     }
-    OpcionesConfiguracion()
+    OpcionesConfiguracion(barraAbajo)
+    BarraAbajoPerfil(barraAbajo)
 }
 
 @Composable
@@ -134,15 +149,82 @@ fun BotonCerrarSesion(navController: NavController){
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BarraAbajoPerfil(barraAbajo: BottomBarPerfil){
+    if (barraAbajo.mostrarBarra){
+        ModalBottomSheet(
+            onDismissRequest = { barraAbajo.mostrarBarra = false }
+        ) {
+            ContentBottomSheet(barraAbajo)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ContentBottomSheet(barraAbajo: BottomBarPerfil) {
+    var nombre by remember { mutableStateOf("") }
+    var telefono by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(350.dp)
+            .padding(8.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        OutlinedTextField(
+            value = nombre,
+            onValueChange = { nombre = it },
+            label = { Text("Nombre y apellidos") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+        )
+        OutlinedTextField(
+            value = telefono,
+            onValueChange = { telefono = it },
+            label = { Text("Nº de Telefono") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+        )
+        Button(
+            modifier = Modifier
+                .alpha(0.8f),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFFFA500),
+                contentColor = Color.Black
+            ),
+            onClick = {
+                barraAbajo.mostrarBarra = false
+            }
+        ) {
+            Text(
+                text = "Guardar cambios",
+                fontSize = 18.sp
+            )
+        }
+    }
+}
 
 @Composable
-fun OpcionesConfiguracion(){
+fun OpcionesConfiguracion(barraAbajo: BottomBarPerfil){
     Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
-                .padding(8.dp),
+                .padding(8.dp)
+                .clickable {
+                    barraAbajo.mostrarBarra = true
+                },
             verticalAlignment = Alignment.CenterVertically
         ){
             Icon(
@@ -192,13 +274,16 @@ fun OpcionesConfiguracion(){
 }
 
 @Composable
-fun OpcionesIntercambios(){
+fun OpcionesIntercambios(navController: NavController){
     Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
-                .padding(8.dp),
+                .padding(8.dp)
+                .clickable {
+                    navController.navigate(VentanasPerfil.AdquisicionesScreen.ruta)
+                },
             verticalAlignment = Alignment.CenterVertically
         ){
             Icon(
@@ -223,7 +308,10 @@ fun OpcionesIntercambios(){
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
-                .padding(8.dp),
+                .padding(8.dp)
+                .clickable {
+                    navController.navigate(VentanasPerfil.TransferenciasScreen.ruta)
+                },
             verticalAlignment = Alignment.CenterVertically
         ){
             Icon(
@@ -248,7 +336,10 @@ fun OpcionesIntercambios(){
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
-                .padding(8.dp),
+                .padding(8.dp)
+                .clickable {
+                    navController.navigate(VentanasPerfil.HistorialScreen.ruta)
+                },
             verticalAlignment = Alignment.CenterVertically
         ){
             Icon(

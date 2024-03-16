@@ -22,7 +22,7 @@ fun PantallaMain(controller: NavHostController){
     Scaffold(
         bottomBar = { Barra(navController) }
     ) {
-        BotonesDeNavegar(navController,controller)
+        BotonesDeNavegar(navController,controller,controller)
     }
 
 }
