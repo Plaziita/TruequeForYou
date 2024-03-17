@@ -35,8 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.intercromo.dao.AuthRepository
-import com.example.intercromo.navigation.manejadorRutas.Rutas
+import com.example.intercromo.dao.UsuarioRepository
 
 @Composable
 fun LoginEmailScreen(navController: NavController){
@@ -66,7 +65,7 @@ fun recogidaDatos(navController: NavController){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var estadoBoton by remember { mutableStateOf(false) }
-    val auth = AuthRepository(navController)
+    val auth = UsuarioRepository(navController)
 
     OutlinedTextField(
         value = email,

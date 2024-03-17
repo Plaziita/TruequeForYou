@@ -1,5 +1,6 @@
 package com.example.intercromo.navigation.barraNavegacion
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -8,6 +9,8 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -20,11 +23,14 @@ import androidx.wear.compose.material.ContentAlpha
 import com.example.intercromo.screens.PantallaFavoritos
 import com.example.intercromo.screens.PantallaInicio
 import com.example.intercromo.screens.PantallaMensajes
-import com.example.intercromo.screens.PantallaPerfil
 import com.example.intercromo.screens.PantallaTradear
+import com.example.intercromo.screens.perfil.PantallaPerfil
 /* Esta función gestiona como vamos  a navegar entre las pantallas de nuestra sealed class */
 @Composable
-fun BotonesDeNavegar(navController: NavHostController){
+
+fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostController,navController3: NavHostController){
+
+    //El nuevo navController2 es el de VentanasLogin
 
         NavHost(
             navController = navController,
@@ -43,14 +49,14 @@ fun BotonesDeNavegar(navController: NavHostController){
                 PantallaMensajes()
             }
             composable(route = BarraDeOpciones.Perfil.ruta) {
-                PantallaPerfil()
+                PantallaPerfil(navController2)
             }
         }
 }
 
 /* funcion para cada vez q pulses a un elemento de la barra de abajo te lleve a su pantalla*/
 @Composable
-fun Barra (navController : NavHostController){
+fun Barra (navController: NavHostController){
     val screens = listOf(
         BarraDeOpciones.Inicio,
         BarraDeOpciones.Favoritos,
@@ -84,13 +90,15 @@ fun RowScope.AddItem(
         label = {
             Text(
                 text = screen.titulo,
-                fontSize = 10.sp
+                fontSize = 10.sp,
+                color = Color.Black
             )
         },
         icon = {
             Icon(
                 imageVector = screen.icono,
-                contentDescription = "Navigation Icon"
+                contentDescription = "Navigation Icon",
+                tint = Color.Black
             )
         },
         selected = currentDestination?.hierarchy?.any {
@@ -102,6 +110,8 @@ fun RowScope.AddItem(
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             }
-        }
+        },
+        modifier = Modifier
+            .background(Color(0xFFFFA500))
     )
 }
