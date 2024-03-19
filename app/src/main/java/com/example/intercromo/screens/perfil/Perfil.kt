@@ -122,7 +122,7 @@ fun Configuracion(){
 fun BotonCerrarSesion(navController: NavController){
 
     val context = LocalContext.current
-    val auth = AuthGoogleRepository(navController)
+    val auth = UsuarioRepository(navController)
 
     Column(
         modifier = Modifier
@@ -149,6 +149,7 @@ fun BotonCerrarSesion(navController: NavController){
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BarraAbajoPerfil(barraAbajo: BottomBarPerfil){
@@ -366,14 +367,14 @@ fun OpcionesIntercambios(navController: NavController){
 @Composable
 fun DatosUsuario(navController: NavController){
 
-    val authGoogle = AuthGoogleRepository(navController)
-    val authEmail = UsuarioRepository(navController)
-    val currentUser = authGoogle.currentUser
-    val currentUserEmail = authEmail.currentUser
-    val userProfileImageUrl = authGoogle.getUserProfileImageUrl()
+
+    val auth = UsuarioRepository(navController)
+
+
+    val userProfileImageUrl = auth.getUserProfileImageUrl()
     var rating by remember { mutableStateOf(2.5) }
 
-    if (currentUser != null) {
+    if (auth.currentUser != null) {
         Column(
             modifier = Modifier
         ) {
@@ -403,16 +404,16 @@ fun DatosUsuario(navController: NavController){
                 }
                 Column() {
                     Spacer(modifier = Modifier.height(8.dp))
-                    if(currentUser != null) {
+                    if(auth.currentUser != null) {
                         Text(
-                            text = "${currentUser.displayName}",
+                            text = "${auth.getNombreUsuario()}",
                             color = Color.Black,
                             fontWeight = FontWeight.Bold,
                             fontSize = 30.sp
                         )
                     }else{
                         Text(
-                            text = "${authEmail.getNombreUsuario()}",
+                            text = "${auth.getNombreUsuario()}",
                             color = Color.Black,
                             fontWeight = FontWeight.Bold,
                             fontSize = 30.sp
