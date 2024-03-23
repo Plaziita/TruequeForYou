@@ -1,4 +1,4 @@
-package com.example.intercromo.screens.perfil
+package com.example.intercromo.presentation.perfil
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -27,33 +27,34 @@ import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaHistorial(navController: NavController){
+fun PantallaAdquisiciones(navController: NavController){
 
     Scaffold(
         topBar = {
-            BarraSuperiorHistorial(navController)
+            BarraSuperior(navController)
         }
     ) {
-        Historial()
+        Adquisiciones()
     }
+
 }
 
 @Composable
-fun Historial() {
+fun Adquisiciones(){
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Blue)
     ) {
         Text(
-            text = "Historial"
+            text = "Adquisiciones"
         )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BarraSuperiorHistorial(navController: NavController) {
+fun BarraSuperior(navController: NavController) {
     TopAppBar(
         title = {
             Row {
@@ -68,16 +69,16 @@ fun BarraSuperiorHistorial(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 Text(
-                    text = "Historial"
+                    text = "Adquisiciones"
                 )
             }
         }
     )
 }
 
+
 @Composable
 @Preview
-fun PantallaHistorialPreview(){
-    PantallaHistorial(navController = rememberNavController())
+fun PantallaInicioPreview(){
+    PantallaAdquisiciones(navController = rememberNavController())
 }
-

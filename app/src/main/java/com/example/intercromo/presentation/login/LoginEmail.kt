@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.intercromo.screens.registro.email
+package com.example.intercromo.presentation.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,7 +40,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.intercromo.dao.UsuarioRepository
 
 @Composable
-fun LoginEmailScreen(navController: NavController){
+fun LoginEmailScreen(viewModel: LoginViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -53,23 +55,25 @@ fun LoginEmailScreen(navController: NavController){
                 color = Color(0xFFFFA500),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            recogidaDatos(navController)
+            recogidaDatos(viewModel)
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun recogidaDatos(navController: NavController){
+fun recogidaDatos(viewModel: LoginViewModel) {
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var estadoBoton by remember { mutableStateOf(false) }
-    val auth = UsuarioRepository(navController)
+
+    val email:String by viewModel.email.observeAsState(initial = "")
+    val password:String by viewModel.password.observeAsState(initial = "")
+    val estadoBoton:Boolean by viewModel.loginEnable.observeAsState(initial = false)
+
 
     OutlinedTextField(
         value = email,
-        onValueChange = { email = it },
+        onValueChange = {viewModel.onLoginChanged(it , password)},
         label = { Text("Correo electrónico") },
         modifier = Modifier
             .fillMaxWidth()
@@ -77,11 +81,12 @@ fun recogidaDatos(navController: NavController){
         leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
 
+
         )
 
     OutlinedTextField(
         value = password,
-        onValueChange = { password = it },
+        onValueChange = {viewModel.onLoginChanged(email , it)},
         label = { Text("Contraseña") },
         modifier = Modifier
             .fillMaxWidth(),
@@ -90,9 +95,6 @@ fun recogidaDatos(navController: NavController){
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
     )
 
-    if (email.isNotEmpty() && password.isNotEmpty()){
-        estadoBoton = true
-    }
 
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -106,7 +108,7 @@ fun recogidaDatos(navController: NavController){
         ),
         enabled = estadoBoton,
         onClick = {
-           auth.signInEmailPassword(email, password)
+            viewModel.login(email, password)
         }
     ) {
         Text(
@@ -116,13 +118,5 @@ fun recogidaDatos(navController: NavController){
     }
 }
 
-@Composable
-fun inicioSesion(){
 
-}
 
-@Composable
-@Preview
-fun LoginScreenPreview(){
-    LoginEmailScreen(rememberNavController())
-}

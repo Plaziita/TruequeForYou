@@ -1,4 +1,4 @@
-package com.example.intercromo.screens.registro.email
+package com.example.intercromo.presentation.registro
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

@@ -1,4 +1,4 @@
-package com.example.intercromo.screens
+package com.example.intercromo.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun PantallaInicio(){
+fun PantallaFavoritos(){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -21,17 +21,16 @@ fun PantallaInicio(){
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = "Inicio",
+            text = "Favoritos",
             color = Color.White,
             fontSize = 48.sp,
             fontWeight = FontWeight.Bold
         )
-
     }
 }
 
 @Composable
 @Preview
-fun PantallaInicioPreview(){
-    PantallaInicio()
+fun PantallaFavoritosPreview(){
+    PantallaFavoritos()
 }

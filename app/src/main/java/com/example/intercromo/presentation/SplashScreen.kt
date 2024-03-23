@@ -1,4 +1,4 @@
-package com.example.intercromo.screens
+package com.example.intercromo.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

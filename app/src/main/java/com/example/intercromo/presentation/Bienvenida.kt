@@ -1,5 +1,5 @@
 
-package com.example.intercromo.screens
+package com.example.intercromo.presentation
 
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.intercromo.R
-import com.example.intercromo.dao.AuthGoogleRepository
 import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
 import com.google.android.gms.auth.api.signin.GoogleSignIn

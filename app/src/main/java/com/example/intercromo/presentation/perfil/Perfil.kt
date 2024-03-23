@@ -1,4 +1,4 @@
-package com.example.intercromo.screens.perfil
+package com.example.intercromo.presentation.perfil
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,7 +50,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.intercromo.R
-import com.example.intercromo.dao.AuthGoogleRepository
 import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.rutaPerfil.BottomBarPerfil
 import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
