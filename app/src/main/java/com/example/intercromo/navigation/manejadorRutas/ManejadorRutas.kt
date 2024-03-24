@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.intercromo.PantallaMain
 import com.example.intercromo.navigation.rutaPerfil.NavegacionPerfil
 import com.example.intercromo.navigation.ventanasRegistro.NavegacionLogin
@@ -11,12 +12,13 @@ import com.example.intercromo.navigation.ventanasRegistro.NavegacionLogin
 
 @Composable
 fun ManejadorRutas(navController: NavHostController) {
+    val controller = rememberNavController()
     NavHost(
         navController = navController,
         route = Rutas.MANEJADOR,
         startDestination = Rutas.REGISTRO
     ){
-        NavegacionPerfil(navController = navController)
+        NavegacionPerfil(navController = navController, controller)
         NavegacionLogin(navController = navController)
         composable(route = Rutas.BARRANAVEGACION) {
             PantallaMain(navController)

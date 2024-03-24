@@ -4,5 +4,6 @@ data class Cromo(
     val nombre: String,
     val descripcion: String,
     val imagen: String,
-    val categoria: String
+    val categoria: String,
+    val nombre_usuario: String
 )

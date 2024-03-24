@@ -10,20 +10,20 @@ import com.example.intercromo.presentation.perfil.PantallaAdquisiciones
 import com.example.intercromo.presentation.perfil.PantallaHistorial
 import com.example.intercromo.presentation.perfil.PantallaPerfil
 
-fun NavGraphBuilder.NavegacionPerfil(navController: NavHostController){
+fun NavGraphBuilder.NavegacionPerfil(navController: NavHostController,controllerOpciones: NavHostController){
 
     navigation(
         route = Rutas.PERFIL,
         startDestination = VentanasPerfil.PerfilScreen.ruta
     ){
         composable(route = VentanasPerfil.AdquisicionesScreen.ruta) {
-            PantallaAdquisiciones(navController)
+            PantallaAdquisiciones(controllerOpciones)
         }
         composable(route = VentanasPerfil.HistorialScreen.ruta) {
-            PantallaHistorial(navController)
+            PantallaHistorial(controllerOpciones)
         }
         composable(route = VentanasPerfil.TransferenciasScreen.ruta) {
-            PantallaTransferencias(navController)
+            PantallaTransferencias(controllerOpciones)
         }
         composable(route = VentanasPerfil.PerfilScreen.ruta) {
             PantallaPerfil(navController)
