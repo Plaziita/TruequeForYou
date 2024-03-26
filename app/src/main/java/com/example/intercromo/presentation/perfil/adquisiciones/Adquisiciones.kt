@@ -1,4 +1,4 @@
-package com.example.intercromo.presentation.perfil
+package com.example.intercromo.presentation.perfil.adquisiciones
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

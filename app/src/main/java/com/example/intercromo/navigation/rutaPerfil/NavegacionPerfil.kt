@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.intercromo.navigation.manejadorRutas.Rutas
-import com.example.intercromo.presentation.perfil.PantallaAdquisiciones
+import com.example.intercromo.presentation.perfil.adquisiciones.PantallaAdquisiciones
 import com.example.intercromo.presentation.perfil.PantallaHistorial
 import com.example.intercromo.presentation.perfil.PantallaPerfil
 

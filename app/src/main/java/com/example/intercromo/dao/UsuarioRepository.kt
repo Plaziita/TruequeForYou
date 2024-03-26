@@ -53,7 +53,7 @@ class UsuarioRepository(navController: NavController){
         val name = name
         val email = email
 
-        val user = Usuario(name, email, userId.toString(), null, null, 0.0)
+        val user = Usuario(name, email, userId.toString(), null, null, 0.0, null)
 
         FirebaseFirestore.getInstance().collection("usuarios").add(user.toMap()).addOnSuccessListener {
             Log.d("InterCromo", "Creado")
@@ -108,6 +108,10 @@ class UsuarioRepository(navController: NavController){
         } catch (ex: Exception){
             Log.d("InterCromo", "Excepcion al cerrar sesion " + "${ex.localizedMessage}")
         }
+    }
+
+    fun getCromosUsuario(){
+
     }
 
 
