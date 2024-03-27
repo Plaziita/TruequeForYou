@@ -1,8 +1,11 @@
 package com.example.intercromo.dao
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.lifecycle.LiveData
 import com.example.intercromo.model.Cromo
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class CromoRepository {
 
@@ -18,12 +21,11 @@ class CromoRepository {
     private val db = FirebaseFirestore.getInstance()
     private val cromos = db.collection(COLECCION_CROMOS)
 
-    fun getCromos(setLista: (List<Cromo>) -> Unit) {
-
-        val listaCromos = mutableListOf<Cromo>()
-        cromos.get().addOnSuccessListener { documents ->
-
-            for (document in documents) {
+    suspend fun getCromos(): List<Cromo> {
+        return try {
+            val querySnapshot = cromos.get().await()
+            val listaCromos = mutableListOf<Cromo>()
+            for (document in querySnapshot) {
                 val nombre = document.getString(CAMPO_NOMBRE) ?: ""
                 val descripcion = document.getString(CAMPO_DESCRIPCION) ?: ""
                 val imagen = document.getString(CAMPO_IMAGEN) ?: ""
@@ -39,16 +41,14 @@ class CromoRepository {
                 )
 
                 listaCromos.add(cromo)
-
                 Log.i(TAG, "------> Cromo: $nombre")
-
             }
-
-            setLista(listaCromos)
-
+            listaCromos
+        } catch (e: Exception) {
+            // Manejar cualquier error que ocurra al obtener los datos
+            Log.e(TAG, "Error al obtener la lista de cromos", e)
+            emptyList()
         }
-
     }
-
 
 }

@@ -83,6 +83,8 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.2")
+
 
 
 }

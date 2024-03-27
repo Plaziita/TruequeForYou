@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,8 +46,9 @@ import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaAdquisiciones(navController: NavController) {
-    var listaCromos by remember { mutableStateOf(listOf<Cromo>()) }
+fun PantallaAdquisiciones(navController: NavController, viewModel: AdquisicionesViewModel) {
+    //var listaCromos by remember { mutableStateOf(listOf<Cromo>()) }
+    var listaCromos = viewModel.listaCromos.value
 
     Scaffold(
         topBar = {
@@ -57,7 +59,7 @@ fun PantallaAdquisiciones(navController: NavController) {
             columns = GridCells.Fixed(2),
             contentPadding = contentPadding,
         ) {
-            Datasource_Cromo().getCromos { listaCromos = it }
+           // Datasource_Cromo().getCromos { listaCromos = it }
             items(listaCromos){
                Adquisiciones(cromo = it)
            }
@@ -146,8 +148,3 @@ fun BarraSuperior(navController: NavController) {
 }
 
 
-@Composable
-@Preview
-fun PantallaAdquisicionesPreview(){
-    PantallaAdquisiciones(navController = rememberNavController())
-}
