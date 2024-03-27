@@ -23,7 +23,7 @@ import androidx.wear.compose.material.ContentAlpha
 import com.example.intercromo.presentation.PantallaFavoritos
 import com.example.intercromo.presentation.PantallaInicio
 import com.example.intercromo.presentation.PantallaMensajes
-import com.example.intercromo.presentation.PantallaTradear
+import com.example.intercromo.presentation.UploadCromoScreen
 import com.example.intercromo.presentation.perfil.PantallaPerfil
 /* Esta función gestiona como vamos  a navegar entre las pantallas de nuestra sealed class */
 @Composable
@@ -42,8 +42,8 @@ fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostCo
             composable(route = BarraDeOpciones.Favoritos.ruta) {
                 PantallaFavoritos()
             }
-            composable(route = BarraDeOpciones.Tradear.ruta) {
-                PantallaTradear()
+            composable(route = BarraDeOpciones.Upload.ruta) {
+                UploadCromoScreen()
             }
             composable(route = BarraDeOpciones.Mensajes.ruta) {
                 PantallaMensajes()
@@ -60,7 +60,7 @@ fun Barra (navController: NavHostController){
     val screens = listOf(
         BarraDeOpciones.Inicio,
         BarraDeOpciones.Favoritos,
-        BarraDeOpciones.Tradear,
+        BarraDeOpciones.Upload,
         BarraDeOpciones.Mensajes,
         BarraDeOpciones.Perfil
     )

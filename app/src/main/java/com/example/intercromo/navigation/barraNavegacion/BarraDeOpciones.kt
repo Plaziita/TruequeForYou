@@ -1,11 +1,11 @@
 package com.example.intercromo.navigation.barraNavegacion
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 /* Clase sellada en donde nos creamos un objeto de cada pantalla por la que vamos a navegar*/
 sealed class BarraDeOpciones(
@@ -23,10 +23,10 @@ sealed class BarraDeOpciones(
         titulo = "Favoritos",
         icono = Icons.Default.FavoriteBorder
     )
-    object Tradear : BarraDeOpciones(
-        ruta = "tradear",
-        titulo = "Tradear",
-        icono = Icons.Default.ShoppingCart
+    object Upload : BarraDeOpciones(
+        ruta = "upload",
+        titulo = "Subir",
+        icono = Icons.Default.ArrowUpward
     )
     object Mensajes : BarraDeOpciones(
         ruta = "mensajes",

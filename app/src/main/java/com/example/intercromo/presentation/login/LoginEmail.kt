@@ -14,7 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,20 +23,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.intercromo.dao.UsuarioRepository
 
 @Composable
 fun LoginEmailScreen(viewModel: LoginViewModel) {
@@ -74,7 +66,8 @@ fun recogidaDatos(viewModel: LoginViewModel) {
     OutlinedTextField(
         value = email,
         onValueChange = {viewModel.onLoginChanged(it , password)},
-        label = { Text("Correo electrónico") },
+        label = { Text("Correo electrónico", color = Color.Black) },
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
@@ -87,7 +80,9 @@ fun recogidaDatos(viewModel: LoginViewModel) {
     OutlinedTextField(
         value = password,
         onValueChange = {viewModel.onLoginChanged(email , it)},
-        label = { Text("Contraseña") },
+        label = { Text("Contraseña", color = Color.Black) },
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
+
         modifier = Modifier
             .fillMaxWidth(),
         leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },

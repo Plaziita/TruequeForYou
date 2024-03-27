@@ -74,10 +74,11 @@ fun datosInicio(navController: NavController) {
     OutlinedTextField(
         value = nombreApellidos,
         onValueChange = { nombreApellidos = it },
-        label = { Text("Nombre y apellidos") },
+        label = { Text("Nombre y apellidos", color = Color.Black) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
         leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
     )
@@ -85,10 +86,11 @@ fun datosInicio(navController: NavController) {
     OutlinedTextField(
         value = email,
         onValueChange = { email = it },
-        label = { Text("Correo electrónico") },
+        label = { Text("Correo electrónico", color = Color.Black) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
 
@@ -97,9 +99,10 @@ fun datosInicio(navController: NavController) {
     OutlinedTextField(
         value = password,
         onValueChange = { password = it },
-        label = { Text("Contraseña") },
+        label = { Text("Contraseña", color = Color.Black) },
         modifier = Modifier
             .fillMaxWidth(),
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),

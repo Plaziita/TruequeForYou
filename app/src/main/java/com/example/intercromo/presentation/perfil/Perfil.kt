@@ -14,21 +14,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,15 +38,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.intercromo.R
 import com.example.intercromo.dao.UsuarioRepository
-import com.example.intercromo.navigation.rutaPerfil.BottomBarPerfil
 import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
 import com.example.intercromo.valoracion.RatingBar
 
@@ -95,8 +87,6 @@ fun Intercambios(navController: NavController){
 @Composable
 fun Configuracion(){
 
-    val barraAbajo: BottomBarPerfil = viewModel()
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -113,8 +103,7 @@ fun Configuracion(){
             modifier = Modifier.padding(8.dp)
         )
     }
-    OpcionesConfiguracion(barraAbajo)
-    BarraAbajoPerfil(barraAbajo)
+    OpcionesConfiguracion()
 }
 
 @Composable
@@ -149,73 +138,8 @@ fun BotonCerrarSesion(navController: NavController){
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BarraAbajoPerfil(barraAbajo: BottomBarPerfil){
-    if (barraAbajo.mostrarBarra){
-        ModalBottomSheet(
-            onDismissRequest = { barraAbajo.mostrarBarra = false }
-        ) {
-            ContentBottomSheet(barraAbajo)
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ContentBottomSheet(barraAbajo: BottomBarPerfil) {
-    var nombre by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(350.dp)
-            .padding(8.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        OutlinedTextField(
-            value = nombre,
-            onValueChange = { nombre = it },
-            label = { Text("Nombre y apellidos") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-        )
-        OutlinedTextField(
-            value = telefono,
-            onValueChange = { telefono = it },
-            label = { Text("Nº de Telefono") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-        )
-        Button(
-            modifier = Modifier
-                .alpha(0.8f),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFFA500),
-                contentColor = Color.Black
-            ),
-            onClick = {
-                barraAbajo.mostrarBarra = false
-            }
-        ) {
-            Text(
-                text = "Guardar cambios",
-                fontSize = 18.sp
-            )
-        }
-    }
-}
-
-@Composable
-fun OpcionesConfiguracion(barraAbajo: BottomBarPerfil){
+fun OpcionesConfiguracion(){
     Column {
         Row(
             modifier = Modifier
@@ -223,7 +147,6 @@ fun OpcionesConfiguracion(barraAbajo: BottomBarPerfil){
                 .height(50.dp)
                 .padding(8.dp)
                 .clickable {
-                    barraAbajo.mostrarBarra = true
                 },
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -293,7 +216,7 @@ fun OpcionesIntercambios(navController: NavController){
             )
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = "Adquisiciones",
+                text = "Mis cromos",
                 color = Color.Black,
                 fontSize = 18.sp
             )
@@ -315,13 +238,13 @@ fun OpcionesIntercambios(navController: NavController){
             verticalAlignment = Alignment.CenterVertically
         ){
             Icon(
-                imageVector = Icons.Default.ShoppingCart,
+                imageVector = Icons.Default.Autorenew,
                 contentDescription = "Navigation Icon",
                 tint = Color.Black
             )
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = "Transferencias",
+                text = "Intercambios",
                 color = Color.Black,
                 fontSize = 18.sp
             )
@@ -366,10 +289,7 @@ fun OpcionesIntercambios(navController: NavController){
 @Composable
 fun DatosUsuario(navController: NavController){
 
-
     val auth = UsuarioRepository(navController)
-
-
     val userProfileImageUrl = auth.getUserProfileImageUrl()
     var rating by remember { mutableStateOf(2.5) }
 
