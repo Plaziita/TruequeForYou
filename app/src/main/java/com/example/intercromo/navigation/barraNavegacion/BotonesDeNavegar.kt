@@ -20,24 +20,29 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.wear.compose.material.ContentAlpha
+import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.presentation.PantallaFavoritos
 import com.example.intercromo.presentation.PantallaInicio
 import com.example.intercromo.presentation.PantallaMensajes
 import com.example.intercromo.presentation.UploadCromoScreen
 import com.example.intercromo.presentation.perfil.PantallaPerfil
+import com.example.intercromo.presentation.perfil.adquisiciones.AdquisicionesViewModel
+
 /* Esta función gestiona como vamos  a navegar entre las pantallas de nuestra sealed class */
 @Composable
 
 fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostController){
 
     //El nuevo navController2 es el de VentanasLogin
+    val cromorepository = CromoRepository()
 
         NavHost(
             navController = navController,
             startDestination = BarraDeOpciones.Inicio.ruta
         ){
             composable(route = BarraDeOpciones.Inicio.ruta) {
-                PantallaInicio()
+                val viewmodelAdquisiciones = AdquisicionesViewModel(cromorepository)
+                PantallaInicio(viewmodelAdquisiciones)
             }
             composable(route = BarraDeOpciones.Favoritos.ruta) {
                 PantallaFavoritos()
