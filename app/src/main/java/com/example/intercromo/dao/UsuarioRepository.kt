@@ -48,7 +48,7 @@ class UsuarioRepository(navController: NavController){
         }
     }
 
-    fun createUser(name:String, email: String){
+    private fun createUser(name:String, email: String){
         val userId = auth.currentUser?.uid
         val name = name
         val email = email

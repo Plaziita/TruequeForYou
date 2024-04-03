@@ -11,6 +11,7 @@ import com.example.intercromo.presentation.registro.EmailScreen
 import com.example.intercromo.presentation.login.LoginEmailScreen
 import com.example.intercromo.presentation.SplashScreen
 import com.example.intercromo.presentation.login.LoginViewModel
+import com.example.intercromo.presentation.registro.RegistroEmailViewModel
 
 fun NavGraphBuilder.NavegacionLogin (navController: NavHostController){
 
@@ -26,12 +27,13 @@ fun NavGraphBuilder.NavegacionLogin (navController: NavHostController){
             BienvenidoScreen(navController)
         }
         composable(route = VentanasLogIn.EmailScreen.ruta) {
-            EmailScreen(navController)
+            val registroviewmodel = RegistroEmailViewModel(usuarioRepository)
+            EmailScreen(registroviewmodel)
         }
         composable(route = VentanasLogIn.LoginEmailScreen.ruta) {
-            val viewModel= LoginViewModel(usuarioRepository)
+            val loginviewModel= LoginViewModel(usuarioRepository)
 
-            LoginEmailScreen(viewModel)
+            LoginEmailScreen(loginviewModel)
         }
 
     }

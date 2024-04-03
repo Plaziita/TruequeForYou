@@ -8,23 +8,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.intercromo.dao.UsuarioRepository
+import com.example.intercromo.model.Cromo
 
 class LoginViewModel(private val usuarioRepository: UsuarioRepository) : ViewModel() {
 
     /* para que solo se pueda modificar desde aqui pero se vaua actualizando la vista*/
-    private val _email = MutableLiveData<String>()
-    val email: LiveData<String> = _email
 
-    private val _password = MutableLiveData<String>()
-    val password: LiveData<String> = _password
+    val email: MutableState<String> = mutableStateOf("")
 
-    private val _loginEnable = MutableLiveData<Boolean>()
-    val loginEnable: LiveData<Boolean> = _loginEnable
+    val password: MutableState<String> = mutableStateOf("")
 
-    fun onLoginChanged(email: String, password: String){
-        _email.value = email
-        _password.value = password
-        _loginEnable.value = isValidEmail(email) && isValidPassword(password)
+
+    val loginEnable: MutableState<Boolean> = mutableStateOf(false)
+
+    fun onLoginChanged(emailp: String, passwordp: String){
+        email.value = emailp
+        password.value = passwordp
+        loginEnable.value = isValidEmail(emailp) && isValidPassword(passwordp)
     }
 
     private fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()

@@ -58,9 +58,9 @@ fun LoginEmailScreen(viewModel: LoginViewModel) {
 fun recogidaDatos(viewModel: LoginViewModel) {
 
 
-    val email:String by viewModel.email.observeAsState(initial = "")
-    val password:String by viewModel.password.observeAsState(initial = "")
-    val estadoBoton:Boolean by viewModel.loginEnable.observeAsState(initial = false)
+    val email:String = viewModel.email.value
+    val password:String = viewModel.password.value
+    val estadoBoton:Boolean = viewModel.loginEnable.value
 
 
     OutlinedTextField(
