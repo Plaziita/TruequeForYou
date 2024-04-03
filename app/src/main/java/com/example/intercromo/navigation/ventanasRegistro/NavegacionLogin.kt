@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.manejadorRutas.Rutas
-import com.example.intercromo.presentation.BienvenidoScreen
+import com.example.intercromo.presentation.bienvenida.BienvenidoScreen
 import com.example.intercromo.presentation.registro.EmailScreen
 import com.example.intercromo.presentation.login.LoginEmailScreen
 import com.example.intercromo.presentation.SplashScreen

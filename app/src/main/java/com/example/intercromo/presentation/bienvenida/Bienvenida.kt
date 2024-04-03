@@ -1,5 +1,5 @@
 
-package com.example.intercromo.presentation
+package com.example.intercromo.presentation.bienvenida
 
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
