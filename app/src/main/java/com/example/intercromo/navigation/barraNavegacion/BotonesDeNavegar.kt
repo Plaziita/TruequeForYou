@@ -1,13 +1,16 @@
-package com.example.intercromo.navigation.barraNavegacion
+@file:OptIn(ExperimentalMaterial3Api::class)
 
+package com.example.intercromo
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,50 +24,37 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import androidx.wear.compose.material.ContentAlpha
 import com.example.intercromo.dao.CromoRepository
+
+import com.example.intercromo.navigation.barraNavegacion.BarraDeOpciones
+
 import com.example.intercromo.presentation.PantallaFavoritos
-import com.example.intercromo.presentation.inicio.PantallaInicio
 import com.example.intercromo.presentation.PantallaMensajes
 import com.example.intercromo.presentation.inicio.InicioViewModel
-import com.example.intercromo.presentation.uploadcromo.UploadCromoScreen
+import com.example.intercromo.presentation.inicio.PantallaInicio
 import com.example.intercromo.presentation.perfil.PantallaPerfil
-import com.example.intercromo.presentation.perfil.adquisiciones.AdquisicionesViewModel
+import com.example.intercromo.presentation.uploadcromo.UploadCromoScreen
 
-/* Esta función gestiona como vamos  a navegar entre las pantallas de nuestra sealed class */
-
-
-@SuppressLint("SuspiciousIndentation")
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostController){
+fun barraNavegacion(controller: NavHostController){
+    val navController = rememberNavController()
+    /* gestiona el estado de navegacion entre ellas*/
 
-    //El nuevo navController2 es el de VentanasLogin
-    val cromorepository = CromoRepository()
+    /*Estructura la pantalla para poder añadilre una barra superior o inferior*/
+    Scaffold(
+        bottomBar = { Barra(navController) }
+    ) {
+        BotonesDeNavegar(navController,controller)
+    }
 
-        NavHost(
-            navController = navController,
-            startDestination = BarraDeOpciones.Inicio.ruta
-        ){
-            composable(route = BarraDeOpciones.Inicio.ruta) {
-                val viewmodelinicio = InicioViewModel(cromorepository)
-                PantallaInicio(viewmodelinicio)
-            }
-            composable(route = BarraDeOpciones.Favoritos.ruta) {
-                PantallaFavoritos()
-            }
-            composable(route = BarraDeOpciones.Upload.ruta) {
-                UploadCromoScreen()
-            }
-            composable(route = BarraDeOpciones.Mensajes.ruta) {
-                PantallaMensajes()
-            }
-            composable(route = BarraDeOpciones.Perfil.ruta) {
-                PantallaPerfil(navController2)
-            }
-        }
+
+
 }
 
-/* funcion para cada vez q pulses a un elemento de la barra de abajo te lleve a su pantalla*/
 @Composable
 fun Barra (navController: NavHostController){
     val screens = listOf(
@@ -88,7 +78,6 @@ fun Barra (navController: NavHostController){
         }
     }
 }
-
 
 @Composable
 fun RowScope.AddItem(
@@ -124,4 +113,34 @@ fun RowScope.AddItem(
         modifier = Modifier
             .background(Color(0xFFFFA500))
     )
+}
+
+@SuppressLint("SuspiciousIndentation")
+@Composable
+fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostController){
+
+    //El nuevo navController2 es el de VentanasLogin
+    val cromorepository = CromoRepository()
+
+    NavHost(
+        navController = navController,
+        startDestination = BarraDeOpciones.Inicio.ruta
+    ){
+        composable(route = BarraDeOpciones.Inicio.ruta) {
+            val viewmodelinicio = InicioViewModel(cromorepository)
+            PantallaInicio(viewmodelinicio)
+        }
+        composable(route = BarraDeOpciones.Favoritos.ruta) {
+            PantallaFavoritos()
+        }
+        composable(route = BarraDeOpciones.Upload.ruta) {
+            UploadCromoScreen()
+        }
+        composable(route = BarraDeOpciones.Mensajes.ruta) {
+            PantallaMensajes()
+        }
+        composable(route = BarraDeOpciones.Perfil.ruta) {
+            PantallaPerfil(navController2)
+        }
+    }
 }
