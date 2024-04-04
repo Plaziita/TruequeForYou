@@ -1,4 +1,4 @@
-package com.example.intercromo.presentation
+package com.example.intercromo.presentation.inicio
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -40,7 +40,7 @@ import com.example.intercromo.model.Cromo
 import com.example.intercromo.presentation.perfil.adquisiciones.AdquisicionesViewModel
 
 @Composable
-fun PantallaInicio(viewModel: AdquisicionesViewModel){
+fun PantallaInicio(viewModel: InicioViewModel){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -145,19 +145,18 @@ fun ItemCromo(cromo: Cromo){
 }
 
 @Composable
-fun Recientes(viewModel: AdquisicionesViewModel){
+fun Recientes(viewModel: InicioViewModel){
 
-    val scrollState = rememberScrollState()
+    //val scrollState = rememberScrollState()
     var listaCromos = viewModel.listaCromos.value
 
     LazyRow(
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .padding(start = 16.dp)
-            .padding(end = 16.dp)
-            .height(200.dp)
+            .padding(start = 8.dp)
+            .padding(end = 8.dp)
             .fillMaxWidth()
-            .horizontalScroll(scrollState)
+            //.horizontalScroll(scrollState)
     ) {
         items(listaCromos){
             ItemCromo(cromo = it)
@@ -167,19 +166,18 @@ fun Recientes(viewModel: AdquisicionesViewModel){
 }
 
 @Composable
-fun Favoritos(viewModel: AdquisicionesViewModel){
+fun Favoritos(viewModel: InicioViewModel){
 
-    val scrollState = rememberScrollState()
+    //val scrollState = rememberScrollState()
     var listaCromos = viewModel.listaCromos.value
 
     LazyRow(
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .padding(start = 16.dp)
-            .padding(end = 16.dp)
-            .height(200.dp)
+            .padding(start = 8.dp)
+            .padding(end = 8.dp)
             .fillMaxWidth()
-            .horizontalScroll(scrollState)
+            //.horizontalScroll(scrollState)
     ) {
         items(listaCromos){
             ItemCromo(cromo = it)
@@ -189,7 +187,7 @@ fun Favoritos(viewModel: AdquisicionesViewModel){
 }
 
 @Composable
-fun MostrarCromos(viewModel: AdquisicionesViewModel){
+fun MostrarCromos(viewModel: InicioViewModel){
 
     var listaCromos = viewModel.listaCromos.value
 

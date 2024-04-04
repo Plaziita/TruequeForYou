@@ -1,4 +1,4 @@
-package com.example.intercromo.presentation
+package com.example.intercromo.presentation.uploadcromo
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

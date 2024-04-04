@@ -1,5 +1,7 @@
 package com.example.intercromo.navigation.barraNavegacion
 
+
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
@@ -22,15 +24,18 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.wear.compose.material.ContentAlpha
 import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.presentation.PantallaFavoritos
-import com.example.intercromo.presentation.PantallaInicio
+import com.example.intercromo.presentation.inicio.PantallaInicio
 import com.example.intercromo.presentation.PantallaMensajes
-import com.example.intercromo.presentation.UploadCromoScreen
+import com.example.intercromo.presentation.inicio.InicioViewModel
+import com.example.intercromo.presentation.uploadcromo.UploadCromoScreen
 import com.example.intercromo.presentation.perfil.PantallaPerfil
 import com.example.intercromo.presentation.perfil.adquisiciones.AdquisicionesViewModel
 
 /* Esta función gestiona como vamos  a navegar entre las pantallas de nuestra sealed class */
-@Composable
 
+
+@SuppressLint("SuspiciousIndentation")
+@Composable
 fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostController){
 
     //El nuevo navController2 es el de VentanasLogin
@@ -41,8 +46,8 @@ fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostCo
             startDestination = BarraDeOpciones.Inicio.ruta
         ){
             composable(route = BarraDeOpciones.Inicio.ruta) {
-                val viewmodelAdquisiciones = AdquisicionesViewModel(cromorepository)
-                PantallaInicio(viewmodelAdquisiciones)
+                val viewmodelinicio = InicioViewModel(cromorepository)
+                PantallaInicio(viewmodelinicio)
             }
             composable(route = BarraDeOpciones.Favoritos.ruta) {
                 PantallaFavoritos()
