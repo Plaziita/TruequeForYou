@@ -40,15 +40,15 @@ import com.example.intercromo.presentation.uploadcromo.UploadCromoScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun barraNavegacion(controller: NavHostController){
-    val navController = rememberNavController()
+fun barraNavegacion(controller: NavHostController, controllerBarraNavegacion: NavHostController){
+
     /* gestiona el estado de navegacion entre ellas*/
 
     /*Estructura la pantalla para poder añadilre una barra superior o inferior*/
     Scaffold(
-        bottomBar = { Barra(navController) }
+        bottomBar = { Barra(controllerBarraNavegacion) }
     ) {
-        BotonesDeNavegar(navController,controller)
+        BotonesDeNavegar(controller, controllerBarraNavegacion)
     }
 
 
@@ -117,13 +117,13 @@ fun RowScope.AddItem(
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostController){
+fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion: NavHostController){
 
     //El nuevo navController2 es el de VentanasLogin
     val cromorepository = CromoRepository()
 
     NavHost(
-        navController = navController,
+        navController = controllerBarraNavegacion,
         startDestination = BarraDeOpciones.Inicio.ruta
     ){
         composable(route = BarraDeOpciones.Inicio.ruta) {
@@ -140,7 +140,7 @@ fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostCo
             PantallaMensajes()
         }
         composable(route = BarraDeOpciones.Perfil.ruta) {
-            PantallaPerfil(navController2)
+            PantallaPerfil(navController)
         }
     }
 }

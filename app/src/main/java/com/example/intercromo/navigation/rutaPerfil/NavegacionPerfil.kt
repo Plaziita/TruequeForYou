@@ -4,6 +4,7 @@ import PantallaIntercambios
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.navigation.manejadorRutas.Rutas
@@ -12,7 +13,8 @@ import com.example.intercromo.presentation.perfil.PantallaPerfil
 import com.example.intercromo.presentation.perfil.adquisiciones.AdquisicionesViewModel
 import com.example.intercromo.presentation.perfil.adquisiciones.PantallaAdquisiciones
 
-fun NavGraphBuilder.NavegacionPerfil(navController: NavHostController,controllerOpciones: NavHostController){
+fun NavGraphBuilder.NavegacionPerfil(controllerOpciones: NavHostController){
+
 
     val cromorepository = CromoRepository()
     navigation(
@@ -30,7 +32,7 @@ fun NavGraphBuilder.NavegacionPerfil(navController: NavHostController,controller
             PantallaIntercambios(controllerOpciones)
         }
         composable(route = VentanasPerfil.PerfilScreen.ruta) {
-            PantallaPerfil(navController)
+            PantallaPerfil(controllerOpciones)
         }
     }
 }

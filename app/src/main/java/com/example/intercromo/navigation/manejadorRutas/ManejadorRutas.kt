@@ -12,16 +12,17 @@ import com.example.intercromo.navigation.ventanasRegistro.NavegacionLogin
 
 @Composable
 fun ManejadorRutas(navController: NavHostController) {
-    val controller = rememberNavController()
+    val controllerBarraNavegacion = rememberNavController()
+
     NavHost(
         navController = navController,
         route = Rutas.MANEJADOR,
         startDestination = Rutas.REGISTRO
     ){
-        NavegacionPerfil(navController = navController, controller)
+        NavegacionPerfil(navController)
         NavegacionLogin(navController = navController)
         composable(route = Rutas.BARRANAVEGACION) {
-            barraNavegacion(navController)
+            barraNavegacion(navController, controllerBarraNavegacion)
         }
     }
 }
