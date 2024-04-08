@@ -3,9 +3,11 @@ package com.example.intercromo.presentation.perfil.adquisiciones
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,6 +29,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -38,7 +41,6 @@ import com.example.intercromo.model.Cromo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PantallaAdquisiciones(navController: NavController, viewModel: AdquisicionesViewModel) {
-    //var listaCromos by remember { mutableStateOf(listOf<Cromo>()) }
     var listaCromos = viewModel.listaCromos.value
 
     Scaffold(
@@ -49,6 +51,7 @@ fun PantallaAdquisiciones(navController: NavController, viewModel: Adquisiciones
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = contentPadding,
+            modifier = Modifier.background(Color.White)
         ) {
            // Datasource_Cromo().getCromos { listaCromos = it }
             items(listaCromos){
@@ -61,63 +64,68 @@ fun PantallaAdquisiciones(navController: NavController, viewModel: Adquisiciones
 
 
 @Composable
-fun Adquisiciones(cromo: Cromo){
+fun Adquisiciones(cromo: Cromo) {
     Card(
         modifier = Modifier
-            .clip(MaterialTheme.shapes.medium)
             .size(200.dp, 300.dp)
             .padding(16.dp)
-            .background(Color.White)
     ) {
-        Column (modifier = Modifier.padding(8.dp)){
-            AsyncImage(
-                model = cromo.imagen,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(Color.Black)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Row (
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Icon(
-                    imageVector = Icons.Default.Autorenew,
-                    contentDescription = "Icono tradear",
-                    tint = Color.Black,
+        Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+            Column(modifier = Modifier.padding(8.dp)) {
+                AsyncImage(
+                    model = cromo.imagen,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(Color.Black)
                 )
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Autorenew,
+                        contentDescription = "Icono tradear",
+                        tint = Color.Black,
+                    )
+                    Text(
+                        text = cromo.categoria,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFFFA500),
+                        modifier = Modifier.alpha(0.8f)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        contentDescription = "Icono favorito",
+                        tint = Color.Black,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = cromo.categoria,
+                    text = "Carta / Cromo",
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = "Icono favorito",
-                    tint = Color.Black,
-                    modifier = Modifier.weight(1f)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = cromo.nombre,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Carta / Cromo",
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = cromo.nombre,
-                fontWeight = FontWeight.Bold
-            )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+    @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BarraSuperior(navController: NavController) {
     TopAppBar(
+        modifier = Modifier.background(Color.White),
         title = {
             Row {
                 Icon(

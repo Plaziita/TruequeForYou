@@ -6,12 +6,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.manejadorRutas.Rutas
-import com.example.intercromo.presentation.bienvenida.BienvenidoScreen
-import com.example.intercromo.presentation.registro.EmailScreen
-import com.example.intercromo.presentation.login.LoginEmailScreen
 import com.example.intercromo.presentation.SplashScreen
-import com.example.intercromo.presentation.bienvenida.BienvenidaViewModel
+import com.example.intercromo.presentation.bienvenida.BienvenidoScreen
+import com.example.intercromo.presentation.login.LoginEmailScreen
 import com.example.intercromo.presentation.login.LoginViewModel
+import com.example.intercromo.presentation.registro.EmailScreen
 import com.example.intercromo.presentation.registro.RegistroEmailViewModel
 
 fun NavGraphBuilder.NavegacionLogin (navController: NavHostController){
@@ -22,7 +21,7 @@ fun NavGraphBuilder.NavegacionLogin (navController: NavHostController){
         startDestination = VentanasLogIn.SplashScreen.ruta
     ){
         composable(route = VentanasLogIn.SplashScreen.ruta) {
-            SplashScreen(navController)
+            SplashScreen(navController,usuarioRepository)
         }
         composable(route = VentanasLogIn.BienvenidosScreen.ruta) {
             //val bienvenidaviewmodel = BienvenidaViewModel(usuarioRepository)

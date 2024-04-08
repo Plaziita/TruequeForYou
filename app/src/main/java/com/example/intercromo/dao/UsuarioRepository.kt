@@ -86,6 +86,13 @@ class UsuarioRepository(navController: NavController){
         }
     }
 
+    fun llevarAlMenu(){
+        if(currentUser != null){
+            navegar.navigate(Rutas.BARRANAVEGACION)
+        }
+    }
+
+
     fun cerrarSesion(context: Context){
         try {
             // Cerrar sesión en Firebase

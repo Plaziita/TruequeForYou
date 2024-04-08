@@ -22,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +42,7 @@ fun Historial() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Blue)
+            .background(Color.White)
     ) {
         Text(
             text = "Historial"
@@ -55,6 +54,7 @@ fun Historial() {
 @Composable
 fun BarraSuperiorHistorial(navController: NavController) {
     TopAppBar(
+        modifier = Modifier.background(Color.White),
         title = {
             Row {
                 Icon(
@@ -63,7 +63,7 @@ fun BarraSuperiorHistorial(navController: NavController) {
                     tint = Color.Black,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(VentanasPerfil.PerfilScreen.ruta)
+                            navController.popBackStack()
                         }
                 )
                 Spacer(modifier = Modifier.width(20.dp))

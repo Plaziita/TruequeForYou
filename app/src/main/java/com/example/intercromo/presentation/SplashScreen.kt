@@ -16,13 +16,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.intercromo.R
+import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavHostController){
-    LaunchedEffect(key1 = true){
+fun SplashScreen(navController: NavHostController, usuarioRepository: UsuarioRepository){
+
+    LaunchedEffect(key1 = Unit){
         delay(1000)
+        usuarioRepository.llevarAlMenu()
+    }
+
+    LaunchedEffect(key1 = true){
+        delay(2000)
         navController.popBackStack()
         navController.navigate(VentanasLogIn.BienvenidosScreen.ruta)
     }
@@ -30,7 +37,6 @@ fun SplashScreen(navController: NavHostController){
 }
 @Composable
 fun Splash() {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
