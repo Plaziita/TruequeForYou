@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.intercromo.model.Cromo
-import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,7 +126,7 @@ fun BarraSuperior(navController: NavController) {
                     tint = Color.Black,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(VentanasPerfil.PerfilScreen.ruta)
+                            navController.popBackStack()
                         }
                 )
                 Spacer(modifier = Modifier.width(20.dp))

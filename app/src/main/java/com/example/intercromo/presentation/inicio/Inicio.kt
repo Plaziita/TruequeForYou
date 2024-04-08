@@ -1,7 +1,6 @@
 package com.example.intercromo.presentation.inicio
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,12 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.Favorite
@@ -37,58 +36,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.intercromo.model.Cromo
-import com.example.intercromo.presentation.perfil.adquisiciones.AdquisicionesViewModel
 
 @Composable
-fun PantallaInicio(viewModel: InicioViewModel){
-    Column(
+fun PantallaInicio(viewModel: InicioViewModel) {
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
             .padding(16.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.Restore,
-                contentDescription = "Icono recientes",
-                tint = Color.Black,
-                modifier = Modifier.size(50.dp)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = "Recientes",
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp
-            )
-        }
-        Recientes(viewModel)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.Favorite,
-                contentDescription = "Icono favoritos",
-                tint = Color.Black,
-                modifier = Modifier.size(50.dp)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = "Favoritos",
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp
-            )
-        }
-        Favoritos(viewModel)
-        Spacer(modifier = Modifier.height(20.dp))
-        MostrarCromos(viewModel)
     }
 }
+
 
 @Composable
 fun ItemCromo(cromo: Cromo){
@@ -150,6 +109,25 @@ fun Recientes(viewModel: InicioViewModel){
     //val scrollState = rememberScrollState()
     var listaCromos = viewModel.listaCromos.value
 
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Restore,
+            contentDescription = "Icono recientes",
+            tint = Color.Black,
+            modifier = Modifier.size(40.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = "Recientes",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp
+        )
+    }
+
     LazyRow(
         modifier = Modifier
             .padding(vertical = 8.dp)
@@ -171,6 +149,25 @@ fun Favoritos(viewModel: InicioViewModel){
     //val scrollState = rememberScrollState()
     var listaCromos = viewModel.listaCromos.value
 
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Favorite,
+            contentDescription = "Icono favoritos",
+            tint = Color.Black,
+            modifier = Modifier.size(40.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = "Favoritos",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp
+        )
+    }
+
     LazyRow(
         modifier = Modifier
             .padding(vertical = 8.dp)
@@ -190,6 +187,7 @@ fun Favoritos(viewModel: InicioViewModel){
 fun MostrarCromos(viewModel: InicioViewModel){
 
     var listaCromos = viewModel.listaCromos.value
+    Spacer(modifier = Modifier.height(10.dp))
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2)
