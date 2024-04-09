@@ -24,14 +24,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import androidx.wear.compose.material.ContentAlpha
 import com.example.intercromo.dao.CromoRepository
-
 import com.example.intercromo.navigation.barraNavegacion.BarraDeOpciones
-
-import com.example.intercromo.presentation.PantallaFavoritos
 import com.example.intercromo.presentation.PantallaMensajes
+import com.example.intercromo.presentation.favoritos.FavoritosViewModel
+import com.example.intercromo.presentation.favoritos.PantallaFavoritos
 import com.example.intercromo.presentation.inicio.InicioViewModel
 import com.example.intercromo.presentation.inicio.PantallaInicio
 import com.example.intercromo.presentation.perfil.PantallaPerfil
@@ -131,7 +129,8 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
             PantallaInicio(viewmodelinicio)
         }
         composable(route = BarraDeOpciones.Favoritos.ruta) {
-            PantallaFavoritos()
+            val viewmodelFavorito = FavoritosViewModel(cromorepository)
+            PantallaFavoritos(viewmodelFavorito)
         }
         composable(route = BarraDeOpciones.Upload.ruta) {
             UploadCromoScreen()
