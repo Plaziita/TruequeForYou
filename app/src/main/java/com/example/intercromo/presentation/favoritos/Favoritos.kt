@@ -50,6 +50,7 @@ fun MostrarFavoritos(favoritosViewModel: FavoritosViewModel) {
 
     Spacer(modifier = Modifier.height(10.dp))
 
+    //Lucas bobon
     val columnSize = 2
     val numberOfRows = (listaCromos.size + columnSize - 1) / columnSize
     val lastRowItemCount = listaCromos.size % columnSize
