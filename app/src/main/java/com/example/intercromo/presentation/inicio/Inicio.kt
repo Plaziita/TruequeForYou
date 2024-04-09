@@ -46,6 +46,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun PantallaInicio(viewModel: InicioViewModel) {
+    //Lucas pelucas
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -168,6 +169,7 @@ fun Recientes(viewModel: InicioViewModel){
 
 @Composable
 fun MostrarCromos(viewModel: InicioViewModel) {
+    //Lucas tontito
     var listaCromos = viewModel.listaCromos.value
     var isLoading by remember { mutableStateOf(false) }
 
