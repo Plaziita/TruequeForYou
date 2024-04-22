@@ -68,13 +68,13 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
 
 @Composable
 fun ItemCromo(cromo: Cromo, navController: NavController){
+
     Card(
         modifier = Modifier
             .size(200.dp, 300.dp)
             .padding(16.dp)
             .clickable {
                 navController.navigate("${VentanasInicio.CromoScreen.ruta.replace("{cromo}", cromo.nombre)}")
-
             }
     ) {
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
