@@ -17,23 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.intercromo.model.Cromo
 
 @Composable
-fun PantallaCromo(cromo: Cromo,controller: NavController){
+fun PantallaCromo(){
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(500.dp)
     ){
-        AsyncImage(
+        /*AsyncImage(
             model = cromo.imagen,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()
-        )
+        )*/
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -44,9 +44,6 @@ fun PantallaCromo(cromo: Cromo,controller: NavController){
                     contentDescription = "Navigation Icon",
                     tint = Color.Black,
                     modifier = Modifier
-                        .clickable {
-                            controller.popBackStack()
-                        }
                 )
                 Icon(
                     imageVector = Icons.Default.FavoriteBorder,

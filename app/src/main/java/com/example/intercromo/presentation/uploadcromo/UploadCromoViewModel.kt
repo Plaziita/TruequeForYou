@@ -1,9 +1,21 @@
 package com.example.intercromo.presentation.uploadcromo
 
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.util.UUID
 
 class UploadCromoViewModel {
 
@@ -39,4 +51,19 @@ class UploadCromoViewModel {
     fun isValidDescripcion(descripcion_: String):Boolean{
         return descripcion_.length>0
     }
+    fun uploadImageToFirebase(uri: Uri) {
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+        val imagesRef = storageRef.child("images/${UUID.randomUUID()}")
+
+        // Subir la imagen a Firebase Storage
+        imagesRef.putFile(uri)
+            .addOnSuccessListener {
+                // Manejar el éxito de la carga de la imagen
+            }
+            .addOnFailureListener {
+                // Manejar el error de la carga de la imagen
+            }
+    }
+
 }

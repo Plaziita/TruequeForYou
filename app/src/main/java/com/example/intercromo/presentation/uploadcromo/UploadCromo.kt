@@ -1,6 +1,14 @@
 package com.example.intercromo.presentation.uploadcromo
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,7 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,7 +67,8 @@ fun recogidaDatos(viewModel: UploadCromoViewModel){
         modifier = Modifier
             .padding(16.dp)
     ) {
-        SubirImagen()
+        SubirImagen1()
+        SubirImagen2()
         OutlinedTextField(
             value = nombre,
             onValueChange = { viewModel.uploadCromoChanged(selectedtText,it, descripcion) },
@@ -85,16 +96,46 @@ fun recogidaDatos(viewModel: UploadCromoViewModel){
         BotonGuardarCromo()
     }
 }
-
 @Composable
-fun SubirImagen(){
+fun SubirImagen1(){
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+            imageUri = uri
+        }
     Row (
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
     ) {
+        imageUri?.let {
+            if (Build.VERSION.SDK_INT < 28) {
+                bitmap.value = MediaStore.Images
+                    .Media.getBitmap(context.contentResolver, it)
+            } else {
+                val source = ImageDecoder.createSource(context.contentResolver, it)
+                bitmap.value = ImageDecoder.decodeBitmap(source)
+            }
+
+            bitmap.value?.let { btm ->
+                Image(
+                    bitmap = btm.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(120.dp)
+                        .border(
+                            border = BorderStroke(2.dp, Color(0xFFFFA500)),
+                            shape = MaterialTheme.shapes.small
+                        ),
+                )
+            }
+        }
         IconButton(
-            onClick = {},
+            onClick = {launcher.launch("image/*") },
             modifier = Modifier
                 .weight(1f)
                 .height(120.dp)
@@ -107,8 +148,48 @@ fun SubirImagen(){
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
+    }
+}
+@Composable
+fun SubirImagen2(){
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+            imageUri = uri
+        }
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        imageUri?.let {
+            if (Build.VERSION.SDK_INT < 28) {
+                bitmap.value = MediaStore.Images
+                    .Media.getBitmap(context.contentResolver, it)
+            } else {
+                val source = ImageDecoder.createSource(context.contentResolver, it)
+                bitmap.value = ImageDecoder.decodeBitmap(source)
+            }
+
+            bitmap.value?.let { btm ->
+                Image(
+                    bitmap = btm.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(120.dp)
+                        .border(
+                            border = BorderStroke(2.dp, Color(0xFFFFA500)),
+                            shape = MaterialTheme.shapes.small
+                        ),
+                )
+            }
+        }
         IconButton(
-            onClick = {},
+            onClick = {launcher.launch("image/*") },
             modifier = Modifier
                 .weight(1f)
                 .height(120.dp)
@@ -120,6 +201,7 @@ fun SubirImagen(){
                 Icon(Icons.Default.PhotoCamera, contentDescription = null)
             }
         )
+        Spacer(modifier = Modifier.width(8.dp))
     }
 }
 

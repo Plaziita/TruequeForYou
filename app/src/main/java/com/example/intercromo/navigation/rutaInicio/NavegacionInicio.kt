@@ -18,7 +18,7 @@ fun NavGraphBuilder.NavegacionInicio(controllerOpciones: NavHostController){
         startDestination = VentanasPerfil.PerfilScreen.ruta
     ){
         composable(route = VentanasPerfil.AdquisicionesScreen.ruta) {
-            PantallaCromo(controllerOpciones)
+            PantallaCromo()
         }
     }
 }
