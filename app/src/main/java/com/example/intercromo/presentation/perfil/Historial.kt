@@ -1,4 +1,4 @@
-package com.example.intercromo.screens.perfil
+package com.example.intercromo.presentation.perfil
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -22,40 +22,39 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaAdquisiciones(navController: NavController){
+fun PantallaHistorial(navController: NavController){
 
     Scaffold(
         topBar = {
-            BarraSuperior(navController)
+            BarraSuperiorHistorial(navController)
         }
     ) {
-        Adquisiciones()
+        Historial()
     }
-
 }
 
 @Composable
-fun Adquisiciones(){
+fun Historial() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Blue)
+            .background(Color.White)
     ) {
         Text(
-            text = "Adquisiciones"
+            text = "Historial"
         )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BarraSuperior(navController: NavController) {
+fun BarraSuperiorHistorial(navController: NavController) {
     TopAppBar(
+        modifier = Modifier.background(Color.White),
         title = {
             Row {
                 Icon(
@@ -64,21 +63,21 @@ fun BarraSuperior(navController: NavController) {
                     tint = Color.Black,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(VentanasPerfil.PerfilScreen.ruta)
+                            navController.popBackStack()
                         }
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 Text(
-                    text = "Adquisiciones"
+                    text = "Historial"
                 )
             }
         }
     )
 }
 
-
 @Composable
 @Preview
-fun PantallaInicioPreview(){
-    PantallaAdquisiciones(navController = rememberNavController())
+fun PantallaHistorialPreview(){
+    PantallaHistorial(navController = rememberNavController())
 }
+

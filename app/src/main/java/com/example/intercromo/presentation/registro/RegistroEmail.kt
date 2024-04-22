@@ -1,4 +1,4 @@
-package com.example.intercromo.screens.registro.email
+package com.example.intercromo.presentation.registro
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -37,8 +37,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.intercromo.dao.UsuarioRepository
 
 @Composable
-fun EmailScreen(navController: NavController) {
-    val navController = navController
+fun EmailScreen(viewModel: RegistroEmailViewModel) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -53,7 +53,7 @@ fun EmailScreen(navController: NavController) {
                 color = Color(0xFFFFA500),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            datosInicio(navController)
+            datosInicio(viewModel)
         }
     }
 }
@@ -61,34 +61,36 @@ fun EmailScreen(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun datosInicio(navController: NavController) {
+fun datosInicio(viewModel: RegistroEmailViewModel) {
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var nombreApellidos by remember { mutableStateOf("") }
-    var estadoBoton by remember { mutableStateOf(false) }
+    var email = viewModel.email.value
+    var password = viewModel.password.value
+    var nombreApellidos = viewModel.nombre.value
+    var estadoBoton = viewModel.registrarEnable.value
     var showDialog by remember { mutableStateOf(false) }
 
-    val auth = UsuarioRepository(navController)
+
 
     OutlinedTextField(
         value = nombreApellidos,
-        onValueChange = { nombreApellidos = it },
-        label = { Text("Nombre y apellidos") },
+        onValueChange = { viewModel.onRegistroChanged(email, password, it)},
+        label = { Text("Nombre y apellidos", color = Color.Black) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
         leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
     )
 
     OutlinedTextField(
         value = email,
-        onValueChange = { email = it },
-        label = { Text("Correo electrónico") },
+        onValueChange = { viewModel.onRegistroChanged(it, password, nombreApellidos) },
+        label = { Text("Correo electrónico", color = Color.Black) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
 
@@ -96,10 +98,11 @@ fun datosInicio(navController: NavController) {
 
     OutlinedTextField(
         value = password,
-        onValueChange = { password = it },
-        label = { Text("Contraseña") },
+        onValueChange = { viewModel.onRegistroChanged(email, it, nombreApellidos)},
+        label = { Text("Contraseña", color = Color.Black) },
         modifier = Modifier
             .fillMaxWidth(),
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
@@ -107,9 +110,6 @@ fun datosInicio(navController: NavController) {
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    if (email.isNotEmpty() && password.isNotEmpty() && nombreApellidos.isNotEmpty()) {
-        estadoBoton = true
-    }
 
     Button(
         modifier = Modifier
@@ -121,11 +121,7 @@ fun datosInicio(navController: NavController) {
         ),
         enabled = estadoBoton,
         onClick = {
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-
-                auth.registerEmailPassword(email, password, nombreApellidos)
-
-            }
+            viewModel.registrar(email, password, nombreApellidos)
 
         }
     ) {
@@ -163,8 +159,3 @@ fun datosInicio(navController: NavController) {
 
 }
 
-@Composable
-@Preview
-fun EmailPreview() {
-    EmailScreen(rememberNavController())
-}

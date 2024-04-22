@@ -4,29 +4,37 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.manejadorRutas.Rutas
-import com.example.intercromo.screens.BienvenidoScreen
-import com.example.intercromo.screens.registro.email.EmailScreen
-import com.example.intercromo.screens.registro.email.LoginEmailScreen
-import com.example.intercromo.screens.SplashScreen
+import com.example.intercromo.presentation.SplashScreen
+import com.example.intercromo.presentation.bienvenida.BienvenidoScreen
+import com.example.intercromo.presentation.login.LoginEmailScreen
+import com.example.intercromo.presentation.login.LoginViewModel
+import com.example.intercromo.presentation.registro.EmailScreen
+import com.example.intercromo.presentation.registro.RegistroEmailViewModel
 
 fun NavGraphBuilder.NavegacionLogin (navController: NavHostController){
 
+    val usuarioRepository = UsuarioRepository(navController)
     navigation(
         route = Rutas.REGISTRO,
         startDestination = VentanasLogIn.SplashScreen.ruta
     ){
         composable(route = VentanasLogIn.SplashScreen.ruta) {
-            SplashScreen(navController)
+            SplashScreen(navController,usuarioRepository)
         }
         composable(route = VentanasLogIn.BienvenidosScreen.ruta) {
+            //val bienvenidaviewmodel = BienvenidaViewModel(usuarioRepository)
             BienvenidoScreen(navController)
         }
         composable(route = VentanasLogIn.EmailScreen.ruta) {
-            EmailScreen(navController)
+            val registroviewmodel = RegistroEmailViewModel(usuarioRepository)
+            EmailScreen(registroviewmodel)
         }
         composable(route = VentanasLogIn.LoginEmailScreen.ruta) {
-            LoginEmailScreen(navController)
+            val loginviewmodel= LoginViewModel(usuarioRepository)
+
+            LoginEmailScreen(loginviewmodel)
         }
 
     }

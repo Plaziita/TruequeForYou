@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.intercromo.screens.registro.email
+package com.example.intercromo.presentation.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,23 +22,17 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.intercromo.dao.UsuarioRepository
 
 @Composable
-fun LoginEmailScreen(navController: NavController){
+fun LoginEmailScreen(viewModel: LoginViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -53,36 +47,42 @@ fun LoginEmailScreen(navController: NavController){
                 color = Color(0xFFFFA500),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            recogidaDatos(navController)
+            recogidaDatos(viewModel)
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun recogidaDatos(navController: NavController){
+fun recogidaDatos(viewModel: LoginViewModel) {
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var estadoBoton by remember { mutableStateOf(false) }
-    val auth = UsuarioRepository(navController)
+
+    val email:String = viewModel.email.value
+    val password:String = viewModel.password.value
+    val estadoBoton:Boolean = viewModel.loginEnable.value
+
 
     OutlinedTextField(
         value = email,
-        onValueChange = { email = it },
-        label = { Text("Correo electrónico") },
+        onValueChange = {viewModel.onLoginChanged(it , password)},
+        label = { Text("Correo electrónico", color = Color.Black) },
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
         leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
 
+
         )
 
     OutlinedTextField(
         value = password,
-        onValueChange = { password = it },
-        label = { Text("Contraseña") },
+        onValueChange = {viewModel.onLoginChanged(email , it)},
+        label = { Text("Contraseña", color = Color.Black) },
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
+
         modifier = Modifier
             .fillMaxWidth(),
         leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
@@ -90,9 +90,6 @@ fun recogidaDatos(navController: NavController){
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
     )
 
-    if (email.isNotEmpty() && password.isNotEmpty()){
-        estadoBoton = true
-    }
 
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -106,7 +103,7 @@ fun recogidaDatos(navController: NavController){
         ),
         enabled = estadoBoton,
         onClick = {
-           auth.signInEmailPassword(email, password)
+            viewModel.login(email, password)
         }
     ) {
         Text(
@@ -116,13 +113,5 @@ fun recogidaDatos(navController: NavController){
     }
 }
 
-@Composable
-fun inicioSesion(){
 
-}
 
-@Composable
-@Preview
-fun LoginScreenPreview(){
-    LoginEmailScreen(rememberNavController())
-}

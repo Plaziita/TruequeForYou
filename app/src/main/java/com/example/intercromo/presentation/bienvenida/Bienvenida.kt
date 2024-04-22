@@ -1,5 +1,5 @@
 
-package com.example.intercromo.screens
+package com.example.intercromo.presentation.bienvenida
 
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.intercromo.R
-import com.example.intercromo.dao.AuthGoogleRepository
+import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -114,7 +114,7 @@ fun botonesRegistro(
     //Nuestro webID
     val token = stringResource(R.string.idWeb)
     val context = LocalContext.current
-    val authGoogle = AuthGoogleRepository(navController)
+    val auth = UsuarioRepository(navController)
 
     //Creamos una nueva actividad para hacer el login con Google
     val launcher = rememberLauncherForActivityResult(
@@ -128,7 +128,7 @@ fun botonesRegistro(
         try{
             val account = task.getResult(ApiException::class.java)
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-            authGoogle.signInWithGoogleCredential(credential)
+            auth.signInWithGoogleCredential(credential)
         }
         catch (ex: Exception){
             Log.d("InterCromo", "Registro con google fallo!")

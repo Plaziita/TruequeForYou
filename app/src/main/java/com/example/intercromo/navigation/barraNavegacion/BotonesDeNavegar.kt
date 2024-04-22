@@ -1,11 +1,16 @@
-package com.example.intercromo.navigation.barraNavegacion
+@file:OptIn(ExperimentalMaterial3Api::class)
 
+package com.example.intercromo
+
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,47 +25,41 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.wear.compose.material.ContentAlpha
-import com.example.intercromo.screens.PantallaFavoritos
-import com.example.intercromo.screens.PantallaInicio
-import com.example.intercromo.screens.PantallaMensajes
-import com.example.intercromo.screens.PantallaTradear
-import com.example.intercromo.screens.perfil.PantallaPerfil
-/* Esta función gestiona como vamos  a navegar entre las pantallas de nuestra sealed class */
+import com.example.intercromo.dao.CromoRepository
+import com.example.intercromo.navigation.barraNavegacion.BarraDeOpciones
+import com.example.intercromo.presentation.PantallaMensajes
+import com.example.intercromo.presentation.favoritos.FavoritosViewModel
+import com.example.intercromo.presentation.favoritos.PantallaFavoritos
+import com.example.intercromo.presentation.inicio.InicioViewModel
+import com.example.intercromo.presentation.inicio.PantallaInicio
+import com.example.intercromo.presentation.perfil.PantallaPerfil
+import com.example.intercromo.presentation.uploadcromo.UploadCromoScreen
+import com.example.intercromo.presentation.uploadcromo.UploadCromoViewModel
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
+fun barraNavegacion(controller: NavHostController, controllerBarraNavegacion: NavHostController){
 
-fun BotonesDeNavegar(navController: NavHostController, navController2: NavHostController,navController3: NavHostController){
+    /* gestiona el estado de navegacion entre ellas*/
 
-    //El nuevo navController2 es el de VentanasLogin
+    /*Estructura la pantalla para poder añadilre una barra superior o inferior*/
+    Scaffold(
+        bottomBar = { Barra(controllerBarraNavegacion) }
+    ) {
+        BotonesDeNavegar(controller, controllerBarraNavegacion)
+    }
 
-        NavHost(
-            navController = navController,
-            startDestination = BarraDeOpciones.Inicio.ruta
-        ){
-            composable(route = BarraDeOpciones.Inicio.ruta) {
-                PantallaInicio()
-            }
-            composable(route = BarraDeOpciones.Favoritos.ruta) {
-                PantallaFavoritos()
-            }
-            composable(route = BarraDeOpciones.Tradear.ruta) {
-                PantallaTradear()
-            }
-            composable(route = BarraDeOpciones.Mensajes.ruta) {
-                PantallaMensajes()
-            }
-            composable(route = BarraDeOpciones.Perfil.ruta) {
-                PantallaPerfil(navController2)
-            }
-        }
+
+
 }
 
-/* funcion para cada vez q pulses a un elemento de la barra de abajo te lleve a su pantalla*/
 @Composable
 fun Barra (navController: NavHostController){
     val screens = listOf(
         BarraDeOpciones.Inicio,
         BarraDeOpciones.Favoritos,
-        BarraDeOpciones.Tradear,
+        BarraDeOpciones.Upload,
         BarraDeOpciones.Mensajes,
         BarraDeOpciones.Perfil
     )
@@ -78,7 +77,6 @@ fun Barra (navController: NavHostController){
         }
     }
 }
-
 
 @Composable
 fun RowScope.AddItem(
@@ -114,4 +112,36 @@ fun RowScope.AddItem(
         modifier = Modifier
             .background(Color(0xFFFFA500))
     )
+}
+
+@SuppressLint("SuspiciousIndentation")
+@Composable
+fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion: NavHostController){
+
+    //El nuevo navController2 es el de VentanasLogin
+    val cromorepository = CromoRepository()
+
+    NavHost(
+        navController = controllerBarraNavegacion,
+        startDestination = BarraDeOpciones.Inicio.ruta
+    ){
+        composable(route = BarraDeOpciones.Inicio.ruta) {
+            val viewmodelinicio = InicioViewModel(cromorepository)
+            PantallaInicio(viewmodelinicio)
+        }
+        composable(route = BarraDeOpciones.Favoritos.ruta) {
+            val viewmodelFavorito = FavoritosViewModel(cromorepository)
+            PantallaFavoritos(viewmodelFavorito)
+        }
+        composable(route = BarraDeOpciones.Upload.ruta) {
+            val viewmodelUpload = UploadCromoViewModel()
+            UploadCromoScreen(viewmodelUpload)
+        }
+        composable(route = BarraDeOpciones.Mensajes.ruta) {
+            PantallaMensajes()
+        }
+        composable(route = BarraDeOpciones.Perfil.ruta) {
+            PantallaPerfil(navController)
+        }
+    }
 }
