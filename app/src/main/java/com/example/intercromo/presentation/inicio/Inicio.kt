@@ -48,7 +48,7 @@ import com.example.intercromo.navigation.rutaInicio.VentanasInicio
 import kotlinx.coroutines.delay
 
 @Composable
-fun PantallaInicio(viewModel: InicioViewModel) {
+fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
     //Lucas pelucas
     LazyColumn(
         modifier = Modifier
@@ -56,10 +56,10 @@ fun PantallaInicio(viewModel: InicioViewModel) {
             .background(Color.White)
     ) {
         item {
-            Recientes(viewModel)
+            Recientes(viewModel, navController)
         }
         item{
-            MostrarCromos(viewModel)
+            MostrarCromos(viewModel, navController)
         }
     }
 
@@ -73,7 +73,8 @@ fun ItemCromo(cromo: Cromo, navController: NavController){
             .size(200.dp, 300.dp)
             .padding(16.dp)
             .clickable {
-                navController.navigate(VentanasInicio.CromoScreen.ruta)
+                navController.navigate("${VentanasInicio.CromoScreen.ruta.replace("{cromo}", cromo.nombre)}")
+
             }
     ) {
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
@@ -127,7 +128,7 @@ fun ItemCromo(cromo: Cromo, navController: NavController){
 }
 
 @Composable
-fun Recientes(viewModel: InicioViewModel){
+fun Recientes(viewModel: InicioViewModel, navController: NavController){
 
     //val scrollState = rememberScrollState()
     var listaCromos = viewModel.listaCromos.value
@@ -166,7 +167,7 @@ fun Recientes(viewModel: InicioViewModel){
             .fillMaxWidth()
     ) {
         items(listaCromos){
-            ItemCromo(cromo = it)
+            ItemCromo(cromo = it, navController)
         }
     }
 
@@ -174,7 +175,7 @@ fun Recientes(viewModel: InicioViewModel){
 
 
 @Composable
-fun MostrarCromos(viewModel: InicioViewModel) {
+fun MostrarCromos(viewModel: InicioViewModel, navController: NavController) {
     //Lucas tontito
     var listaCromos = viewModel.listaCromos.value
     var isLoading by remember { mutableStateOf(false) }
@@ -220,7 +221,7 @@ fun MostrarCromos(viewModel: InicioViewModel) {
                 for (col in 0 until itemsInRow) {
                     val index = row * columnSize + col
                     if (index < listaCromos.size) {
-                        ItemCromo(cromo = listaCromos[index])
+                        ItemCromo(cromo = listaCromos[index], navController)
                     }
                 }
             }

@@ -6,8 +6,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.navigation.manejadorRutas.Rutas
-import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
-import com.example.intercromo.presentation.PantallaCromo
+import com.example.intercromo.presentation.CromoScreen.CromoScreenViewModel
+import com.example.intercromo.presentation.CromoScreen.PantallaCromo
+import com.example.intercromo.presentation.inicio.InicioViewModel
+import com.example.intercromo.presentation.inicio.PantallaInicio
 
 fun NavGraphBuilder.NavegacionInicio(controllerOpciones: NavHostController){
 
@@ -15,10 +17,16 @@ fun NavGraphBuilder.NavegacionInicio(controllerOpciones: NavHostController){
 
     navigation(
         route = Rutas.INICIO,
-        startDestination = VentanasPerfil.PerfilScreen.ruta
+        startDestination = VentanasInicio.InicioScreen.ruta
     ){
-        composable(route = VentanasPerfil.AdquisicionesScreen.ruta) {
-            PantallaCromo(controllerOpciones)
+        composable(route = VentanasInicio.CromoScreen.ruta) {
+            val viewmodelPantallaCromo = CromoScreenViewModel(cromorepository)
+            PantallaCromo(controllerOpciones, viewmodelPantallaCromo)
+        }
+
+        composable(route = VentanasInicio.InicioScreen.ruta) {
+            val viewmodelInicio = InicioViewModel(cromorepository)
+            PantallaInicio(viewmodelInicio, controllerOpciones)
         }
     }
 }

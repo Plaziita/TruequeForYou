@@ -27,24 +27,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.intercromo.presentation.inicio.ItemCromo
 import kotlinx.coroutines.delay
 
 @Composable
-fun PantallaFavoritos(favoritosViewModel: FavoritosViewModel){
+fun PantallaFavoritos(favoritosViewModel: FavoritosViewModel, navController: NavController){
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
         item{
-            MostrarFavoritos(favoritosViewModel)
+            MostrarFavoritos(favoritosViewModel, navController)
         }
     }
 }
 
 @Composable
-fun MostrarFavoritos(favoritosViewModel: FavoritosViewModel) {
+fun MostrarFavoritos(favoritosViewModel: FavoritosViewModel, navController: NavController) {
     var listaCromos = favoritosViewModel.listaCromos.value
     var isLoading by remember { mutableStateOf(false) }
 
@@ -93,7 +94,7 @@ fun MostrarFavoritos(favoritosViewModel: FavoritosViewModel) {
                 for (col in 0 until itemsInRow) {
                     val index = row * columnSize + col
                     if (index < listaCromos.size) {
-                        ItemCromo(cromo = listaCromos[index])
+                        ItemCromo(cromo = listaCromos[index], navController)
                     }
                 }
             }

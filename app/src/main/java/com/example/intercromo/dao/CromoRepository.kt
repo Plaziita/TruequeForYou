@@ -3,6 +3,11 @@ package com.example.intercromo.dao
 import android.util.Log
 import com.example.intercromo.model.Cromo
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 
 class CromoRepository {
@@ -80,6 +85,32 @@ class CromoRepository {
             emptyList()
         }
     }
+
+    fun getCromo(nombre_: String?): Cromo? {
+        var cromoDevolver: Cromo? = null
+
+        // Crear un nuevo alcance de corrutina
+        CoroutineScope(Dispatchers.IO).launch {
+            // Dentro de la corrutina, llamamos a la función suspendida getCromos()
+            val cromos = getCromos()
+
+            // Procesamos la lista de cromos
+            for (cromo in cromos) {
+                if (cromo.nombre.equals(nombre_)) {
+                    cromoDevolver = cromo
+                    break
+                }
+            }
+        }
+
+        // Esperamos hasta que la corrutina termine de ejecutarse
+        runBlocking {
+            delay(1000) // Agregamos un retardo para esperar que la corrutina termine (esto es opcional)
+        }
+
+        return cromoDevolver
+    }
+
 
 
 }
