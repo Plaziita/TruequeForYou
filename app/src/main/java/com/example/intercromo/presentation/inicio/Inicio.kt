@@ -1,6 +1,7 @@
 package com.example.intercromo.presentation.inicio
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,8 +41,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.intercromo.model.Cromo
+import com.example.intercromo.navigation.rutaInicio.VentanasInicio
 import kotlinx.coroutines.delay
 
 @Composable
@@ -64,11 +67,14 @@ fun PantallaInicio(viewModel: InicioViewModel) {
 
 
 @Composable
-fun ItemCromo(cromo: Cromo){
+fun ItemCromo(cromo: Cromo, navController: NavController){
     Card(
         modifier = Modifier
             .size(200.dp, 300.dp)
             .padding(16.dp)
+            .clickable {
+                navController.navigate(VentanasInicio.CromoScreen.ruta)
+            }
     ) {
         Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
             Column(modifier = Modifier.padding(8.dp)) {
