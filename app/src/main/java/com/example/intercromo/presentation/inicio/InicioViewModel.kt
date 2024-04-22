@@ -12,7 +12,6 @@ class InicioViewModel(cromoRepository: CromoRepository) : ViewModel() {
 
     val listaCromos: MutableState<List<Cromo>> = mutableStateOf(listOf())
 
-
     init {
         viewModelScope.launch {
             listaCromos.value = cromoRepository.getCromos()
