@@ -34,22 +34,24 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 
 @Composable
-fun UploadCromoScreen(){
+fun UploadCromoScreen(viewModel: UploadCromoViewModel){
 Column(
     modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
 ) {
-    recogidaDatos()
+    recogidaDatos(viewModel)
 }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun recogidaDatos(){
+fun recogidaDatos(viewModel: UploadCromoViewModel){
 
-    var nombre by remember { mutableStateOf("") }
-    var descripcion by remember { mutableStateOf("") }
+    val nombre = viewModel.nombre.value
+    val descripcion = viewModel.descripcion.value
+    val selectedtText = viewModel.selectedText.value
+
 
     Column(
         modifier = Modifier
@@ -58,7 +60,7 @@ fun recogidaDatos(){
         SubirImagen()
         OutlinedTextField(
             value = nombre,
-            onValueChange = { nombre = it },
+            onValueChange = { viewModel.uploadCromoChanged(selectedtText,it, descripcion) },
             label = { Text("Nombre del cromo", color = Color.Black) },
             textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
             modifier = Modifier
@@ -67,10 +69,10 @@ fun recogidaDatos(){
             leadingIcon = { Icon(Icons.Default.ContactPage, contentDescription = null) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
         )
-        CategoriaDropDown()
+        CategoriaDropDown(selectedtText, nombre, descripcion, viewModel)
         OutlinedTextField(
             value = descripcion,
-            onValueChange = { descripcion = it },
+            onValueChange = { viewModel.uploadCromoChanged(selectedtText,nombre,it)},
             label = { Text("Descripcion", color = Color.Black) },
             textStyle = androidx.compose.ui.text.TextStyle(color = Color.Black),
             modifier = Modifier
@@ -157,11 +159,11 @@ fun BotonGuardarCromo(){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriaDropDown() {
+fun CategoriaDropDown(selectedText:String, nombre:String, descripcion:String, viewModel: UploadCromoViewModel) {
 
     var expanded by remember { mutableStateOf(false) }
     val suggestions = listOf("Pokemon", "Magic", "Adrenalin", "Otro")
-    var selectedText by remember { mutableStateOf("") }
+
 
     var textfieldSize by remember { mutableStateOf(Size.Zero)}
 
@@ -174,7 +176,7 @@ fun CategoriaDropDown() {
         // TextField
         OutlinedTextField(
             value = selectedText,
-            onValueChange = { selectedText = it },
+            onValueChange = { viewModel.uploadCromoChanged(it,nombre,descripcion)},
             readOnly = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -200,7 +202,7 @@ fun CategoriaDropDown() {
         ) {
             suggestions.forEach { label ->
                 DropdownMenuItem(onClick = {
-                    selectedText = label
+                    viewModel.labelSelectedText(label)
                     expanded = false
                 })
                 {
@@ -209,10 +211,5 @@ fun CategoriaDropDown() {
             }
         }
     }
-}
-@Composable
-@Preview
-fun UploadCromoPreview(){
-    UploadCromoScreen()
 }
 

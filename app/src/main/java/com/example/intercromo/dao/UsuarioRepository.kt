@@ -18,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class UsuarioRepository(navController: NavController){
     private val auth: FirebaseAuth = Firebase.auth
-    private val loading = MutableLiveData(false)/*Para que no se introduzcan dos iguales */
     private val navegar = navController
 
     val currentUser: FirebaseUser?
@@ -63,7 +62,7 @@ class UsuarioRepository(navController: NavController){
     }
 
     fun getNombreUsuario(): String? {
-        return auth.currentUser?.displayName
+        return auth.currentUser?.email
     }
 
     fun getUserProfileImageUrl(): String? {

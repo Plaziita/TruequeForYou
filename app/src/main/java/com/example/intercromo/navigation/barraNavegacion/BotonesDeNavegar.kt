@@ -34,6 +34,7 @@ import com.example.intercromo.presentation.inicio.InicioViewModel
 import com.example.intercromo.presentation.inicio.PantallaInicio
 import com.example.intercromo.presentation.perfil.PantallaPerfil
 import com.example.intercromo.presentation.uploadcromo.UploadCromoScreen
+import com.example.intercromo.presentation.uploadcromo.UploadCromoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -133,7 +134,8 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
             PantallaFavoritos(viewmodelFavorito)
         }
         composable(route = BarraDeOpciones.Upload.ruta) {
-            UploadCromoScreen()
+            val viewmodelUpload = UploadCromoViewModel()
+            UploadCromoScreen(viewmodelUpload)
         }
         composable(route = BarraDeOpciones.Mensajes.ruta) {
             PantallaMensajes()
