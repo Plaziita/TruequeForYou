@@ -13,10 +13,11 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class UsuarioRepository(navController: NavController){
+class UsuarioRepository(navController: NavController) {
     private val auth: FirebaseAuth = Firebase.auth
     private val navegar = navController
 
@@ -28,46 +29,58 @@ class UsuarioRepository(navController: NavController){
             if (it.isSuccessful) {
                 Log.d("InterCromo", "Logueado con éxito")
                 navegar.navigate(Rutas.BARRANAVEGACION)
-            } else{
+            } else {
                 Log.d("InterCromo", "Error al loguearse")
             }
         }
     }
 
-    fun registerEmailPassword(email: String, password: String, name:String){
+    fun registerEmailPassword(email: String, password: String, name: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-            if(it.isSuccessful){
+            if (it.isSuccessful) {
                 val nombreEmail = it.result.user?.email?.split("@")?.get(0)
                 createUser(name, nombreEmail.toString())
                 Log.d("InterCromo", "Registro realizado con éxito")
                 navegar.navigate(VentanasLogIn.BienvenidosScreen.ruta)
-            }else{
+            } else {
                 Log.d("InterCromo", "Error al registrarse")
             }
         }
     }
 
-    private fun createUser(name:String, email: String){
+    private fun createUser(name: String, email: String) {
         val userId = auth.currentUser?.uid
         val name = name
         val email = email
 
         val user = Usuario(name, email, userId.toString(), null, null, 0.0, null)
 
-        FirebaseFirestore.getInstance().collection("usuarios").add(user.toMap()).addOnSuccessListener {
-            Log.d("InterCromo", "Creado")
-        }.addOnFailureListener {
-            Log.d("InterCromo", "Error")
+
+
+        FirebaseFirestore.getInstance().collection("usuarios").add(user.toMap())
+            .addOnSuccessListener {
+                Log.d("InterCromo", "Creado")
+            }.addOnFailureListener {
+                Log.d("InterCromo", "Error")
+            }
+
+        if (auth.currentUser != null) {
+            val profileDisplayName = UserProfileChangeRequest.Builder().setDisplayName(name).build()
+
+            auth.currentUser!!.updateProfile(profileDisplayName)
         }
     }
 
     fun getNombreUsuario(): String? {
-        return auth.currentUser?.email
+
+        return auth.currentUser?.displayName
+
     }
 
     fun getUserProfileImageUrl(): String? {
         return currentUser?.photoUrl?.toString()
     }
+
     fun signInWithGoogleCredential(credential: AuthCredential) {
         try {
             auth.signInWithCredential(credential)
@@ -85,20 +98,21 @@ class UsuarioRepository(navController: NavController){
         }
     }
 
-    fun llevarAlMenu(){
-        if(currentUser != null){
+    fun llevarAlMenu() {
+        if (currentUser != null) {
             navegar.navigate(Rutas.BARRANAVEGACION)
         }
     }
 
 
-    fun cerrarSesion(context: Context){
+    fun cerrarSesion(context: Context) {
         try {
             // Cerrar sesión en Firebase
             auth.signOut()
 
             // Desvincular la cuenta de Google utilizando la API de Google Sign-In
-            val googleSignInClient = GoogleSignIn.getClient(context, GoogleSignInOptions.DEFAULT_SIGN_IN)
+            val googleSignInClient =
+                GoogleSignIn.getClient(context, GoogleSignInOptions.DEFAULT_SIGN_IN)
             googleSignInClient.revokeAccess().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // Desvinculación exitosa
@@ -111,13 +125,9 @@ class UsuarioRepository(navController: NavController){
                 // Navegar a la pantalla de inicio de sesión
                 navegar.navigate(VentanasLogIn.BienvenidosScreen.ruta)
             }
-        } catch (ex: Exception){
+        } catch (ex: Exception) {
             Log.d("InterCromo", "Excepcion al cerrar sesion " + "${ex.localizedMessage}")
         }
-    }
-
-    fun getCromosUsuario(){
-
     }
 
 
