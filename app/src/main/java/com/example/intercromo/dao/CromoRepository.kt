@@ -2,6 +2,11 @@ package com.example.intercromo.dao
 
 import android.util.Log
 import com.example.intercromo.model.Cromo
+import com.example.intercromo.model.Usuario
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +26,7 @@ class CromoRepository {
     private val CAMPO_CATEGORIA = "categoria"
     private val CAMPO_NOMBREUSUARIO = "nombre_usuario"
     private val CAMPO_FAVORITO = "favorito"
+    private val CAMPO_ID = "cromoId"
 
     private val db = FirebaseFirestore.getInstance()
     private val cromos = db.collection(COLECCION_CROMOS)
@@ -35,13 +41,17 @@ class CromoRepository {
                 val imagen = document.getString(CAMPO_IMAGEN) ?: ""
                 val categoria = document.getString(CAMPO_CATEGORIA) ?: ""
                 val nombreUsuario = document.getString(CAMPO_NOMBREUSUARIO) ?: ""
+                val favorito = document.getBoolean(CAMPO_FAVORITO) ?: false
+                val cromoId = document.getString(CAMPO_ID)  ?:""
 
                 val cromo = Cromo(
                     nombre,
                     descripcion,
                     imagen,
                     categoria,
-                    nombreUsuario
+                    nombreUsuario,
+                    favorito,
+                    cromoId
                 )
 
                 listaCromos.add(cromo)
@@ -65,6 +75,7 @@ class CromoRepository {
                 val imagen = document.getString(CAMPO_IMAGEN) ?: ""
                 val categoria = document.getString(CAMPO_CATEGORIA) ?: ""
                 val nombreUsuario = document.getString(CAMPO_NOMBREUSUARIO) ?: ""
+                val cromoId = document.getString(CAMPO_ID)  ?:""
 
                 val cromo = Cromo(
                     nombre,
@@ -72,7 +83,8 @@ class CromoRepository {
                     imagen,
                     categoria,
                     nombreUsuario,
-                    true // Indicamos que el cromo es favorito
+                    true ,// Indicamos que el cromo es favorito
+                    cromoId
                 )
 
                 listaCromos.add(cromo)
@@ -109,6 +121,26 @@ class CromoRepository {
         }
 
         return cromoDevolver
+    }
+    fun addCromo(nombre: String, descripcion: String, imagen:String, categoria:String) {
+        val userId = Firebase.auth.currentUser?.uid
+        val nombre = nombre
+        val descripcion = descripcion
+        val imagen = imagen
+        val categoria = categoria
+
+        val cromo = Cromo(nombre, descripcion, imagen, categoria, userId.toString(), false, null)
+
+
+
+        FirebaseFirestore.getInstance().collection("cromos").add(cromo.toMap())
+            .addOnSuccessListener {
+                it.update("cromoId", it.id)
+                Log.d("InterCromo", "Creado")
+            }.addOnFailureListener {
+                Log.d("InterCromo", "Error")
+            }
+
     }
 
 

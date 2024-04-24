@@ -134,7 +134,7 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
             PantallaFavoritos(viewmodelFavorito, navController)
         }
         composable(route = BarraDeOpciones.Upload.ruta) {
-            val viewmodelUpload = UploadCromoViewModel()
+            val viewmodelUpload = UploadCromoViewModel(cromorepository)
             UploadCromoScreen(viewmodelUpload)
         }
         composable(route = BarraDeOpciones.Mensajes.ruta) {

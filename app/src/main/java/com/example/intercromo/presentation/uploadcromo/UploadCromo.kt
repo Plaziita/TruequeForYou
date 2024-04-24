@@ -61,14 +61,13 @@ fun recogidaDatos(viewModel: UploadCromoViewModel){
     val nombre = viewModel.nombre.value
     val descripcion = viewModel.descripcion.value
     val selectedtText = viewModel.selectedText.value
-
+    val estadoBoton:Boolean = viewModel.upLoadEnable.value
 
     Column(
         modifier = Modifier
             .padding(16.dp)
     ) {
-        SubirImagen1()
-        SubirImagen2()
+        val imagen = SubirImagen1()
         OutlinedTextField(
             value = nombre,
             onValueChange = { viewModel.uploadCromoChanged(selectedtText,it, descripcion) },
@@ -93,11 +92,11 @@ fun recogidaDatos(viewModel: UploadCromoViewModel){
             leadingIcon = { Icon(Icons.Default.Description, contentDescription = null) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
         )
-        BotonGuardarCromo()
+        BotonGuardarCromo(estadoBoton, nombre, descripcion, imagen, selectedtText, viewModel)
     }
 }
 @Composable
-fun SubirImagen1(){
+fun SubirImagen1(): Uri?{
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
@@ -149,64 +148,13 @@ fun SubirImagen1(){
         )
         Spacer(modifier = Modifier.width(8.dp))
     }
-}
-@Composable
-fun SubirImagen2(){
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val context = LocalContext.current
-    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
-    val launcher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-            imageUri = uri
-        }
-    Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        imageUri?.let {
-            if (Build.VERSION.SDK_INT < 28) {
-                bitmap.value = MediaStore.Images
-                    .Media.getBitmap(context.contentResolver, it)
-            } else {
-                val source = ImageDecoder.createSource(context.contentResolver, it)
-                bitmap.value = ImageDecoder.decodeBitmap(source)
-            }
-
-            bitmap.value?.let { btm ->
-                Image(
-                    bitmap = btm.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(120.dp)
-                        .border(
-                            border = BorderStroke(2.dp, Color(0xFFFFA500)),
-                            shape = MaterialTheme.shapes.small
-                        ),
-                )
-            }
-        }
-        IconButton(
-            onClick = {launcher.launch("image/*") },
-            modifier = Modifier
-                .weight(1f)
-                .height(120.dp)
-                .border(
-                    border = BorderStroke(2.dp, Color(0xFFFFA500)),
-                    shape = MaterialTheme.shapes.small
-                ),
-            content = {
-                Icon(Icons.Default.PhotoCamera, contentDescription = null)
-            }
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-    }
+    return  imageUri
 }
 
+
 @Composable
-fun BotonGuardarCromo(){
+fun BotonGuardarCromo(estadoBoton:Boolean, nombre:String, descripcion: String, imagen:Uri?, categoria:String, viewModel: UploadCromoViewModel){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -221,7 +169,9 @@ fun BotonGuardarCromo(){
                 containerColor = Color(0xFFFFA500),
                 contentColor = Color.Black
             ),
+            enabled = estadoBoton,
             onClick = {
+                viewModel.addCromo(nombre, descripcion, imagen.toString(), categoria)
             }
         ) {
             Text(
