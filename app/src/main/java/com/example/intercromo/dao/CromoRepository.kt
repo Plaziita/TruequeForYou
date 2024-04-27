@@ -2,10 +2,7 @@ package com.example.intercromo.dao
 
 import android.util.Log
 import com.example.intercromo.model.Cromo
-import com.example.intercromo.model.Usuario
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
@@ -140,6 +137,32 @@ class CromoRepository {
             }.addOnFailureListener {
                 Log.d("InterCromo", "Error")
             }
+
+    }
+
+    fun getCromosAsociados(): MutableList<Cromo> {
+        val userId = Firebase.auth.currentUser?.uid
+        var listaMisCromos = mutableListOf<Cromo>()
+
+        // Crear un nuevo alcance de corrutina
+        CoroutineScope(Dispatchers.IO).launch {
+            // Dentro de la corrutina, llamamos a la función suspendida getCromos()
+            val cromos = getCromos()
+
+            // Procesamos la lista de cromos
+            for (cromo in cromos) {
+                if (cromo.id_usuario == userId) {
+                    listaMisCromos.add(cromo)
+                }
+            }
+        }
+
+        // Esperamos hasta que la corrutina termine de ejecutarse
+        runBlocking {
+            delay(1000) // Agregamos un retardo para esperar que la corrutina termine (esto es opcional)
+        }
+
+        return listaMisCromos
 
     }
 

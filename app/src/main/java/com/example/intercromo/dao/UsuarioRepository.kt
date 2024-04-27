@@ -2,7 +2,6 @@ package com.example.intercromo.dao
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.example.intercromo.model.Usuario
 import com.example.intercromo.navigation.manejadorRutas.Rutas
@@ -102,6 +101,40 @@ class UsuarioRepository(navController: NavController) {
         if (currentUser != null) {
             navegar.navigate(Rutas.BARRANAVEGACION)
         }
+    }
+
+    fun cambiarContraseña(newPassword: String) {
+        val user = FirebaseAuth.getInstance().currentUser
+
+        user?.updatePassword(newPassword)
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // La contraseña se cambió exitosamente
+                    Log.e("InterCromo","Contraseña cambiada exitosamente.")
+                } else {
+                    // Ocurrió un error al cambiar la contraseña
+                    Log.e("Error", "Error al cambiar la contraseña")
+                }
+            }
+    }
+
+    fun cambiarNombre(newNombre: String) {
+        val user = FirebaseAuth.getInstance().currentUser
+
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName(newNombre)
+            .build()
+
+        user?.updateProfile(profileUpdates)
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // El nombre se cambió exitosamente
+                    Log.e("InterCromo","Nombre modificado exitosamente.")
+                } else {
+                    // Ocurrió un error al cambiar el nombre
+                    Log.e("Error", "Error al cambiar la contraseña")
+                }
+            }
     }
 
 

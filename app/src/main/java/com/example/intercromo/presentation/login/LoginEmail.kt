@@ -21,8 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -73,8 +71,6 @@ fun recogidaDatos(viewModel: LoginViewModel) {
             .padding(bottom = 16.dp),
         leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
-
-
         )
 
     OutlinedTextField(

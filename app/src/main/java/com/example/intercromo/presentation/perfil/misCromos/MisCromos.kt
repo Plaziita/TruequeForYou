@@ -1,5 +1,6 @@
-package com.example.intercromo.presentation.perfil.adquisiciones
+package com.example.intercromo.presentation.perfil.misCromos
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,10 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -23,9 +24,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,23 +39,42 @@ import com.example.intercromo.model.Cromo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaAdquisiciones(navController: NavController, viewModel: AdquisicionesViewModel) {
-    var listaCromos = viewModel.listaCromos.value
+fun PantallaMisCromos(navController: NavController, viewModel: MisCromosViewModel) {
+    var listaCromos = viewModel.getMisCromos()
+    Log.e("lista",listaCromos.toString())
 
-    Scaffold(
-        topBar = {
-            BarraSuperior(navController)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(20.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBackIosNew,
+                contentDescription = "Navigation Icon",
+                tint = Color.Black,
+                modifier = Modifier
+                    .clickable {
+                        navController.popBackStack()
+                    }
+                    .size(35.dp)
+            )
+            Text(
+                text = "Mis Cromos",
+                color = Color.Black,
+            )
         }
-    ) { contentPadding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            contentPadding = contentPadding,
             modifier = Modifier.background(Color.White)
         ) {
-           // Datasource_Cromo().getCromos { listaCromos = it }
-            items(listaCromos){
-               Adquisiciones(cromo = it)
-           }
+            items(listaCromos) {
+                MisCromos(cromo = it)
+            }
         }
     }
 }
@@ -64,13 +82,15 @@ fun PantallaAdquisiciones(navController: NavController, viewModel: Adquisiciones
 
 
 @Composable
-fun Adquisiciones(cromo: Cromo) {
+fun MisCromos(cromo: Cromo) {
     Card(
         modifier = Modifier
             .size(200.dp, 300.dp)
             .padding(16.dp)
     ) {
-        Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)) {
             Column(modifier = Modifier.padding(8.dp)) {
                 AsyncImage(
                     model = cromo.imagen,
@@ -119,31 +139,4 @@ fun Adquisiciones(cromo: Cromo) {
         }
     }
 }
-
-
-    @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BarraSuperior(navController: NavController) {
-    TopAppBar(
-        modifier = Modifier.background(Color.White),
-        title = {
-            Row {
-                Icon(
-                    imageVector = Icons.Default.ArrowBackIosNew,
-                    contentDescription = "Navigation Icon",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .clickable {
-                            navController.popBackStack()
-                        }
-                )
-                Spacer(modifier = Modifier.width(20.dp))
-                Text(
-                    text = "Adquisiciones"
-                )
-            }
-        }
-    )
-}
-
 

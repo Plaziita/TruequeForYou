@@ -57,7 +57,7 @@ fun PantallaPerfil(navController: NavController){
         DatosUsuario(navController)
         Spacer(modifier = Modifier.height(20.dp))
         Intercambios(navController)
-        Configuracion()
+        Configuracion(navController)
         BotonCerrarSesion(navController)
 
     }
@@ -85,7 +85,7 @@ fun Intercambios(navController: NavController){
 }
 
 @Composable
-fun Configuracion(){
+fun Configuracion(navController: NavController){
 
     Column(
         modifier = Modifier
@@ -103,7 +103,7 @@ fun Configuracion(){
             modifier = Modifier.padding(8.dp)
         )
     }
-    OpcionesConfiguracion()
+    OpcionesConfiguracion(navController)
 }
 
 @Composable
@@ -139,7 +139,7 @@ fun BotonCerrarSesion(navController: NavController){
 }
 
 @Composable
-fun OpcionesConfiguracion(){
+fun OpcionesConfiguracion(navController: NavController){
     Column {
         Row(
             modifier = Modifier
@@ -147,6 +147,7 @@ fun OpcionesConfiguracion(){
                 .height(50.dp)
                 .padding(8.dp)
                 .clickable {
+                    navController.navigate(VentanasPerfil.ModificarScreen.ruta)
                 },
             verticalAlignment = Alignment.CenterVertically
         ){

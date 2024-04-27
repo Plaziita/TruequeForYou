@@ -10,4 +10,7 @@ class CromoScreenViewModel(cromoRepository: CromoRepository) : ViewModel() {
      fun getCromo(nombre_: String?): Cromo? {
         return cromoRepository.getCromo(nombre_)
     }
+
+
+
 }
