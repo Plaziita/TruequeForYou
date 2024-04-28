@@ -5,6 +5,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -42,6 +43,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 @Composable
 fun UploadCromoScreen(viewModel: UploadCromoViewModel){
@@ -154,7 +160,14 @@ fun SubirImagen1(): Uri?{
 
 
 @Composable
-fun BotonGuardarCromo(estadoBoton:Boolean, nombre:String, descripcion: String, imagen:Uri?, categoria:String, viewModel: UploadCromoViewModel){
+fun BotonGuardarCromo(
+    estadoBoton: Boolean,
+    nombre: String,
+    descripcion: String,
+    imagen: Uri?,
+    categoria: String,
+    viewModel: UploadCromoViewModel
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -162,6 +175,8 @@ fun BotonGuardarCromo(estadoBoton:Boolean, nombre:String, descripcion: String, i
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val scope = rememberCoroutineScope()
+
         androidx.compose.material3.Button(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -171,7 +186,14 @@ fun BotonGuardarCromo(estadoBoton:Boolean, nombre:String, descripcion: String, i
             ),
             enabled = estadoBoton,
             onClick = {
-                viewModel.addCromo(nombre, descripcion, imagen.toString(), categoria)
+                imagen?.let { uri ->
+                    scope.launch {
+                        val imageUrl = convertirUriAUrl(uri)
+                        imageUrl?.let {
+                            viewModel.addCromo(nombre, descripcion, it, categoria)
+                        }
+                    }
+                }
             }
         ) {
             Text(
@@ -187,6 +209,25 @@ fun BotonGuardarCromo(estadoBoton:Boolean, nombre:String, descripcion: String, i
         }
     }
 }
+
+private suspend fun convertirUriAUrl(uri: Uri): String? {
+    return try {
+        val storageRef = Firebase.storage.reference
+        val imageRef = storageRef.child("images/${UUID.randomUUID()}.jpg")
+
+        // Subir la imagen a Firebase Storage
+        imageRef.putFile(uri).await()
+
+        // Obtener la URL de la imagen
+        val downloadUrl = imageRef.downloadUrl.await()
+
+        downloadUrl.toString()
+    } catch (e: Exception) {
+        Log.e("UploadCromoViewModel", "Error al subir la imagen a Firebase Storage: ${e.message}", e)
+        null // Retorna null si hay un error
+    }
+}
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
