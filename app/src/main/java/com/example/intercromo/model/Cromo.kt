@@ -5,7 +5,7 @@ data class Cromo(
     val descripcion: String,
     val imagen: String?,
     val categoria: String,
-    val id_usuario: String,
+    val idUsuario: String,
     val favorito: Boolean,
     val cromoId: String?
 ){
@@ -15,7 +15,7 @@ data class Cromo(
             "descripcion" to this.descripcion,
             "imagenl" to this.imagen.orEmpty(),
             "categoria" to this.categoria,
-            "id_usuario" to this.id_usuario,
+            "id_usuario" to this.idUsuario,
             "cromoId" to this.cromoId.orEmpty(),
             "favorito" to false
         )

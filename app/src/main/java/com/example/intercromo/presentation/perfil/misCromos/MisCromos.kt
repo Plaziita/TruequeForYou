@@ -40,7 +40,7 @@ import com.example.intercromo.model.Cromo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PantallaMisCromos(navController: NavController, viewModel: MisCromosViewModel) {
-    var listaCromos = viewModel.getMisCromos()
+    var listaCromos = viewModel.listaCromos.value
     Log.e("lista",listaCromos.toString())
 
     Column(
