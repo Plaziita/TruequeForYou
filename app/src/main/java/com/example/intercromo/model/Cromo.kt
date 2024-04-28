@@ -13,7 +13,7 @@ data class Cromo(
         return mutableMapOf(
             "nombre" to this.nombre,
             "descripcion" to this.descripcion,
-            "imagenl" to this.imagen.orEmpty(),
+            "imagen" to this.imagen.orEmpty(),
             "categoria" to this.categoria,
             "id_usuario" to this.idUsuario,
             "cromoId" to this.cromoId.orEmpty(),
