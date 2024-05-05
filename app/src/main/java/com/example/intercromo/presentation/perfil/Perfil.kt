@@ -19,7 +19,6 @@ import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -159,31 +158,6 @@ fun OpcionesConfiguracion(navController: NavController){
             Spacer(modifier = Modifier.width(20.dp))
             Text(
                 text = "Editar perfil",
-                color = Color.Black,
-                fontSize = 18.sp
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                imageVector = Icons.Default.ChevronRight,
-                contentDescription = "Navigation Icon",
-                tint = Color.Black
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Icon(
-                imageVector = Icons.Default.LocationOn,
-                contentDescription = "Navigation Icon",
-                tint = Color.Black
-            )
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(
-                text = "Dirección de envio",
                 color = Color.Black,
                 fontSize = 18.sp
             )

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -33,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.intercromo.model.Cromo
@@ -51,7 +53,8 @@ fun PantallaMisCromos(navController: NavController, viewModel: MisCromosViewMode
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBackIosNew,
@@ -63,9 +66,12 @@ fun PantallaMisCromos(navController: NavController, viewModel: MisCromosViewMode
                     }
                     .size(35.dp)
             )
+            Spacer(modifier = Modifier.width(20.dp))
             Text(
                 text = "Mis Cromos",
                 color = Color.Black,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
             )
         }
         LazyVerticalGrid(

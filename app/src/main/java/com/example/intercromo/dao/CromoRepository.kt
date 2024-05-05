@@ -39,7 +39,7 @@ class CromoRepository {
                 val categoria = document.getString(CAMPO_CATEGORIA) ?: ""
                 val nombreUsuario = document.getString(CAMPO_NOMBREUSUARIO) ?: ""
                 val favorito = document.getBoolean(CAMPO_FAVORITO) ?: false
-                val cromoId = document.getString(CAMPO_ID) ?: ""
+                val cromoId = document.getString(CAMPO_ID)  ?:""
 
                 val cromo = Cromo(
                     nombre,
@@ -72,7 +72,7 @@ class CromoRepository {
                 val imagen = document.getString(CAMPO_IMAGEN) ?: ""
                 val categoria = document.getString(CAMPO_CATEGORIA) ?: ""
                 val nombreUsuario = document.getString(CAMPO_NOMBREUSUARIO) ?: ""
-                val cromoId = document.getString(CAMPO_ID) ?: ""
+                val cromoId = document.getString(CAMPO_ID)  ?:""
 
                 val cromo = Cromo(
                     nombre,
@@ -80,7 +80,7 @@ class CromoRepository {
                     imagen,
                     categoria,
                     nombreUsuario,
-                    true,// Indicamos que el cromo es favorito
+                    true ,// Indicamos que el cromo es favorito
                     cromoId
                 )
 
@@ -119,8 +119,7 @@ class CromoRepository {
 
         return cromoDevolver
     }
-
-    fun addCromo(nombre: String, descripcion: String, imagen: String, categoria: String) {
+    fun addCromo(nombre: String, descripcion: String, imagen:String, categoria:String) {
         val userId = Firebase.auth.currentUser?.uid
         val nombre = nombre
         val descripcion = descripcion
@@ -141,28 +140,32 @@ class CromoRepository {
 
     }
 
-    suspend fun getCromosAsociados(): List<Cromo> {
+    fun getCromosAsociados(): MutableList<Cromo> {
         val userId = Firebase.auth.currentUser?.uid
         var listaMisCromos = mutableListOf<Cromo>()
 
         // Crear un nuevo alcance de corrutina
+        CoroutineScope(Dispatchers.IO).launch {
+            // Dentro de la corrutina, llamamos a la función suspendida getCromos()
+            val cromos = getCromos()
 
-        // Dentro de la corrutina, llamamos a la función suspendida getCromos()
-        val cromos = getCromos()
-
-        // Procesamos la lista de cromos
-        for (cromo in cromos) {
-            if (cromo.idUsuario.equals(userId)) {
-                listaMisCromos.add(cromo)
+            // Procesamos la lista de cromos
+            for (cromo in cromos) {
+                if (cromo.idUsuario == userId) {
+                    listaMisCromos.add(cromo)
+                }
             }
         }
+
+        // Esperamos hasta que la corrutina termine de ejecutarse
+        runBlocking {
+            delay(1000) // Agregamos un retardo para esperar que la corrutina termine (esto es opcional)
+        }
+
         return listaMisCromos
+
     }
 
-    // Esperamos hasta que la corrutina termine de ejecutarse
 
 
 }
-
-
-

@@ -25,9 +25,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.wear.compose.material.ContentAlpha
+import com.example.intercromo.dao.ChatRepository
 import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.navigation.barraNavegacion.BarraDeOpciones
-import com.example.intercromo.presentation.PantallaMensajes
+import com.example.intercromo.presentation.chat.ChatViewModel
+import com.example.intercromo.presentation.chat.PantallaMensajes
 import com.example.intercromo.presentation.favoritos.FavoritosViewModel
 import com.example.intercromo.presentation.favoritos.PantallaFavoritos
 import com.example.intercromo.presentation.inicio.InicioViewModel
@@ -120,6 +122,7 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
 
     //El nuevo navController2 es el de VentanasLogin
     val cromorepository = CromoRepository()
+    val chatRepository = ChatRepository()
 
     NavHost(
         navController = controllerBarraNavegacion,
@@ -138,7 +141,8 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
             UploadCromoScreen(viewmodelUpload)
         }
         composable(route = BarraDeOpciones.Mensajes.ruta) {
-            PantallaMensajes()
+            val viewmodelMensajes = ChatViewModel(chatRepository)
+            PantallaMensajes(viewmodelMensajes)
         }
         composable(route = BarraDeOpciones.Perfil.ruta) {
             PantallaPerfil(navController)

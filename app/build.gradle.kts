@@ -1,8 +1,3 @@
-import org.gradle.api.JavaVersion
-import org.gradle.api.tasks.compile.JavaCompile
-
-
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -90,4 +85,5 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.2")
+
 }

@@ -41,6 +41,8 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel){
     val navBackStackEntry by controller.currentBackStackEntryAsState()
     val cromoNombre: String? = navBackStackEntry?.arguments?.getString("cromo")
     val cromo: Cromo? = viewModel.getCromo(cromoNombre)
+    val cromoUserId = cromo?.idUsuario.toString()
+    val currentUser = viewModel.userId.toString()
 
 
     Column(
@@ -132,7 +134,7 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel){
                     contentColor = Color.Black
                 ),
                 onClick = {
-                    //Abrir chatt
+                    viewModel.startConversation(cromoUserId,currentUser)
                 }
             ) {
                 Text(
