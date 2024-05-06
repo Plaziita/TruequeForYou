@@ -57,9 +57,6 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
-    var listaCromos by remember { mutableStateOf(viewModel.listaCromos.value) }
-    var filteredCromos by remember { mutableStateOf<List<Cromo>>(emptyList()) }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,14 +65,8 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         SearchBar(onSearch = { query ->
-            filteredCromos = if (query.isEmpty()) {
-                listaCromos
-            } else {
-                listaCromos.filter { cromo ->
-                    cromo.nombre.contains(query, ignoreCase = true) || cromo.categoria.contains(query, ignoreCase = true)
-                }
-            }
-        })
+            viewModel.filtrarCromos(query)
+        },navController)
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(
             modifier = Modifier
@@ -94,7 +85,7 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
 
 
 @Composable
-fun SearchBar(onSearch: (String) -> Unit) {
+fun SearchBar(onSearch: (String) -> Unit, navController: NavController) {
     var query by remember { mutableStateOf("") }
 
     Surface(
@@ -120,7 +111,7 @@ fun SearchBar(onSearch: (String) -> Unit) {
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    // You can perform any action here when the user presses the Done button on the keyboard
+                    navController.navigate(VentanasInicio.CromoFiltradoScreen.ruta)
                 }
             ),
             colors = TextFieldDefaults.textFieldColors(
@@ -134,7 +125,6 @@ fun SearchBar(onSearch: (String) -> Unit) {
         onSearch(query)
     }
 }
-
 
 
 @Composable

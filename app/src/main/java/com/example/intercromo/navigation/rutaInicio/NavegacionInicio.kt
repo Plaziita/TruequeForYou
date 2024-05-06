@@ -26,14 +26,13 @@ fun NavGraphBuilder.NavegacionInicio(controllerOpciones: NavHostController){
             val viewmodelPantallaCromo = CromoScreenViewModel(cromorepository,chatRepository)
             PantallaCromo(controllerOpciones, viewmodelPantallaCromo)
         }
-
         composable(route = VentanasInicio.InicioScreen.ruta) {
             val viewmodelInicio = InicioViewModel(cromorepository)
             PantallaInicio(viewmodelInicio, controllerOpciones)
         }
-
         composable(route = VentanasInicio.CromoFiltradoScreen.ruta) {
-            PantallaFiltrada()
+            val viewmodelInicio = InicioViewModel(cromorepository)
+            PantallaFiltrada(viewmodelInicio,controllerOpciones)
         }
     }
 }
