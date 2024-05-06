@@ -1,5 +1,6 @@
 package com.example.intercromo.presentation.inicio
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -28,7 +29,8 @@ import androidx.navigation.NavController
 
 @Composable
 fun PantallaFiltrada(viewModel: InicioViewModel, navController: NavController) {
-    val cromosFiltrados = viewModel.listaCromos.value
+    val cromosFiltrados = viewModel.cromosFiltrados.value
+    Log.d("ListaFiltrada", cromosFiltrados.toString())
 
     Column(
         modifier = Modifier

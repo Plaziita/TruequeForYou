@@ -64,9 +64,7 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
             .padding(8.dp)
     ) {
         Spacer(modifier = Modifier.height(8.dp))
-        SearchBar(onSearch = { query ->
-            viewModel.filtrarCromos(query)
-        },navController)
+        SearchBar(navController,viewModel)
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(
             modifier = Modifier
@@ -85,7 +83,7 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
 
 
 @Composable
-fun SearchBar(onSearch: (String) -> Unit, navController: NavController) {
+fun SearchBar(navController: NavController,viewModel: InicioViewModel) {
     var query by remember { mutableStateOf("") }
 
     Surface(
@@ -111,6 +109,7 @@ fun SearchBar(onSearch: (String) -> Unit, navController: NavController) {
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
+                    viewModel.filtrarCromos(query)
                     navController.navigate(VentanasInicio.CromoFiltradoScreen.ruta)
                 }
             ),
@@ -119,10 +118,6 @@ fun SearchBar(onSearch: (String) -> Unit, navController: NavController) {
                 placeholderColor = Color.Black,
             )
         )
-    }
-
-    LaunchedEffect(query) {
-        onSearch(query)
     }
 }
 
