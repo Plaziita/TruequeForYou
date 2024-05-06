@@ -10,6 +10,7 @@ import com.example.intercromo.navigation.manejadorRutas.Rutas
 import com.example.intercromo.presentation.CromoScreen.CromoScreenViewModel
 import com.example.intercromo.presentation.CromoScreen.PantallaCromo
 import com.example.intercromo.presentation.inicio.InicioViewModel
+import com.example.intercromo.presentation.inicio.PantallaFiltrada
 import com.example.intercromo.presentation.inicio.PantallaInicio
 
 fun NavGraphBuilder.NavegacionInicio(controllerOpciones: NavHostController){
@@ -29,6 +30,10 @@ fun NavGraphBuilder.NavegacionInicio(controllerOpciones: NavHostController){
         composable(route = VentanasInicio.InicioScreen.ruta) {
             val viewmodelInicio = InicioViewModel(cromorepository)
             PantallaInicio(viewmodelInicio, controllerOpciones)
+        }
+
+        composable(route = VentanasInicio.CromoFiltradoScreen.ruta) {
+            PantallaFiltrada()
         }
     }
 }
