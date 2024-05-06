@@ -52,16 +52,20 @@ class UsuarioRepository(navController: NavController) {
         val name = name
         val email = email
 
-        val user = Usuario(name, email, userId.toString(), null, null, 0.0, null)
+        val user = Usuario(name, email, userId.toString(), null, null, 0.0, null, null)
 
 
 
-        FirebaseFirestore.getInstance().collection("usuarios").add(user.toMap())
+        val usuarioRef = FirebaseFirestore.getInstance().collection("usuarios").document(userId!!)
+
+        usuarioRef.set(user.toMap()) // Establecer los datos del usuario en el documento con el userId como ID
+
             .addOnSuccessListener {
                 Log.d("InterCromo", "Creado")
             }.addOnFailureListener {
                 Log.d("InterCromo", "Error")
             }
+
 
         if (auth.currentUser != null) {
             val profileDisplayName = UserProfileChangeRequest.Builder().setDisplayName(name).build()
@@ -162,6 +166,8 @@ class UsuarioRepository(navController: NavController) {
             Log.d("InterCromo", "Excepcion al cerrar sesion " + "${ex.localizedMessage}")
         }
     }
+
+
 
 
 }

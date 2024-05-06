@@ -7,7 +7,8 @@ data class Usuario(
     val imagenPerfil: String?,
     val direccion: String?,
     val valoracion: Double,
-    val cromos: List<Cromo>?
+    val cromos: List<Cromo>?,
+    val cromosFavoritos: List<String>?
 
 
 ){
@@ -19,7 +20,8 @@ data class Usuario(
             "imagenPerfil" to this.imagenPerfil.orEmpty(),
             "direccion" to this.direccion.orEmpty(),
             "valoracion" to this.valoracion,
-            "cromos" to this.cromos.orEmpty()
+            "cromos" to this.cromos.orEmpty(),
+            "cromosFavoritos" to this.cromosFavoritos.orEmpty()
         )
     }
 }
