@@ -16,15 +16,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Restore
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +45,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,20 +57,73 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
-    //Lucas pelucas
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .padding(8.dp)
     ) {
-        item {
-            Recientes(viewModel, navController)
-        }
-        item{
-            MostrarCromos(viewModel, navController)
+        Spacer(modifier = Modifier.height(8.dp))
+        SearchBar(onSearch = { query ->
+            viewModel.filtrarCromos(query)
+        },navController)
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            item {
+                Recientes(viewModel,navController)
+            }
+            item {
+                MostrarCromos(viewModel,navController)
+            }
         }
     }
+}
 
+
+@Composable
+fun SearchBar(onSearch: (String) -> Unit, navController: NavController) {
+    var query by remember { mutableStateOf("") }
+
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White),
+        shape = RoundedCornerShape(16.dp),
+    ) {
+        TextField(
+            value = query,
+            onValueChange = { newValue ->
+                query = newValue
+            },
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text(text = "Buscar cromos...", color = Color.Black)
+            },
+            leadingIcon = {
+                Icon(Icons.Filled.Search, contentDescription = "Search", tint = Color.Black)
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    navController.navigate(VentanasInicio.CromoFiltradoScreen.ruta)
+                }
+            ),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Gray,
+                placeholderColor = Color.Black,
+            )
+        )
+    }
+
+    LaunchedEffect(query) {
+        onSearch(query)
+    }
 }
 
 
@@ -74,10 +135,19 @@ fun ItemCromo(cromo: Cromo, navController: NavController){
             .size(200.dp, 300.dp)
             .padding(16.dp)
             .clickable {
-                navController.navigate("${VentanasInicio.CromoScreen.ruta.replace("{cromo}", cromo.nombre)}")
+                navController.navigate(
+                    "${
+                        VentanasInicio.CromoScreen.ruta.replace(
+                            "{cromo}",
+                            cromo.nombre
+                        )
+                    }"
+                )
             }
     ) {
-        Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)) {
             Column(modifier = Modifier.padding(8.dp)) {
                 AsyncImage(
                     model = cromo.imagen,
@@ -135,7 +205,8 @@ fun Recientes(viewModel: InicioViewModel, navController: NavController){
 
     Row(
         modifier = Modifier
-            .fillMaxWidth().padding(8.dp),
+            .fillMaxWidth()
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -193,7 +264,8 @@ fun MostrarCromos(viewModel: InicioViewModel, navController: NavController) {
 
     Row(
         modifier = Modifier
-            .fillMaxWidth().padding(8.dp),
+            .fillMaxWidth()
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -212,7 +284,9 @@ fun MostrarCromos(viewModel: InicioViewModel, navController: NavController) {
     }
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
     ) {
         for (row in 0 until numberOfRows) {
             Row(Modifier.fillMaxWidth()) {

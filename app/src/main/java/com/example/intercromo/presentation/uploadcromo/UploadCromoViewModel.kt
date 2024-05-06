@@ -1,18 +1,9 @@
 package com.example.intercromo.presentation.uploadcromo
 
-import android.graphics.Bitmap
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.IntSize
 import com.example.intercromo.dao.CromoRepository
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -69,8 +60,13 @@ class UploadCromoViewModel(private val cromoRepository: CromoRepository) {
             }
     }
 
-    fun addCromo(nombre: String, descripion: String, imagen: String, categoria: String) {
-        cromoRepository.addCromo(nombre, descripion, imagen, categoria)
+     fun addCromo(nombre: String, descripion: String, imagen: String, categoria: String): Boolean {
+        return try {
+            cromoRepository.addCromo(nombre, descripion, imagen, categoria)
+            true // La operación se realizó con éxito
+        } catch (e: Exception) {
+            false // Hubo un error al agregar el cromo
+        }
     }
 
 }

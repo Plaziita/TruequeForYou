@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -39,7 +40,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -168,6 +168,7 @@ fun BotonGuardarCromo(
     categoria: String,
     viewModel: UploadCromoViewModel
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -190,11 +191,17 @@ fun BotonGuardarCromo(
                     scope.launch {
                         val imageUrl = convertirUriAUrl(uri)
                         imageUrl?.let {
-                            viewModel.addCromo(nombre, descripcion, it, categoria)
+                            val resultado = viewModel.addCromo(nombre, descripcion, it, categoria)
+                            if (resultado) {
+                               Toast.makeText(context, "Cromo agregado correctamente", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Error al agregar el cromo", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
             }
+
         ) {
             Text(
                 text = "Subir cromo",
