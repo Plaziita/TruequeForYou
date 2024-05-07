@@ -1,5 +1,6 @@
 package com.example.intercromo.presentation.inicio
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -53,10 +55,11 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.intercromo.model.Cromo
 import com.example.intercromo.navigation.rutaInicio.VentanasInicio
+import com.example.intercromo.presentation.inicio.filtrar.FiltradoViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
+fun PantallaInicio(viewModel: InicioViewModel, navController: NavController, viewModelFiltrado: FiltradoViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +67,7 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
             .padding(8.dp)
     ) {
         Spacer(modifier = Modifier.height(8.dp))
-        SearchBar(navController,viewModel)
+        SearchBar(navController,viewModelFiltrado)
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(
             modifier = Modifier
@@ -83,8 +86,9 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
 
 
 @Composable
-fun SearchBar(navController: NavController,viewModel: InicioViewModel) {
-    var query by remember { mutableStateOf("") }
+fun SearchBar(navController: NavController, viewModel: FiltradoViewModel) {
+    var query by remember { mutableStateOf("") } // Utiliza una variable de estado
+    var mensaje = ""
 
     Surface(
         modifier = Modifier
@@ -109,8 +113,7 @@ fun SearchBar(navController: NavController,viewModel: InicioViewModel) {
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    viewModel.filtrarCromos(query)
-                    navController.navigate(VentanasInicio.CromoFiltradoScreen.ruta)
+                    mensaje = query
                 }
             ),
             colors = TextFieldDefaults.textFieldColors(
@@ -119,7 +122,15 @@ fun SearchBar(navController: NavController,viewModel: InicioViewModel) {
             )
         )
     }
+   Button(onClick = {
+       Log.e("mensaje",mensaje)
+       viewModel.query = mensaje
+       navController.navigate(VentanasInicio.CromoFiltradoScreen.ruta)}) {
+       Text(text = "MANDAR FILTRO")
+   }
 }
+
+
 
 
 @Composable

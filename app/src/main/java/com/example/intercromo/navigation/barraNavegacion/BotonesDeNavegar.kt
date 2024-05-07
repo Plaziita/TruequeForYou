@@ -34,6 +34,7 @@ import com.example.intercromo.presentation.favoritos.FavoritosViewModel
 import com.example.intercromo.presentation.favoritos.PantallaFavoritos
 import com.example.intercromo.presentation.inicio.InicioViewModel
 import com.example.intercromo.presentation.inicio.PantallaInicio
+import com.example.intercromo.presentation.inicio.filtrar.FiltradoViewModel
 import com.example.intercromo.presentation.perfil.PantallaPerfil
 import com.example.intercromo.presentation.uploadcromo.UploadCromoScreen
 import com.example.intercromo.presentation.uploadcromo.UploadCromoViewModel
@@ -130,7 +131,8 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
     ){
         composable(route = BarraDeOpciones.Inicio.ruta) {
             val viewmodelinicio = InicioViewModel(cromorepository)
-            PantallaInicio(viewmodelinicio, navController)
+            val viewmodelFiltrado = FiltradoViewModel(cromorepository)
+            PantallaInicio(viewmodelinicio, navController, viewmodelFiltrado)
         }
         composable(route = BarraDeOpciones.Favoritos.ruta) {
             val viewmodelFavorito = FavoritosViewModel(cromorepository)

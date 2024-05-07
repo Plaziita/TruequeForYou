@@ -1,4 +1,4 @@
-package com.example.intercromo.presentation.inicio
+package com.example.intercromo.presentation.inicio.filtrar
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.intercromo.presentation.inicio.InicioViewModel
+import com.example.intercromo.presentation.inicio.ItemCromo
 
 @Composable
 fun PantallaFiltrada(viewModel: InicioViewModel, navController: NavController) {
