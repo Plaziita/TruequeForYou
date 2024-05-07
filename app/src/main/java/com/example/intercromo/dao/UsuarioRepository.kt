@@ -47,7 +47,7 @@ class UsuarioRepository(navController: NavController) {
         }
     }
 
-    private fun createUser(name: String, email: String) {
+    private fun createUser(name: String?, email: String?) {
         val userId = auth.currentUser?.uid
         val name = name
         val email = email
@@ -90,6 +90,7 @@ class UsuarioRepository(navController: NavController) {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d("InterCromo", "Logueado con Google exitoso!")
+                        createUser(auth.currentUser?.displayName, auth.currentUser?.email)
                         navegar.navigate(Rutas.BARRANAVEGACION)
                     }
                 }
