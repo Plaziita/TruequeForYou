@@ -29,12 +29,12 @@ fun NavGraphBuilder.NavegacionInicio(controllerOpciones: NavHostController){
         }
         composable(route = VentanasInicio.InicioScreen.ruta) {
             val viewmodelInicio = InicioViewModel(cromorepository)
-            val viewmodelFiltrado = FiltradoViewModel(cromorepository)
-            PantallaInicio(viewmodelInicio, controllerOpciones, viewmodelFiltrado)
+            PantallaInicio(viewmodelInicio, controllerOpciones)
         }
         composable(route = VentanasInicio.CromoFiltradoScreen.ruta) {
             val viewmodelInicio = InicioViewModel(cromorepository)
-            PantallaFiltrada(viewmodelInicio,controllerOpciones)
+            val viewmodelFiltrado = FiltradoViewModel(cromorepository)
+            PantallaFiltrada(viewmodelFiltrado,controllerOpciones)
         }
     }
 }

@@ -7,6 +7,6 @@ sealed class VentanasInicio(
 
     object InicioScreen: VentanasInicio(ruta = "inicio_screen")
 
-    object CromoFiltradoScreen: VentanasInicio(ruta = "cromos_filtrados")
+    object CromoFiltradoScreen: VentanasInicio(ruta = "cromos_filtrados/{query}")
 
 }

@@ -59,7 +59,7 @@ import com.example.intercromo.presentation.inicio.filtrar.FiltradoViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun PantallaInicio(viewModel: InicioViewModel, navController: NavController, viewModelFiltrado: FiltradoViewModel) {
+fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,7 +67,7 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController, vie
             .padding(8.dp)
     ) {
         Spacer(modifier = Modifier.height(8.dp))
-        SearchBar(navController,viewModelFiltrado)
+        SearchBar(navController,viewModel)
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(
             modifier = Modifier
@@ -86,8 +86,9 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController, vie
 
 
 @Composable
-fun SearchBar(navController: NavController, viewModel: FiltradoViewModel) {
-    var query by remember { mutableStateOf("") } // Utiliza una variable de estado
+fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
+    val query = viewModel.query.value
+    val cromosFiltrados = viewModel.cromosFiltrados.value
     var mensaje = ""
 
     Surface(
@@ -98,8 +99,7 @@ fun SearchBar(navController: NavController, viewModel: FiltradoViewModel) {
     ) {
         TextField(
             value = query,
-            onValueChange = { newValue ->
-                query = newValue
+            onValueChange = { viewModel.queryChanged(it)
             },
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
@@ -123,202 +123,212 @@ fun SearchBar(navController: NavController, viewModel: FiltradoViewModel) {
         )
     }
    Button(onClick = {
-       Log.e("mensaje",mensaje)
-       viewModel.query = mensaje
-       navController.navigate(VentanasInicio.CromoFiltradoScreen.ruta)}) {
-       Text(text = "MANDAR FILTRO")
+       Log.e("mensaje", mensaje)
+       viewModel.cromosFiltrados
+       navController.navigate(
+           "${
+               VentanasInicio.CromoFiltradoScreen.ruta.replace(
+                   "{query}",
+                   query
+               )
+           }"
+       )
+   }){
+       Text("Buscar")
    }
 }
 
 
 
 
-@Composable
-fun ItemCromo(cromo: Cromo, navController: NavController){
+       @Composable
+       fun ItemCromo(cromo: Cromo, navController: NavController) {
 
-    Card(
-        modifier = Modifier
-            .size(200.dp, 300.dp)
-            .padding(16.dp)
-            .clickable {
-                navController.navigate(
-                    "${
-                        VentanasInicio.CromoScreen.ruta.replace(
-                            "{cromo}",
-                            cromo.nombre
-                        )
-                    }"
-                )
-            }
-    ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)) {
-            Column(modifier = Modifier.padding(8.dp)) {
-                AsyncImage(
-                    model = cromo.imagen,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(150.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(Color.Black)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Autorenew,
-                        contentDescription = "Icono tradear",
-                        tint = Color.Black,
-                    )
-                    Text(
-                        text = cromo.categoria,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFFA500),
-                        modifier = Modifier.alpha(0.8f)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Icono favorito",
-                        tint = Color.Black,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Carta / Cromo",
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = cromo.nombre,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-            }
-        }
-    }
-}
+           Card(
+               modifier = Modifier
+                   .size(200.dp, 300.dp)
+                   .padding(16.dp)
+                   .clickable {
+                       navController.navigate(
+                           "${
+                               VentanasInicio.CromoScreen.ruta.replace(
+                                   "{cromo}",
+                                   cromo.nombre
+                               )
+                           }"
+                       )
+                   }
+           ) {
+               Box(
+                   modifier = Modifier
+                       .fillMaxSize()
+                       .background(Color.White)
+               ) {
+                   Column(modifier = Modifier.padding(8.dp)) {
+                       AsyncImage(
+                           model = cromo.imagen,
+                           contentDescription = null,
+                           modifier = Modifier
+                               .size(150.dp)
+                               .clip(MaterialTheme.shapes.medium)
+                               .background(Color.Black)
+                       )
+                       Spacer(modifier = Modifier.height(16.dp))
+                       Row(
+                           horizontalArrangement = Arrangement.Center,
+                           verticalAlignment = Alignment.CenterVertically
+                       ) {
+                           Icon(
+                               imageVector = Icons.Default.Autorenew,
+                               contentDescription = "Icono tradear",
+                               tint = Color.Black,
+                           )
+                           Text(
+                               text = cromo.categoria,
+                               fontWeight = FontWeight.Bold,
+                               color = Color(0xFFFFA500),
+                               modifier = Modifier.alpha(0.8f)
+                           )
+                           Spacer(modifier = Modifier.weight(1f))
+                           Icon(
+                               imageVector = Icons.Default.FavoriteBorder,
+                               contentDescription = "Icono favorito",
+                               tint = Color.Black,
+                               modifier = Modifier.weight(1f)
+                           )
+                       }
+                       Spacer(modifier = Modifier.height(8.dp))
+                       Text(
+                           text = "Carta / Cromo",
+                           fontWeight = FontWeight.Bold
+                       )
+                       Spacer(modifier = Modifier.height(8.dp))
+                       Text(
+                           text = cromo.nombre,
+                           fontWeight = FontWeight.Bold,
+                           color = Color.Black
+                       )
+                   }
+               }
+           }
+       }
 
-@Composable
-fun Recientes(viewModel: InicioViewModel, navController: NavController){
+       @Composable
+       fun Recientes(viewModel: InicioViewModel, navController: NavController) {
 
-    //val scrollState = rememberScrollState()
-    var listaCromos = viewModel.listaCromos.value
+           //val scrollState = rememberScrollState()
+           var listaCromos = viewModel.listaCromos.value
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Default.Restore,
-            contentDescription = "Icono recientes",
-            tint = Color.Black,
-            modifier = Modifier.size(40.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = "Recientes",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontSize = 20.sp
-        )
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-            contentDescription = "Icono",
-            tint = Color.Black,
-            modifier = Modifier.size(40.dp)
-        )
-    }
+           Row(
+               modifier = Modifier
+                   .fillMaxWidth()
+                   .padding(8.dp),
+               verticalAlignment = Alignment.CenterVertically
+           ) {
+               Icon(
+                   imageVector = Icons.Default.Restore,
+                   contentDescription = "Icono recientes",
+                   tint = Color.Black,
+                   modifier = Modifier.size(40.dp)
+               )
+               Spacer(modifier = Modifier.width(16.dp))
+               Text(
+                   text = "Recientes",
+                   fontWeight = FontWeight.Bold,
+                   color = Color.Black,
+                   fontSize = 20.sp
+               )
+               Icon(
+                   imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                   contentDescription = "Icono",
+                   tint = Color.Black,
+                   modifier = Modifier.size(40.dp)
+               )
+           }
 
-    LazyRow(
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .padding(start = 8.dp)
-            .padding(end = 8.dp)
-            .fillMaxWidth()
-    ) {
-        items(listaCromos){
-            ItemCromo(cromo = it, navController)
-        }
-    }
+           LazyRow(
+               modifier = Modifier
+                   .padding(vertical = 8.dp)
+                   .padding(start = 8.dp)
+                   .padding(end = 8.dp)
+                   .fillMaxWidth()
+           ) {
+               items(listaCromos) {
+                   ItemCromo(cromo = it, navController)
+               }
+           }
 
-}
+       }
 
 
-@Composable
-fun MostrarCromos(viewModel: InicioViewModel, navController: NavController) {
-    //Lucas tontito
-    var listaCromos = viewModel.listaCromos.value
-    var isLoading by remember { mutableStateOf(false) }
+       @Composable
+       fun MostrarCromos(viewModel: InicioViewModel, navController: NavController) {
+           //Lucas tontito
+           var listaCromos = viewModel.listaCromos.value
+           var isLoading by remember { mutableStateOf(false) }
 
-    Spacer(modifier = Modifier.height(10.dp))
+           Spacer(modifier = Modifier.height(10.dp))
 
-    val columnSize = 2
-    val numberOfRows = (listaCromos.size + columnSize - 1) / columnSize
-    val lastRowItemCount = listaCromos.size % columnSize
+           val columnSize = 2
+           val numberOfRows = (listaCromos.size + columnSize - 1) / columnSize
+           val lastRowItemCount = listaCromos.size % columnSize
 
-    LaunchedEffect(key1 = true) {
-        delay(2000)
-        isLoading = true
-    }
+           LaunchedEffect(key1 = true) {
+               delay(2000)
+               isLoading = true
+           }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Default.ArrowDownward,
-            contentDescription = "Icono",
-            tint = Color.Black,
-            modifier = Modifier.size(40.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = "Todos los cromos",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontSize = 20.sp
-        )
-    }
+           Row(
+               modifier = Modifier
+                   .fillMaxWidth()
+                   .padding(8.dp),
+               verticalAlignment = Alignment.CenterVertically
+           ) {
+               Icon(
+                   imageVector = Icons.Default.ArrowDownward,
+                   contentDescription = "Icono",
+                   tint = Color.Black,
+                   modifier = Modifier.size(40.dp)
+               )
+               Spacer(modifier = Modifier.width(16.dp))
+               Text(
+                   text = "Todos los cromos",
+                   fontWeight = FontWeight.Bold,
+                   color = Color.Black,
+                   fontSize = 20.sp
+               )
+           }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        for (row in 0 until numberOfRows) {
-            Row(Modifier.fillMaxWidth()) {
-                val itemsInRow =
-                    if (row == numberOfRows - 1 && lastRowItemCount != 0) lastRowItemCount else columnSize
-                for (col in 0 until itemsInRow) {
-                    val index = row * columnSize + col
-                    if (index < listaCromos.size) {
-                        ItemCromo(cromo = listaCromos[index], navController)
-                    }
-                }
-            }
-        }
+           Column(
+               modifier = Modifier
+                   .fillMaxWidth()
+                   .padding(8.dp)
+           ) {
+               for (row in 0 until numberOfRows) {
+                   Row(Modifier.fillMaxWidth()) {
+                       val itemsInRow =
+                           if (row == numberOfRows - 1 && lastRowItemCount != 0) lastRowItemCount else columnSize
+                       for (col in 0 until itemsInRow) {
+                           val index = row * columnSize + col
+                           if (index < listaCromos.size) {
+                               ItemCromo(cromo = listaCromos[index], navController)
+                           }
+                       }
+                   }
+               }
 
-        if (isLoading) {
-            Spacer(modifier = Modifier.height(50.dp))
-            Text(
-                text = "-No hay más cromos en este momento-",
-                color = Color.Gray,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(50.dp))
-        }
+               if (isLoading) {
+                   Spacer(modifier = Modifier.height(50.dp))
+                   Text(
+                       text = "-No hay más cromos en este momento-",
+                       color = Color.Gray,
+                       fontSize = 18.sp,
+                       fontWeight = FontWeight.Bold,
+                       modifier = Modifier.fillMaxWidth(),
+                       textAlign = TextAlign.Center
+                   )
+                   Spacer(modifier = Modifier.height(50.dp))
+               }
 
-    }
-}
+           }
+       }

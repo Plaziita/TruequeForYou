@@ -7,6 +7,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -165,5 +166,20 @@ class CromoRepository {
         return listaMisCromos
 
     }
+
+    fun getCromosFiltrados(query: String): List<Cromo> = runBlocking {
+        val listaCromos = async(Dispatchers.IO) {
+            getCromos()
+        }.await()
+
+        if (query.isEmpty()) {
+            emptyList()
+        } else {
+            listaCromos.filter { cromo ->
+                cromo.nombre.contains(query, ignoreCase = true) || cromo.categoria.contains(query, ignoreCase = true)
+            }
+        }
+    }
+
 
 }

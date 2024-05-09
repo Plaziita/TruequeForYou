@@ -132,7 +132,7 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
         composable(route = BarraDeOpciones.Inicio.ruta) {
             val viewmodelinicio = InicioViewModel(cromorepository)
             val viewmodelFiltrado = FiltradoViewModel(cromorepository)
-            PantallaInicio(viewmodelinicio, navController, viewmodelFiltrado)
+            PantallaInicio(viewmodelinicio, navController)
         }
         composable(route = BarraDeOpciones.Favoritos.ruta) {
             val viewmodelFavorito = FavoritosViewModel(cromorepository)
