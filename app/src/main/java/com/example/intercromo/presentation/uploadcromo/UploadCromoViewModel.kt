@@ -68,5 +68,4 @@ class UploadCromoViewModel(private val cromoRepository: CromoRepository) {
             false // Hubo un error al agregar el cromo
         }
     }
-
 }

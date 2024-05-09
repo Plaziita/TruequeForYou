@@ -63,6 +63,19 @@ class CromoRepository {
         }
     }
 
+    fun updateFavoriteStatus(cromoNombre: String, isFavorite: Boolean, userId: String) {
+        // Actualiza el estado favorito del cromo en Firestore
+        val cromoRef = cromos.document(CAMPO_NOMBRE)
+        cromoRef.update("favorito", isFavorite)
+            .addOnSuccessListener {
+                // Actualización exitosa
+                Log.e(TAG,"El estado favorito del cromo $cromoNombre se actualizó correctamente a $isFavorite")
+            }
+            .addOnFailureListener { e ->
+                // Manejo de error
+                Log.e(TAG,"Error al actualizar el estado favorito del cromo $cromoNombre: ${e.message}")
+            }
+    }
     suspend fun getFavoritos(): List<Cromo> {
         return try {
             val querySnapshot = cromos.whereEqualTo(CAMPO_FAVORITO, true).get().await()
