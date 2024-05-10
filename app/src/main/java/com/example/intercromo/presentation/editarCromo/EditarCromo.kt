@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun EditarCromoScreen(viewModel: EditarCromoViewModel){
+fun EditarCromoScreen(){
     Column(
         modifier = Modifier
             .fillMaxSize()
