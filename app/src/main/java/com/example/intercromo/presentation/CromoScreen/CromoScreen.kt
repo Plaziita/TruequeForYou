@@ -1,22 +1,46 @@
+
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -25,7 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.rememberImagePainter
 import com.example.intercromo.model.Cromo
-import com.example.intercromo.presentation.CromoScreen.CromoScreenViewModel
+import com.example.intercromo.navigation.rutaInicio.VentanasInicio
 
 @Composable
 fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
@@ -34,8 +58,11 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
     val cromo: Cromo? = viewModel.getCromo(cromoNombre)
     val cromoUserId = cromo?.idUsuario.toString()
     val currentUser = viewModel.userId.toString()
+    val context = LocalContext.current
 
     var isFavorite by remember { mutableStateOf(viewModel.isFavorite(cromoNombre)) }
+    var estado by remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
 
     // Actualizar el estado del favorito al cargar la pantalla
     LaunchedEffect(cromoNombre) {
@@ -46,7 +73,7 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(20.dp)
+            .padding(6.dp)
     ) {
         Row(
             modifier = Modifier
@@ -63,7 +90,6 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
                     .size(35.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
-            //cambiar icono de favorito
             Icon(
                 imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                 contentDescription = "Favorite Icon",
@@ -75,6 +101,53 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
                         viewModel.updateFavoriteStatus(cromoNombre, isFavorite)
                     }
             )
+            Spacer(modifier = Modifier.width(20.dp))
+            Box(modifier = Modifier.size(35.dp)) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "Mostrar opciones",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(35.dp)
+                        .clickable {
+                            estado = !estado
+                        }
+                )
+                DropdownMenu(
+                    expanded = estado,
+                    onDismissRequest = { estado = false },
+                    modifier = Modifier
+                        .background(Color.White)
+                        .width(175.dp)
+                ) {
+                    DropdownMenuItem(
+                        onClick = {controller.navigate(VentanasInicio.EditarCromoScreen.ruta)}
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Mostrar opciones",
+                            tint = Color.Black,
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(text = "Editar cromo", color = Color.Black)
+                    }
+
+                    DropdownMenuItem(
+                        onClick = {
+                            showDialog.value = true
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Mostrar opciones",
+                            tint = Color.Black,
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(text = "Eliminar cromo", color = Color.Black)
+                    }
+
+                }
+            }
         }
         Spacer(modifier = Modifier.height(20.dp))
         cromo?.imagen?.let { imageUrl ->
@@ -139,6 +212,35 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
                     fontSize = 18.sp
                 )
             }
+        }
+        if (showDialog.value) {
+            AlertDialog(
+                onDismissRequest = {
+                    showDialog.value = false
+                },
+                title = { Text("¿Quieres eliminar este cromo?") },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            viewModel.deleteCromo(cromo?.cromoId ?: "")
+                            showDialog.value = false
+                            Toast.makeText(context, "Cromo eliminado correctamente!", Toast.LENGTH_SHORT).show()
+                            controller.popBackStack()
+                        }
+                    ) {
+                        Text("Eliminar")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = {
+                            showDialog.value = false
+                        }
+                    ) {
+                        Text("Cancelar")
+                    }
+                }
+            )
         }
     }
 }

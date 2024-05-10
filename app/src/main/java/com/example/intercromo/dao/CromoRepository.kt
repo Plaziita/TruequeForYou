@@ -194,5 +194,39 @@ class CromoRepository {
         }
     }
 
+    suspend fun deleteCromo(cromoId: String?) {
+        try {
+            if (cromoId != null) {
+                FirebaseFirestore.getInstance()
+                    .collection("cromos")
+                    .document(cromoId)
+                    .delete()
+                    .await()
+            }
+            Log.d("InterCromo", "Cromo eliminado exitosamente")
+        } catch (e: Exception) {
+            Log.e("InterCromo", "Error al eliminar el cromo: ${e.message}", e)
+        }
+    }
+
+    suspend fun updateCromo(cromoId: String, nombre: String, descripcion: String, imagen: String, categoria: String) {
+        try {
+            val data = hashMapOf(
+                "nombre" to nombre,
+                "descripcion" to descripcion,
+                "imagen" to imagen,
+                "categoria" to categoria
+            ).toMutableMap() as MutableMap<String, Any>
+            FirebaseFirestore.getInstance()
+                .collection("cromos")
+                .document(cromoId)
+                .update(data)
+                .await()
+            Log.d("InterCromo", "Cromo actualizado exitosamente")
+        } catch (e: Exception) {
+            Log.e("InterCromo", "Error al actualizar el cromo: ${e.message}", e)
+        }
+    }
+
 
 }

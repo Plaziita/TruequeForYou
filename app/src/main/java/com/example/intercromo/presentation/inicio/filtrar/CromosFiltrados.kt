@@ -19,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.intercromo.model.Cromo
-import com.example.intercromo.presentation.inicio.InicioViewModel
 import com.example.intercromo.presentation.inicio.ItemCromo
 
 @Composable
@@ -70,14 +68,6 @@ fun PantallaFiltrada(viewModel: FiltradoViewModel, controller: NavController) {
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            if (query != null) {
-                Text(
-                    text = query,
-                    color = Color.Black,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
         }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),

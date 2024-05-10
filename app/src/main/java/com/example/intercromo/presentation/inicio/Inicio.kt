@@ -1,6 +1,5 @@
 package com.example.intercromo.presentation.inicio
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +28,6 @@ import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -55,7 +53,6 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.intercromo.model.Cromo
 import com.example.intercromo.navigation.rutaInicio.VentanasInicio
-import com.example.intercromo.presentation.inicio.filtrar.FiltradoViewModel
 import kotlinx.coroutines.delay
 
 @Composable
@@ -106,7 +103,23 @@ fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
                 Text(text = "Buscar cromos...", color = Color.Black)
             },
             leadingIcon = {
-                Icon(Icons.Filled.Search, contentDescription = "Search", tint = Color.Black)
+                Icon(
+                    Icons.Filled.Search,
+                    contentDescription = "Search",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .clickable {
+                            viewModel.cromosFiltrados
+                            navController.navigate(
+                                "${
+                                    VentanasInicio.CromoFiltradoScreen.ruta.replace(
+                                        "{query}",
+                                        query
+                                    )
+                                }"
+                            )
+                        }
+                )
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
@@ -114,6 +127,15 @@ fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
             keyboardActions = KeyboardActions(
                 onDone = {
                     mensaje = query
+                    viewModel.cromosFiltrados
+                    navController.navigate(
+                        "${
+                            VentanasInicio.CromoFiltradoScreen.ruta.replace(
+                                "{query}",
+                                query
+                            )
+                        }"
+                    )
                 }
             ),
             colors = TextFieldDefaults.textFieldColors(
@@ -122,20 +144,6 @@ fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
             )
         )
     }
-   Button(onClick = {
-       Log.e("mensaje", mensaje)
-       viewModel.cromosFiltrados
-       navController.navigate(
-           "${
-               VentanasInicio.CromoFiltradoScreen.ruta.replace(
-                   "{query}",
-                   query
-               )
-           }"
-       )
-   }){
-       Text("Buscar")
-   }
 }
 
 

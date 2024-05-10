@@ -9,4 +9,6 @@ sealed class VentanasInicio(
 
     object CromoFiltradoScreen: VentanasInicio(ruta = "cromos_filtrados/{query}")
 
+    object EditarCromoScreen: VentanasInicio(ruta ="editar-cromo")
+
 }

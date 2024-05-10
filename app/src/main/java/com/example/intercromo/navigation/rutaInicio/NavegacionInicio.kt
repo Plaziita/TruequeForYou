@@ -1,5 +1,6 @@
 package com.example.intercromo.navigation.rutaInicio
 
+import CromoScreenViewModel
 import PantallaCromo
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -8,7 +9,7 @@ import androidx.navigation.navigation
 import com.example.intercromo.dao.ChatRepository
 import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.navigation.manejadorRutas.Rutas
-import com.example.intercromo.presentation.CromoScreen.CromoScreenViewModel
+import com.example.intercromo.presentation.editarCromo.EditarCromoScreen
 import com.example.intercromo.presentation.inicio.InicioViewModel
 import com.example.intercromo.presentation.inicio.PantallaInicio
 import com.example.intercromo.presentation.inicio.filtrar.FiltradoViewModel
@@ -35,6 +36,9 @@ fun NavGraphBuilder.NavegacionInicio(controllerOpciones: NavHostController){
             val viewmodelInicio = InicioViewModel(cromorepository)
             val viewmodelFiltrado = FiltradoViewModel(cromorepository)
             PantallaFiltrada(viewmodelFiltrado,controllerOpciones)
+        }
+        composable(route = VentanasInicio.EditarCromoScreen.ruta){
+            EditarCromoScreen()
         }
     }
 }
