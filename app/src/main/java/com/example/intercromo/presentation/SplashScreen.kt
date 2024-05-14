@@ -23,10 +23,10 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(navController: NavHostController, usuarioRepository: UsuarioRepository){
 
-    //LaunchedEffect(key1 = Unit){
-       // delay(1000)
-       // usuarioRepository.llevarAlMenu()
-    //}
+    LaunchedEffect(key1 = Unit){
+        delay(1000)
+        usuarioRepository.llevarAlMenu()
+    }
 
     LaunchedEffect(key1 = true){
         delay(2000)

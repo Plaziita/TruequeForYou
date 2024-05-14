@@ -49,7 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.rememberImagePainter
 import com.example.intercromo.model.Cromo
-import com.example.intercromo.navigation.rutaInicio.VentanasInicio
+import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
 
 @Composable
 fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
@@ -57,7 +57,7 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
     val cromoNombre: String? = navBackStackEntry?.arguments?.getString("cromo")
     val cromo: Cromo? = viewModel.getCromo(cromoNombre)
     val cromoUserId = cromo?.idUsuario.toString()
-    val currentUser = viewModel.userId.toString()
+    val currentUser = viewModel.currentUserID
     val context = LocalContext.current
 
     var isFavorite by remember { mutableStateOf(viewModel.isFavorite(cromoNombre)) }
@@ -102,50 +102,68 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
                     }
             )
             Spacer(modifier = Modifier.width(20.dp))
-            Box(modifier = Modifier.size(35.dp)) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Mostrar opciones",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .size(35.dp)
-                        .clickable {
-                            estado = !estado
-                        }
-                )
-                DropdownMenu(
-                    expanded = estado,
-                    onDismissRequest = { estado = false },
-                    modifier = Modifier
-                        .background(Color.White)
-                        .width(175.dp)
-                ) {
-                    DropdownMenuItem(
-                        onClick = {controller.navigate(VentanasInicio.EditarCromoScreen.ruta)}
+            if (cromo?.idUsuario == currentUser) {
+                Box(modifier = Modifier.size(35.dp)) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = "Mostrar opciones",
+                        tint = Color.Black,
+                        modifier = Modifier
+                            .size(35.dp)
+                            .clickable {
+                                estado = !estado
+                            }
+                    )
+                    DropdownMenu(
+                        expanded = estado,
+                        onDismissRequest = { estado = false },
+                        modifier = Modifier
+                            .background(Color.White)
+                            .width(175.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Mostrar opciones",
-                            tint = Color.Black,
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(text = "Editar cromo", color = Color.Black)
-                    }
-
-                    DropdownMenuItem(
-                        onClick = {
-                            showDialog.value = true
+                        DropdownMenuItem(
+                            onClick = {
+                                controller.navigate(
+                                    "${VentanasPerfil.EditarCromoScreen.ruta.replace(
+                                        "{cromoId}",
+                                        cromo.cromoId
+                                    ).replace(
+                                        "{descripcion}",
+                                        cromo.descripcion
+                                    ).replace(
+                                        "{nombre}",
+                                        cromo.nombre
+                                    ).replace(
+                                        "{categoria}",
+                                        cromo.categoria
+                                    )}"
+                                )
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Mostrar opciones",
+                                tint = Color.Black,
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(text = "Editar cromo", color = Color.Black)
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Mostrar opciones",
-                            tint = Color.Black,
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(text = "Eliminar cromo", color = Color.Black)
-                    }
 
+                        DropdownMenuItem(
+                            onClick = {
+                                showDialog.value = true
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Mostrar opciones",
+                                tint = Color.Black,
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(text = "Eliminar cromo", color = Color.Black)
+                        }
+
+                    }
                 }
             }
         }
@@ -188,29 +206,31 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
             fontSize = 18.sp
         )
         Spacer(modifier = Modifier.height(20.dp))
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Bottom, // Alinear los elementos hacia abajo
-            horizontalAlignment = Alignment.CenterHorizontally // Centrar horizontalmente
-        ) {
-            Button(
+        if (cromo?.idUsuario != currentUser) {
+            Column(
                 modifier = Modifier
-                    .alpha(0.8f)
-                    .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFFA500),
-                    contentColor = Color.Black
-                ),
-                onClick = {
-                    viewModel.startConversation(cromoUserId, currentUser)
-                }
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Bottom, // Alinear los elementos hacia abajo
+                horizontalAlignment = Alignment.CenterHorizontally // Centrar horizontalmente
             ) {
-                Text(
-                    text = "Iniciar conversación",
-                    fontSize = 18.sp
-                )
+                Button(
+                    modifier = Modifier
+                        .alpha(0.8f)
+                        .fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFFA500),
+                        contentColor = Color.Black
+                    ),
+                    onClick = {
+                        viewModel.startConversation(cromoUserId, currentUser)
+                    }
+                ) {
+                    Text(
+                        text = "Iniciar conversación",
+                        fontSize = 18.sp
+                    )
+                }
             }
         }
         if (showDialog.value) {

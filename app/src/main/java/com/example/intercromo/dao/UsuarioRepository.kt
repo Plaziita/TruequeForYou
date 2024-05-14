@@ -39,6 +39,7 @@ class UsuarioRepository(navController: NavController) {
             if (it.isSuccessful) {
                 val nombreEmail = it.result.user?.email?.split("@")?.get(0)
                 createUser(name, nombreEmail.toString())
+                updateDisplayName(name)
                 Log.d("InterCromo", "Registro realizado con éxito")
                 navegar.navigate(VentanasLogIn.BienvenidosScreen.ruta)
             } else {
@@ -67,6 +68,9 @@ class UsuarioRepository(navController: NavController) {
             }
 
 
+    }
+
+    fun updateDisplayName(name: String){
         if (auth.currentUser != null) {
             val profileDisplayName = UserProfileChangeRequest.Builder().setDisplayName(name).build()
 
@@ -90,7 +94,7 @@ class UsuarioRepository(navController: NavController) {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d("InterCromo", "Logueado con Google exitoso!")
-                        createUser(auth.currentUser?.displayName, auth.currentUser?.email)
+                        createUser(auth.currentUser?.displayName, auth.currentUser?.email.toString())
                         navegar.navigate(Rutas.BARRANAVEGACION)
                     }
                 }

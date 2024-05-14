@@ -1,27 +1,29 @@
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.intercromo.dao.ChatRepository
 import com.example.intercromo.dao.CromoRepository
+import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.model.Cromo
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
-class CromoScreenViewModel(cromoRepository: CromoRepository, repository: ChatRepository) : ViewModel() {
+class CromoScreenViewModel(cromoRepository: CromoRepository, repository: ChatRepository,usuarioRepository: UsuarioRepository) : ViewModel() {
 
     val cromoRepository = cromoRepository
     val repository = repository
-    val userId = Firebase.auth.currentUser?.uid
+    val usuarioRepository = usuarioRepository
     private var _isFavoriteMap: MutableMap<String, Boolean> = mutableMapOf()
+
+    val currentUserID = usuarioRepository.currentUser!!.uid
 
     fun getCromo(nombre_: String?): Cromo? {
         return cromoRepository.getCromo(nombre_)
     }
 
     fun updateFavoriteStatus(cromoNombre: String?, isFavorite: Boolean) {
-        if (!cromoNombre.isNullOrBlank() && userId != null) {
+        if (!cromoNombre.isNullOrBlank() && currentUserID != null) {
             viewModelScope.launch {
-                cromoRepository.updateFavoriteStatus(cromoNombre, isFavorite, userId)
+                cromoRepository.updateFavoriteStatus(cromoNombre, isFavorite, currentUserID)
             }
         }
     }

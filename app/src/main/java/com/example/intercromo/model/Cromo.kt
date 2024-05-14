@@ -7,7 +7,7 @@ data class Cromo(
     val categoria: String,
     val idUsuario: String,
     val favorito: Boolean,
-    val cromoId: String?
+    val cromoId: String
 ){
     fun toMap(): MutableMap<Any, Any> {
         return mutableMapOf(

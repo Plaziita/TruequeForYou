@@ -8,12 +8,14 @@ import androidx.navigation.navigation
 import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.manejadorRutas.Rutas
+import com.example.intercromo.presentation.editarCromo.EditarCromoViewModel
 import com.example.intercromo.presentation.perfil.PantallaHistorial
 import com.example.intercromo.presentation.perfil.PantallaPerfil
 import com.example.intercromo.presentation.perfil.misCromos.MisCromosViewModel
 import com.example.intercromo.presentation.perfil.misCromos.PantallaMisCromos
 import com.example.intercromo.presentation.perfil.modificarPerfil.ModificarPerfilScreen
 import com.example.intercromo.presentation.perfil.modificarPerfil.ModificarViewModel
+import com.example.intercromo.presentation.uploadcromo.EditarCromoScreen
 
 fun NavGraphBuilder.NavegacionPerfil(controllerOpciones: NavHostController){
 
@@ -41,6 +43,10 @@ fun NavGraphBuilder.NavegacionPerfil(controllerOpciones: NavHostController){
         }
         composable(route = VentanasPerfil.PerfilScreen.ruta) {
             PantallaPerfil(controllerOpciones)
+        }
+        composable(route = VentanasPerfil.EditarCromoScreen.ruta){
+            val editarViewmovel = EditarCromoViewModel(cromorepository)
+            EditarCromoScreen(editarViewmovel,controllerOpciones)
         }
     }
 }

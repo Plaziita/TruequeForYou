@@ -38,10 +38,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.intercromo.model.Cromo
+import com.example.intercromo.navigation.rutaInicio.VentanasInicio
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaMisCromos(navController: NavController, viewModel: MisCromosViewModel) {
+fun PantallaMisCromos(controller: NavController, viewModel: MisCromosViewModel) {
     var listaCromos = viewModel.listaCromos.value
     Log.e("lista",listaCromos.toString())
 
@@ -62,7 +63,7 @@ fun PantallaMisCromos(navController: NavController, viewModel: MisCromosViewMode
                 tint = Color.Black,
                 modifier = Modifier
                     .clickable {
-                        navController.popBackStack()
+                        controller.popBackStack()
                     }
                     .size(35.dp)
             )
@@ -79,7 +80,7 @@ fun PantallaMisCromos(navController: NavController, viewModel: MisCromosViewMode
             modifier = Modifier.background(Color.White)
         ) {
             items(listaCromos) {
-                MisCromos(cromo = it)
+                MisCromos(cromo = it,controller)
             }
         }
     }
@@ -88,11 +89,21 @@ fun PantallaMisCromos(navController: NavController, viewModel: MisCromosViewMode
 
 
 @Composable
-fun MisCromos(cromo: Cromo) {
+fun MisCromos(cromo: Cromo,controller: NavController) {
     Card(
         modifier = Modifier
             .size(200.dp, 300.dp)
             .padding(16.dp)
+            .clickable {
+                controller.navigate(
+                    "${
+                        VentanasInicio.CromoScreen.ruta.replace(
+                            "{cromo}",
+                            cromo.nombre
+                        )
+                    }"
+                )
+            }
     ) {
         Box(modifier = Modifier
             .fillMaxSize()

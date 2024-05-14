@@ -109,7 +109,7 @@ class CromoRepository {
         }
     }
 
-    fun getCromo(nombre_: String?): Cromo? {
+    fun getCromo(cromoId: String?): Cromo? {
         var cromoDevolver: Cromo? = null
 
         // Crear un nuevo alcance de corrutina
@@ -119,7 +119,7 @@ class CromoRepository {
 
             // Procesamos la lista de cromos
             for (cromo in cromos) {
-                if (cromo.nombre.equals(nombre_)) {
+                if (cromo.nombre.equals(cromoId)) {
                     cromoDevolver = cromo
                     break
                 }
@@ -140,7 +140,7 @@ class CromoRepository {
         val imagen = imagen
         val categoria = categoria
 
-        val cromo = Cromo(nombre, descripcion, imagen, categoria, userId.toString(), false, null)
+        val cromo = Cromo(nombre, descripcion, imagen, categoria, userId.toString(), false, "")
 
 
 
@@ -209,21 +209,23 @@ class CromoRepository {
         }
     }
 
-    suspend fun updateCromo(cromoId: String, nombre: String, descripcion: String, imagen: String, categoria: String) {
+     fun updateCromo(cromoId: String?, nombre: String, descripcion: String, categoria: String) :Boolean {
         try {
             val data = hashMapOf(
                 "nombre" to nombre,
                 "descripcion" to descripcion,
-                "imagen" to imagen,
                 "categoria" to categoria
             ).toMutableMap() as MutableMap<String, Any>
-            FirebaseFirestore.getInstance()
-                .collection("cromos")
-                .document(cromoId)
-                .update(data)
-                .await()
+            if (cromoId != null) {
+                FirebaseFirestore.getInstance()
+                    .collection("cromos")
+                    .document(cromoId)
+                    .update(data)
+            }
+            return true
             Log.d("InterCromo", "Cromo actualizado exitosamente")
         } catch (e: Exception) {
+            return false
             Log.e("InterCromo", "Error al actualizar el cromo: ${e.message}", e)
         }
     }

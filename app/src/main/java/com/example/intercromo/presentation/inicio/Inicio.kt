@@ -161,7 +161,7 @@ fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
                            "${
                                VentanasInicio.CromoScreen.ruta.replace(
                                    "{cromo}",
-                                   cromo.nombre
+                                   cromo.cromoId
                                )
                            }"
                        )
