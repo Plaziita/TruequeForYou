@@ -100,7 +100,7 @@ fun recogidaDatos(viewModel: EditarCromoViewModel,cromoId: String?,controller: N
             leadingIcon = { Icon(Icons.Default.Description, contentDescription = null) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
         )
-        BotonGuardarCromo(nombre, descripcion, selectedtText, cromoId, viewModel, controller)
+        BotonGuardarCromo(nombre, descripcion, selectedtText, cromoId,nombreInicial,categoriaInicial,descripcionInicial,viewModel, controller)
     }
 }
 
@@ -110,10 +110,17 @@ fun BotonGuardarCromo(
     descripcion: String,
     categoria: String,
     cromoId: String?,
+    nombreInicial: String?,
+    categoriaInicial: String?,
+    descripcionInicial: String?,
     viewModel: EditarCromoViewModel,
     controller: NavController
 ) {
     val context = LocalContext.current
+    var tempNombre = nombre
+    var tempCategoria = categoria
+    var tempDescripcion = descripcion
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -131,7 +138,22 @@ fun BotonGuardarCromo(
                 contentColor = Color.Black
             ),
             onClick = {
-                val resultado = viewModel.updateCromo(cromoId,nombre, descripcion, categoria)
+                if(tempNombre.isEmpty()){
+                    if (nombreInicial != null) {
+                        tempNombre = nombreInicial
+                    }
+                }
+                if(tempCategoria.isEmpty()){
+                    if (categoriaInicial != null) {
+                        tempCategoria = categoriaInicial
+                    }
+                }
+                if(tempDescripcion.isEmpty()){
+                    if (descripcionInicial != null) {
+                        tempDescripcion = descripcionInicial
+                    }
+                }
+                val resultado = viewModel.updateCromo(cromoId,tempNombre, tempDescripcion, tempCategoria)
                 scope.launch {
                             if (resultado) {
                                 Toast.makeText(context, "Cromo actualizado correctamente", Toast.LENGTH_SHORT).show()
