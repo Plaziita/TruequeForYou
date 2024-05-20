@@ -178,13 +178,15 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = cromo?.categoria ?: "",
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFFFFA500),
-            modifier = Modifier.alpha(0.8f),
-            fontSize = 18.sp
-        )
+        if (cromo != null) {
+            Text(
+                text = cromo.categoria,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFFFA500),
+                modifier = Modifier.alpha(0.8f),
+                fontSize = 18.sp
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "Carta / Cromo",
@@ -192,19 +194,23 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
             fontSize = 18.sp
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = cromo?.nombre ?: "",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontSize = 24.sp
-        )
+        if (cromo != null) {
+            Text(
+                text = cromo.nombre,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                fontSize = 24.sp
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = cromo?.descripcion ?: "",
-            color = Color.Black,
-            textAlign = TextAlign.Justify,
-            fontSize = 18.sp
-        )
+        if (cromo != null) {
+            Text(
+                text = cromo.descripcion,
+                color = Color.Black,
+                textAlign = TextAlign.Justify,
+                fontSize = 18.sp
+            )
+        }
         Spacer(modifier = Modifier.height(20.dp))
         if (cromo?.idUsuario != currentUser) {
             Column(

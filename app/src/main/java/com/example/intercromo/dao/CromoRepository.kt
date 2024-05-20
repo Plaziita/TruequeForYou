@@ -119,7 +119,7 @@ class CromoRepository {
 
             // Procesamos la lista de cromos
             for (cromo in cromos) {
-                if (cromo.nombre.equals(cromoId)) {
+                if (cromo.cromoId.equals(cromoId)) {
                     cromoDevolver = cromo
                     break
                 }
