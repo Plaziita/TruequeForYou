@@ -105,7 +105,7 @@ fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
             leadingIcon = {
                 Icon(
                     Icons.Filled.Search,
-                    contentDescription = "Search",
+                    contentDescription = "Search...",
                     tint = Color.Black,
                     modifier = Modifier
                         .clickable {
