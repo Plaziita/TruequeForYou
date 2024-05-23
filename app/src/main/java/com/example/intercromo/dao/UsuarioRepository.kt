@@ -15,11 +15,15 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class UsuarioRepository(navController: NavController) {
     private val auth: FirebaseAuth = Firebase.auth
     private val navegar = navController
     private val firestore = FirebaseFirestore.getInstance()
+
+    private val db = FirebaseFirestore.getInstance()
+    private val usuarios = db.collection("usuarios")
 
     val currentUser: FirebaseUser?
         get() = auth.currentUser
@@ -167,7 +171,24 @@ class UsuarioRepository(navController: NavController) {
             }
     }
 
-
+    suspend fun actualizarNombreDeUsuario(nuevoNombre: String) {
+        val currentUser = auth.currentUser
+        currentUser?.let {
+            // Actualizar el nombre en Firebase Authentication
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName(nuevoNombre)
+                .build()
+            it.updateProfile(profileUpdates).await()
+            // Actualizar el nombre en Firestore
+            val userRef = usuarios.document(currentUser.uid)
+            userRef.update("name", nuevoNombre).await()
+        }
+    }
+    // Método para actualizar la contraseña en Firebase Authentication
+    suspend fun actualizarPassword(nuevaPassword: String) {
+        val currentUser = auth.currentUser
+        currentUser?.updatePassword(nuevaPassword)?.await()
+    }
     fun cerrarSesion(context: Context) {
         try {
             // Cerrar sesión en Firebase

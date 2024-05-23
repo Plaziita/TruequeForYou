@@ -3,30 +3,17 @@ package com.example.intercromo.presentation.perfil.modificarPerfil
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -43,15 +30,17 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.intercromo.R
 import com.example.intercromo.dao.UsuarioRepository
-
+import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModificarPerfilScreen(navController: NavController,viewModel: ModificarViewModel){
 
     val auth = UsuarioRepository(navController)
-    val userProfileImageUrl = auth.getUserProfileImageUrl()
-    val password:String = viewModel.password.value
-    val nombre:String = viewModel.nombre.value
+    val password: String = viewModel.password.value
+    val nombre: String = viewModel.nombre.value
+    val userProfileImageUrl = viewModel.userProfileImageUrl.value
+    val mostrarMensajeExito = viewModel.mostrarMensajeExito.value
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -122,7 +111,7 @@ fun ModificarPerfilScreen(navController: NavController,viewModel: ModificarViewM
         Spacer(modifier = Modifier.height(20.dp))
         OutlinedTextField(
             value = nombre,
-            onValueChange = {viewModel.cambiarNombre(nombre)},
+            onValueChange = { viewModel.cambiarNombre(it) },
             label = { Text("Nombre", color = Color.Black) },
             textStyle = TextStyle(color = Color.Black),
             modifier = Modifier
@@ -133,10 +122,9 @@ fun ModificarPerfilScreen(navController: NavController,viewModel: ModificarViewM
 
         OutlinedTextField(
             value = password,
-            onValueChange = {viewModel.cambiarPassword(password)},
+            onValueChange = { viewModel.cambiarPassword(it) },
             label = { Text("Contraseña", color = Color.Black) },
             textStyle = TextStyle(color = Color.Black),
-
             modifier = Modifier
                 .fillMaxWidth(),
             leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
@@ -157,6 +145,9 @@ fun ModificarPerfilScreen(navController: NavController,viewModel: ModificarViewM
                     contentColor = Color.Black
                 ),
                 onClick = {
+                    scope.launch {
+                        viewModel.guardarCambios(nombre, password)
+                    }
                 }
             ) {
                 Text(
@@ -164,6 +155,19 @@ fun ModificarPerfilScreen(navController: NavController,viewModel: ModificarViewM
                     fontSize = 18.sp
                 )
             }
+        }
+
+        // Snackbar para mostrar el mensaje de éxito
+        if (mostrarMensajeExito) {
+            Snackbar(
+                modifier = Modifier.padding(16.dp),
+                content = { Text(text = "¡Cambio realizado con éxito!") },
+                action = {
+                    IconButton(onClick = { viewModel.mostrarMensajeExito.value = false }) {
+                        Icon(Icons.Default.Close, contentDescription = "Cerrar")
+                    }
+                }
+            )
         }
     }
 }
