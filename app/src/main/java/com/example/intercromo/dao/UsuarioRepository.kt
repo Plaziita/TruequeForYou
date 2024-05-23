@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class UsuarioRepository(navController: NavController) {
     private val auth: FirebaseAuth = Firebase.auth
     private val navegar = navController
+    private val firestore = FirebaseFirestore.getInstance()
 
     val currentUser: FirebaseUser?
         get() = auth.currentUser
@@ -93,16 +94,36 @@ class UsuarioRepository(navController: NavController) {
             auth.signInWithCredential(credential)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d("InterCromo", "Logueado con Google exitoso!")
-                        createUser(auth.currentUser?.displayName, auth.currentUser?.email.toString())
-                        navegar.navigate(Rutas.BARRANAVEGACION)
+                        val currentUser = auth.currentUser
+                        if (currentUser != null) {
+                            val userId = currentUser.uid
+                            val firestore = FirebaseFirestore.getInstance()
+                            val userDocRef = firestore.collection("usuarios").document(userId)
+
+                            userDocRef.get()
+                                .addOnSuccessListener { document ->
+                                    if (document.exists()) {
+                                        Log.d("InterCromo", "Usuario ya existe en Firestore.")
+                                    } else {
+                                        Log.d("InterCromo", "Usuario no existe en Firestore, creando usuario.")
+                                        createUser(currentUser.displayName, currentUser.email.toString())
+                                    }
+                                    // Navegar a la siguiente pantalla después de verificar/crear el usuario
+                                    navegar.navigate(Rutas.BARRANAVEGACION)
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.d("InterCromo", "Error obteniendo documento del usuario: $e")
+                                }
+                        }
+                    } else {
+                        Log.d("InterCromo", "Fallo al registrarse!")
                     }
                 }
                 .addOnFailureListener {
                     Log.d("InterCromo", "Fallo al registrarse!")
                 }
         } catch (ex: Exception) {
-            Log.d("InterCromo", "Excepcion al loguear con Google: " + "${ex.localizedMessage}")
+            Log.d("InterCromo", "Excepción al loguear con Google: ${ex.localizedMessage}")
         }
     }
 
@@ -172,7 +193,63 @@ class UsuarioRepository(navController: NavController) {
         }
     }
 
+    fun updateFavoritos(cromoId: String) {
+        val user = currentUser
+        if (user != null) {
+            val userId = user.uid
+            val userDocRef = firestore.collection("usuarios").document(userId)
 
+            userDocRef.get().addOnSuccessListener { document ->
+                if (document != null) {
+                    val favoritos =
+                        document.get("cromosFavoritos") as? MutableList<String> ?: mutableListOf()
+                    if (favoritos.contains(cromoId)) {
+                        favoritos.remove(cromoId)
+                    } else {
+                        favoritos.add(cromoId)
+                    }
+                    userDocRef.update("cromosFavoritos", favoritos)
+                        .addOnSuccessListener {
+                            // Actualización exitosa
+
+                        }
+                        .addOnFailureListener { e ->
+                            // Error al actualizar
+
+                        }
+                }
+            }.addOnFailureListener { e ->
+                // Error al obtener el documento
+
+            }
+        }
+
+    }
+
+    fun isFavorite(cromoId: String?): Boolean {
+        val user = currentUser
+        var favorito:Boolean = false
+        if (user != null) {
+            val userId = user.uid
+            val userDocRef = firestore.collection("usuarios").document(userId)
+
+            userDocRef.get().addOnSuccessListener { document ->
+                if (document != null) {
+                    val favoritos =
+                        document.get("cromosFavoritos") as? MutableList<String> ?: mutableListOf()
+                    if (favoritos.contains(cromoId)) {
+                        favorito = true
+                    } else {
+                        favorito = false
+                    }
+
+
+                }
+            }
+        }
+
+        return favorito
+    }
 
 
 }

@@ -54,20 +54,20 @@ import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
 @Composable
 fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
     val navBackStackEntry by controller.currentBackStackEntryAsState()
-    val cromoNombre: String? = navBackStackEntry?.arguments?.getString("cromo")
-    val cromo: Cromo? = viewModel.getCromo(cromoNombre)
+    val cromoId: String? = navBackStackEntry?.arguments?.getString("cromo")
+    val cromo: Cromo? = viewModel.getCromo(cromoId)
     val cromoUserId = cromo?.idUsuario.toString()
     val currentUser = viewModel.currentUserID
     val context = LocalContext.current
 
-    var isFavorite by remember { mutableStateOf(viewModel.isFavorite(cromoNombre)) }
+    var isFavorite = false
     var estado by remember { mutableStateOf(false) }
     val showDialog = remember { mutableStateOf(false) }
 
     // Actualizar el estado del favorito al cargar la pantalla
-    LaunchedEffect(cromoNombre) {
-        isFavorite = viewModel.isFavorite(cromoNombre)
-    }
+    /*LaunchedEffect(cromoId) {
+        isFavorite = viewModel.isFavorite(cromoId)
+    }*/
 
     Column(
         modifier = Modifier
@@ -98,7 +98,7 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
                     .size(35.dp)
                     .clickable {
                         isFavorite = !isFavorite
-                        viewModel.updateFavoriteStatus(cromoNombre, isFavorite)
+                        viewModel.updateFavoriteStatus(cromoId)
                     }
             )
             Spacer(modifier = Modifier.width(20.dp))

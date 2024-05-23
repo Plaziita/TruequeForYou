@@ -20,11 +20,9 @@ class CromoScreenViewModel(cromoRepository: CromoRepository, repository: ChatRep
         return cromoRepository.getCromo(nombre_)
     }
 
-    fun updateFavoriteStatus(cromoNombre: String?, isFavorite: Boolean) {
-        if (!cromoNombre.isNullOrBlank() && currentUserID != null) {
-            viewModelScope.launch {
-                cromoRepository.updateFavoriteStatus(cromoNombre, isFavorite, currentUserID)
-            }
+    fun updateFavoriteStatus(cromoNombre: String?) {
+        if (cromoNombre != null) {
+            usuarioRepository.updateFavoritos(cromoNombre)
         }
     }
 
@@ -35,7 +33,7 @@ class CromoScreenViewModel(cromoRepository: CromoRepository, repository: ChatRep
     }
 
     fun isFavorite(nombre_: String?): Boolean {
-        return _isFavoriteMap[nombre_] ?: false
+        return usuarioRepository.isFavorite(nombre_)
     }
 
     fun startConversation(user1: String, user2: String) {

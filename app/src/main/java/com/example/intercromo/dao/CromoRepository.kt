@@ -3,8 +3,10 @@ package com.example.intercromo.dao
 import android.util.Log
 import com.example.intercromo.model.Cromo
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -28,6 +30,7 @@ class CromoRepository {
 
     private val db = FirebaseFirestore.getInstance()
     private val cromos = db.collection(COLECCION_CROMOS)
+    private val auth: FirebaseAuth = Firebase.auth
 
     suspend fun getCromos(): List<Cromo> {
         return try {
@@ -63,51 +66,38 @@ class CromoRepository {
         }
     }
 
-    fun updateFavoriteStatus(cromoNombre: String, isFavorite: Boolean, userId: String) {
-        // Actualiza el estado favorito del cromo en Firestore
-        val cromoRef = cromos.document(CAMPO_NOMBRE)
-        cromoRef.update("favorito", isFavorite)
-            .addOnSuccessListener {
-                // Actualización exitosa
-                Log.e(TAG,"El estado favorito del cromo $cromoNombre se actualizó correctamente a $isFavorite")
-            }
-            .addOnFailureListener { e ->
-                // Manejo de error
-                Log.e(TAG,"Error al actualizar el estado favorito del cromo $cromoNombre: ${e.message}")
-            }
-    }
+
     suspend fun getFavoritos(): List<Cromo> {
-        return try {
-            val querySnapshot = cromos.whereEqualTo(CAMPO_FAVORITO, true).get().await()
-            val listaCromos = mutableListOf<Cromo>()
-            for (document in querySnapshot) {
-                val nombre = document.getString(CAMPO_NOMBRE) ?: ""
-                val descripcion = document.getString(CAMPO_DESCRIPCION) ?: ""
-                val imagen = document.getString(CAMPO_IMAGEN) ?: ""
-                val categoria = document.getString(CAMPO_CATEGORIA) ?: ""
-                val nombreUsuario = document.getString(CAMPO_NOMBREUSUARIO) ?: ""
-                val cromoId = document.getString(CAMPO_ID)  ?:""
 
-                val cromo = Cromo(
-                    nombre,
-                    descripcion,
-                    imagen,
-                    categoria,
-                    nombreUsuario,
-                    true ,// Indicamos que el cromo es favorito
-                    cromoId
-                )
+            val user = auth.currentUser
+            if (user != null) {
+                val userId = user.uid
+                val firestore = FirebaseFirestore.getInstance()
+                val userDocRef = firestore.collection("usuarios").document(userId)
 
-                listaCromos.add(cromo)
-                Log.i(TAG, "------> Favorito: $nombre")
+                try {
+                    val documentSnapshot = userDocRef.get().await()
+                    val favoritos = documentSnapshot.get("cromosFavoritos") as? List<String> ?: emptyList()
+
+                    val favoritosList = mutableListOf<Cromo>()
+                    for (cromoId in favoritos) {
+                        val cromoDocRef = firestore.collection("cromos").document(cromoId)
+                        val cromoSnapshot = cromoDocRef.get().await()
+                        val cromo = cromoSnapshot.toObject<Cromo>()
+                        if (cromo != null) {
+                            favoritosList.add(cromo)
+                        }
+                    }
+                    return favoritosList
+                } catch (e: Exception) {
+                    Log.d("InterCromo", "Error obteniendo favoritos: $e")
+                }
+            } else {
+                Log.d("InterCromo", "Usuario no autenticado.")
             }
-            listaCromos
-        } catch (e: Exception) {
-            // Manejar cualquier error que ocurra al obtener los datos
-            Log.e(TAG, "Error al obtener la lista de cromos favoritos", e)
-            emptyList()
+            return emptyList()
         }
-    }
+
 
     fun getCromo(cromoId: String?): Cromo? {
         var cromoDevolver: Cromo? = null
@@ -229,6 +219,8 @@ class CromoRepository {
             Log.e("InterCromo", "Error al actualizar el cromo: ${e.message}", e)
         }
     }
+
+
 
 
 }
