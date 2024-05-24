@@ -6,7 +6,6 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -68,35 +67,34 @@ class CromoRepository {
 
 
     suspend fun getFavoritos(): List<Cromo> {
+        val user = auth.currentUser
+        if (user != null) {
+            val userId = user.uid
+            val firestore = FirebaseFirestore.getInstance()
+            val userDocRef = firestore.collection("usuarios").document(userId)
 
-            val user = auth.currentUser
-            if (user != null) {
-                val userId = user.uid
-                val firestore = FirebaseFirestore.getInstance()
-                val userDocRef = firestore.collection("usuarios").document(userId)
+            try {
+                val documentSnapshot = userDocRef.get().await()
+                val favoritos = documentSnapshot.get("cromosFavoritos") as? List<String> ?: emptyList()
 
-                try {
-                    val documentSnapshot = userDocRef.get().await()
-                    val favoritos = documentSnapshot.get("cromosFavoritos") as? List<String> ?: emptyList()
-
-                    val favoritosList = mutableListOf<Cromo>()
-                    for (cromoId in favoritos) {
-                        val cromoDocRef = firestore.collection("cromos").document(cromoId)
-                        val cromoSnapshot = cromoDocRef.get().await()
-                        val cromo = cromoSnapshot.toObject<Cromo>()
-                        if (cromo != null) {
-                            favoritosList.add(cromo)
-                        }
+                val favoritosList = mutableListOf<Cromo>()
+                for (cromoId in favoritos) {
+                    // Llamar a getCromo para obtener los detalles de cada cromo favorito
+                    val cromo = getCromo(cromoId)
+                    cromo?.let {
+                        favoritosList.add(it)
                     }
-                    return favoritosList
-                } catch (e: Exception) {
-                    Log.d("InterCromo", "Error obteniendo favoritos: $e")
                 }
-            } else {
-                Log.d("InterCromo", "Usuario no autenticado.")
+                Log.d("Lista Favoritos",favoritosList.toString())
+                return favoritosList
+            } catch (e: Exception) {
+                Log.d("InterCromo", "Error obteniendo favoritos: $e")
             }
-            return emptyList()
+        } else {
+            Log.d("InterCromo", "Usuario no autenticado.")
         }
+        return emptyList()
+    }
 
 
     fun getCromo(cromoId: String?): Cromo? {

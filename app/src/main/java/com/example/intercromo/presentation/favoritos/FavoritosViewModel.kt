@@ -1,5 +1,6 @@
 package com.example.intercromo.presentation.favoritos
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,7 @@ class FavoritosViewModel(cromoRepository: CromoRepository) : ViewModel() {
     init {
         viewModelScope.launch {
             listaCromos.value = cromoRepository.getFavoritos()
+            Log.d("listafav0s",listaCromos.toString())
         }
     }
 }

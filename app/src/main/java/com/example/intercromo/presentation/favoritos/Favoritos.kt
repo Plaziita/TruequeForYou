@@ -1,5 +1,6 @@
 package com.example.intercromo.presentation.favoritos
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,6 +48,7 @@ fun PantallaFavoritos(favoritosViewModel: FavoritosViewModel, navController: Nav
 @Composable
 fun MostrarFavoritos(favoritosViewModel: FavoritosViewModel, navController: NavController) {
     var listaCromos = favoritosViewModel.listaCromos.value
+    Log.d("listafavs",listaCromos.toString())
     var isLoading by remember { mutableStateOf(false) }
 
     val columnSize = 2
