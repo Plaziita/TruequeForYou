@@ -66,7 +66,7 @@ class CromoRepository {
     }
 
 
-    suspend fun getFavoritos(): List<Cromo> {
+    /*suspend fun getFavoritos(): List<Cromo> {
         val user = auth.currentUser
         if (user != null) {
             val userId = user.uid
@@ -94,6 +94,78 @@ class CromoRepository {
             Log.d("InterCromo", "Usuario no autenticado.")
         }
         return emptyList()
+    }*/
+
+    suspend fun getFavoritos(): List<Cromo> {
+        val user = auth.currentUser
+        if (user != null) {
+            val userId = user.uid
+            val firestore = FirebaseFirestore.getInstance()
+            val userDocRef = firestore.collection("usuarios").document(userId)
+
+            return try {
+                val documentSnapshot = userDocRef.get().await()
+                val favoritos = documentSnapshot.get("cromosFavoritos") as? List<String> ?: emptyList()
+
+                // Obtener todos los cromos favoritos de una sola vez
+                val favoritosList = getCromosById(favoritos)
+
+                Log.d("Lista Favoritos", favoritosList.toString())
+                favoritosList
+            } catch (e: Exception) {
+                Log.d("InterCromo", "Error obteniendo favoritos: $e")
+                emptyList()
+            }
+        } else {
+            Log.d("InterCromo", "Usuario no autenticado.")
+            return emptyList()
+        }
+    }
+
+
+
+    suspend fun getCromosById(cromoIds: List<String>): List<Cromo> {
+        val firestore = FirebaseFirestore.getInstance()
+        val cromos = mutableListOf<Cromo>()
+
+        try {
+            // Realizar múltiples consultas simultáneamente
+            val tasks = cromoIds.map { cromoId ->
+                firestore.collection("cromos").document(cromoId).get()
+            }
+
+            val results = tasks.map { it.await() }
+
+            for (result in results) {
+                if (result.exists()) {
+                    val data = result.data
+                    if (data != null) {
+                        val nombre = data[CAMPO_NOMBRE] as? String ?: ""
+                        val descripcion = data[CAMPO_DESCRIPCION] as? String ?: ""
+                        val imagen = data[CAMPO_IMAGEN] as? String ?: ""
+                        val categoria = data[CAMPO_CATEGORIA] as? String ?: ""
+                        val nombreUsuario = data[CAMPO_NOMBREUSUARIO] as? String ?: ""
+                        val favorito = data[CAMPO_FAVORITO] as? Boolean ?: false
+                        val cromoId = data[CAMPO_ID] as? String ?: ""
+
+                        val cromo = Cromo(
+                            cromoId = cromoId,
+                            nombre = nombre,
+                            descripcion = descripcion,
+                            imagen = imagen,
+                            categoria = categoria,
+                            idUsuario = nombreUsuario,
+                            favorito = favorito
+                        )
+
+                        cromos.add(cromo)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("InterCromo", "Error obteniendo cromos por ID: $e")
+        }
+        return cromos
     }
 
 
