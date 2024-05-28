@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 /* Clase sellada en donde nos creamos un objeto de cada pantalla por la que vamos a navegar*/
@@ -28,10 +28,10 @@ sealed class BarraDeOpciones(
         titulo = "Subir",
         icono = Icons.Default.ArrowUpward
     )
-    object Mensajes : BarraDeOpciones(
+    object Intercambios : BarraDeOpciones(
         ruta = "mensajes",
-        titulo = "Mensajes",
-        icono = Icons.Default.MailOutline
+        titulo = "Peticiones",
+        icono = Icons.Default.Mail
     )
     object Perfil : BarraDeOpciones(
         ruta = "perfil",

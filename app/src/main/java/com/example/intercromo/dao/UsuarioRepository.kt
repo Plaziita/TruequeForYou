@@ -58,7 +58,7 @@ class UsuarioRepository(navController: NavController) {
         val name = name
         val email = email
 
-        val user = Usuario(name, email, userId.toString(), null, null, 0.0, null, null)
+        val user = Usuario(name, email, userId.toString(), null, null, 0.0, null, null, null)
 
 
 

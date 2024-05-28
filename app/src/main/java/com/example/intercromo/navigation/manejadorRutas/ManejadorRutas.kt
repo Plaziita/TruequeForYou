@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.intercromo.barraNavegacion
 import com.example.intercromo.navigation.rutaInicio.NavegacionInicio
+import com.example.intercromo.navigation.rutaIntercambios.NavegacionIntercambios
 import com.example.intercromo.navigation.rutaPerfil.NavegacionPerfil
 import com.example.intercromo.navigation.ventanasRegistro.NavegacionLogin
 
@@ -23,6 +24,7 @@ fun ManejadorRutas(navController: NavHostController) {
         NavegacionPerfil(navController)
         NavegacionLogin(navController = navController)
         NavegacionInicio(navController)
+        NavegacionIntercambios(navController)
         composable(route = Rutas.BARRANAVEGACION) {
             barraNavegacion(navController, controllerBarraNavegacion)
         }
@@ -34,4 +36,5 @@ object Rutas {
     const val BARRANAVEGACION = "navegacion_ruta"
     const val PERFIL = "perfil_ruta"
     const val INICIO = "inicio_ruta"
+    const val INTERCAMBIOS = "seleccionar_cromo"
 }

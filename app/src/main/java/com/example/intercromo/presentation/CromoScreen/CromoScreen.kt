@@ -30,7 +30,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +48,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.rememberImagePainter
 import com.example.intercromo.model.Cromo
+import com.example.intercromo.navigation.rutaIntercambios.VentanasIntercambios
 import com.example.intercromo.navigation.rutaPerfil.VentanasPerfil
 
 @Composable
@@ -229,11 +229,22 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
                         contentColor = Color.Black
                     ),
                     onClick = {
-                        viewModel.startConversation(cromoUserId, currentUser)
+                        controller.navigate(
+                            "${VentanasIntercambios.SeleccionarCromoScreen.ruta.replace(
+                                "{idEmisor}",
+                                currentUser
+                            ).replace(
+                                "{idRemitente}",
+                                cromoUserId
+                            ).replace(
+                                "{idCromoRemitente}",
+                                cromo!!.cromoId
+                            )}"
+                        )
                     }
                 ) {
                     Text(
-                        text = "Iniciar conversación",
+                        text = "Iniciar intercambio",
                         fontSize = 18.sp
                     )
                 }

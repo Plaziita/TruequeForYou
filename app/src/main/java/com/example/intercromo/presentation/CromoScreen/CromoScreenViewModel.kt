@@ -1,18 +1,17 @@
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.intercromo.dao.ChatRepository
 import com.example.intercromo.dao.CromoRepository
+import com.example.intercromo.dao.IntercambiosRepository
 import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.model.Cromo
 import kotlinx.coroutines.launch
 
-class CromoScreenViewModel(cromoRepository: CromoRepository, repository: ChatRepository,usuarioRepository: UsuarioRepository) : ViewModel() {
+class CromoScreenViewModel(cromoRepository: CromoRepository, repository: IntercambiosRepository, usuarioRepository: UsuarioRepository) : ViewModel() {
 
     val cromoRepository = cromoRepository
     val repository = repository
     val usuarioRepository = usuarioRepository
-    private var _isFavoriteMap: MutableMap<String, Boolean> = mutableMapOf()
 
     val currentUserID = usuarioRepository.currentUser!!.uid
 
@@ -32,12 +31,11 @@ class CromoScreenViewModel(cromoRepository: CromoRepository, repository: ChatRep
         }
     }
 
-    fun isFavorite(nombre_: String?): Boolean {
-        return usuarioRepository.isFavorite(nombre_)
-    }
+    fun startIntercambio(user1: String, user2: String, cromoId: String?) {
+        val idEmisor = user1
+        val idRemitente = user2
+        val idCromoRemitente = cromoId
 
-    fun startConversation(user1: String, user2: String) {
-        repository.startConversation(user1, user2)
     }
 
 }

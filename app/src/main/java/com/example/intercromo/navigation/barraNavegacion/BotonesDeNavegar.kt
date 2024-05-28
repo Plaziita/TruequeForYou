@@ -25,16 +25,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.wear.compose.material.ContentAlpha
-import com.example.intercromo.dao.ChatRepository
 import com.example.intercromo.dao.CromoRepository
+import com.example.intercromo.dao.IntercambiosRepository
 import com.example.intercromo.navigation.barraNavegacion.BarraDeOpciones
-import com.example.intercromo.presentation.chat.ChatViewModel
-import com.example.intercromo.presentation.chat.PantallaMensajes
 import com.example.intercromo.presentation.favoritos.FavoritosViewModel
 import com.example.intercromo.presentation.favoritos.PantallaFavoritos
 import com.example.intercromo.presentation.inicio.InicioViewModel
 import com.example.intercromo.presentation.inicio.PantallaInicio
 import com.example.intercromo.presentation.inicio.filtrar.FiltradoViewModel
+import com.example.intercromo.presentation.intercambios.IntercambiosViewModel
+import com.example.intercromo.presentation.intercambios.PantallaIntercambios
 import com.example.intercromo.presentation.perfil.PantallaPerfil
 import com.example.intercromo.presentation.uploadcromo.UploadCromoScreen
 import com.example.intercromo.presentation.uploadcromo.UploadCromoViewModel
@@ -63,7 +63,7 @@ fun Barra (navController: NavHostController){
         BarraDeOpciones.Inicio,
         BarraDeOpciones.Favoritos,
         BarraDeOpciones.Upload,
-        BarraDeOpciones.Mensajes,
+        BarraDeOpciones.Intercambios,
         BarraDeOpciones.Perfil
     )
 
@@ -123,7 +123,7 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
 
     //El nuevo navController2 es el de VentanasLogin
     val cromorepository = CromoRepository()
-    val chatRepository = ChatRepository()
+    val chatRepository = IntercambiosRepository()
 
     NavHost(
         navController = controllerBarraNavegacion,
@@ -142,9 +142,9 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
             val viewmodelUpload = UploadCromoViewModel(cromorepository)
             UploadCromoScreen(viewmodelUpload)
         }
-        composable(route = BarraDeOpciones.Mensajes.ruta) {
-            val viewmodelMensajes = ChatViewModel(chatRepository)
-            PantallaMensajes(viewmodelMensajes)
+        composable(route = BarraDeOpciones.Intercambios.ruta) {
+            val viewmodelMensajes = IntercambiosViewModel(chatRepository,cromorepository)
+            PantallaIntercambios(viewmodelMensajes)
         }
         composable(route = BarraDeOpciones.Perfil.ruta) {
             PantallaPerfil(navController)
