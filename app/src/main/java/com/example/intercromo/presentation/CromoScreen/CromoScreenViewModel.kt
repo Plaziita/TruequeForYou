@@ -35,6 +35,7 @@ class CromoScreenViewModel(cromoRepository: CromoRepository, repository: Interca
         val idEmisor = user1
         val idRemitente = user2
         val idCromoRemitente = cromoId
+        //???
 
     }
 
