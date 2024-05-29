@@ -123,7 +123,7 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
 
     //El nuevo navController2 es el de VentanasLogin
     val cromorepository = CromoRepository()
-    val chatRepository = IntercambiosRepository()
+    val intercambiosRepository = IntercambiosRepository(navController)
 
     NavHost(
         navController = controllerBarraNavegacion,
@@ -143,7 +143,7 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
             UploadCromoScreen(viewmodelUpload)
         }
         composable(route = BarraDeOpciones.Intercambios.ruta) {
-            val viewmodelMensajes = IntercambiosViewModel(chatRepository,cromorepository)
+            val viewmodelMensajes = IntercambiosViewModel(intercambiosRepository,cromorepository)
             PantallaIntercambios(viewmodelMensajes)
         }
         composable(route = BarraDeOpciones.Perfil.ruta) {

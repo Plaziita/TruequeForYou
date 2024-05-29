@@ -61,7 +61,6 @@ class UsuarioRepository(navController: NavController) {
         val user = Usuario(name, email, userId.toString(), null, null, 0.0, null, null, null)
 
 
-
         val usuarioRef = FirebaseFirestore.getInstance().collection("usuarios").document(userId!!)
 
         usuarioRef.set(user.toMap()) // Establecer los datos del usuario en el documento con el userId como ID
@@ -75,7 +74,7 @@ class UsuarioRepository(navController: NavController) {
 
     }
 
-    fun updateDisplayName(name: String){
+    fun updateDisplayName(name: String) {
         if (auth.currentUser != null) {
             val profileDisplayName = UserProfileChangeRequest.Builder().setDisplayName(name).build()
 
@@ -109,14 +108,23 @@ class UsuarioRepository(navController: NavController) {
                                     if (document.exists()) {
                                         Log.d("InterCromo", "Usuario ya existe en Firestore.")
                                     } else {
-                                        Log.d("InterCromo", "Usuario no existe en Firestore, creando usuario.")
-                                        createUser(currentUser.displayName, currentUser.email.toString())
+                                        Log.d(
+                                            "InterCromo",
+                                            "Usuario no existe en Firestore, creando usuario."
+                                        )
+                                        createUser(
+                                            currentUser.displayName,
+                                            currentUser.email.toString()
+                                        )
                                     }
                                     // Navegar a la siguiente pantalla después de verificar/crear el usuario
                                     navegar.navigate(Rutas.BARRANAVEGACION)
                                 }
                                 .addOnFailureListener { e ->
-                                    Log.d("InterCromo", "Error obteniendo documento del usuario: $e")
+                                    Log.d(
+                                        "InterCromo",
+                                        "Error obteniendo documento del usuario: $e"
+                                    )
                                 }
                         }
                     } else {
@@ -144,7 +152,7 @@ class UsuarioRepository(navController: NavController) {
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // La contraseña se cambió exitosamente
-                    Log.e("InterCromo","Contraseña cambiada exitosamente.")
+                    Log.e("InterCromo", "Contraseña cambiada exitosamente.")
                 } else {
                     // Ocurrió un error al cambiar la contraseña
                     Log.e("Error", "Error al cambiar la contraseña")
@@ -163,7 +171,7 @@ class UsuarioRepository(navController: NavController) {
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // El nombre se cambió exitosamente
-                    Log.e("InterCromo","Nombre modificado exitosamente.")
+                    Log.e("InterCromo", "Nombre modificado exitosamente.")
                 } else {
                     // Ocurrió un error al cambiar el nombre
                     Log.e("Error", "Error al cambiar la contraseña")
@@ -184,11 +192,13 @@ class UsuarioRepository(navController: NavController) {
             userRef.update("name", nuevoNombre).await()
         }
     }
+
     // Método para actualizar la contraseña en Firebase Authentication
     suspend fun actualizarPassword(nuevaPassword: String) {
         val currentUser = auth.currentUser
         currentUser?.updatePassword(nuevaPassword)?.await()
     }
+
     fun cerrarSesion(context: Context) {
         try {
             // Cerrar sesión en Firebase
@@ -247,9 +257,40 @@ class UsuarioRepository(navController: NavController) {
 
     }
 
+    fun anadirIntercambio(intercambioId: String, usuarioId: String) {
+        val user = usuarioId
+        if (user != null) {
+            val userDocRef = firestore.collection("usuarios").document(user)
+
+
+            userDocRef.get().addOnSuccessListener { document ->
+                if (document != null) {
+                    val intercambiosUsuario =
+                        document.get("intercambiosUsuario") as? MutableList<String>
+                            ?: mutableListOf()
+                    intercambiosUsuario.add(intercambioId)
+                    userDocRef.update("intercambiosUsuario", intercambiosUsuario)
+                        .addOnSuccessListener {
+                            // Actualización exitosa
+
+                        }
+                        .addOnFailureListener { e ->
+                            // Error al actualizar
+
+                        }
+                }
+            }.addOnFailureListener { e ->
+                // Error al obtener el documento
+
+            }
+        }
+
+    }
+
+
     fun isFavorite(cromoId: String?): Boolean {
         val user = currentUser
-        var favorito:Boolean = false
+        var favorito: Boolean = false
         if (user != null) {
             val userId = user.uid
             val userDocRef = firestore.collection("usuarios").document(userId)

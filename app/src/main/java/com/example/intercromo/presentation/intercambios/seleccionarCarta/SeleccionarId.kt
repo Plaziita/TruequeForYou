@@ -1,4 +1,4 @@
-package com.example.intercromo.presentation.intercambios
+package com.example.intercromo.presentation.intercambios.seleccionarCarta
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -48,7 +48,7 @@ import com.example.intercromo.model.Cromo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaSeleccionarCromo(controller: NavController, viewModel: IntercambiosViewModel) {
+fun PantallaSeleccionarCromo(controller: NavController, viewModel: SeleccionarIdViewModel) {
     var listaCromos = viewModel.listaCromos.value
     val navBackStackEntry by controller.currentBackStackEntryAsState()
 
@@ -107,7 +107,7 @@ fun MisCromos(
     idEmisor: String,
     idRemitente: String,
     idCromoRemitente: String?,
-    viewModel: IntercambiosViewModel
+    viewModel: SeleccionarIdViewModel
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var cromoSeleccionadoId by remember { mutableStateOf("") }

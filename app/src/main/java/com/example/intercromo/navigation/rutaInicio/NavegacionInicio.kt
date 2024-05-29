@@ -18,7 +18,7 @@ import com.example.intercromo.presentation.inicio.filtrar.PantallaFiltrada
 fun NavGraphBuilder.NavegacionInicio(controllerOpciones: NavHostController){
 
     val cromorepository = CromoRepository()
-    val chatRepository = IntercambiosRepository()
+    val chatRepository = IntercambiosRepository(controllerOpciones)
     val userRepository = UsuarioRepository(controllerOpciones)
 
     navigation(

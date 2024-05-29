@@ -1,5 +1,6 @@
-package com.example.intercromo.presentation.intercambios
+package com.example.intercromo.presentation.intercambios.seleccionarCarta
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
@@ -7,13 +8,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.dao.IntercambiosRepository
+import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.model.Cromo
 import com.example.intercromo.model.Intercambios
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
-class IntercambiosViewModel( val repository: IntercambiosRepository, cromoRepository: CromoRepository) : ViewModel() {
+class SeleccionarIdViewModel(intercambiosRepository: IntercambiosRepository, cromoRepository: CromoRepository, usuarioRepository: UsuarioRepository): ViewModel() {
+    val usuarioRepository = usuarioRepository
+    val intercambiosRepository = intercambiosRepository
 
     val listaCromos: MutableState<List<Cromo>> = mutableStateOf(listOf())
 
@@ -27,12 +31,12 @@ class IntercambiosViewModel( val repository: IntercambiosRepository, cromoReposi
     private val intercambios = MutableLiveData<List<Intercambios>>()
 
     fun createIntercambio(idEmisor: String, idRemitente: String, idCromoRemitente: String, idCromoEmisor: String): Boolean {
+
         return try{
-            repository.addIntercambio(idEmisor,idRemitente,idCromoRemitente,idCromoEmisor)
+            intercambiosRepository.addIntercambio(idEmisor,idRemitente,idCromoRemitente,idCromoEmisor)
             true
         }catch (e: Exception) {
             false // Hubo un error al agregar el cromo
         }
     }
 }
-

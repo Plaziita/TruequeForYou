@@ -6,14 +6,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.dao.IntercambiosRepository
+import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.manejadorRutas.Rutas
 import com.example.intercromo.presentation.intercambios.IntercambiosViewModel
-import com.example.intercromo.presentation.intercambios.PantallaSeleccionarCromo
+import com.example.intercromo.presentation.intercambios.seleccionarCarta.PantallaSeleccionarCromo
+import com.example.intercromo.presentation.intercambios.seleccionarCarta.SeleccionarIdViewModel
 
 fun NavGraphBuilder.NavegacionIntercambios(controller: NavHostController){
 
-    val repository = IntercambiosRepository()
+    val intercambiosRepository = IntercambiosRepository(controller)
     val cromorepository = CromoRepository()
+    val usuarioRepository = UsuarioRepository(controller)
 
 
     navigation(
@@ -21,7 +24,7 @@ fun NavGraphBuilder.NavegacionIntercambios(controller: NavHostController){
         startDestination = VentanasIntercambios.SeleccionarCromoScreen.ruta
     ) {
         composable(route = VentanasIntercambios.SeleccionarCromoScreen.ruta) {
-            val viewmodel = IntercambiosViewModel(repository,cromorepository)
+            val viewmodel = SeleccionarIdViewModel(intercambiosRepository,cromorepository, usuarioRepository)
             PantallaSeleccionarCromo(controller, viewmodel)
         }
     }
