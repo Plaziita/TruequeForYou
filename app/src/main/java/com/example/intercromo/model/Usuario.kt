@@ -10,8 +10,6 @@ data class Usuario(
     val cromos: List<Cromo>?,
     val cromosFavoritos: List<String>?,
     val peticiones: List<String>?
-
-
 ){
    fun toMap(): MutableMap<String, Any> {
         return mutableMapOf(

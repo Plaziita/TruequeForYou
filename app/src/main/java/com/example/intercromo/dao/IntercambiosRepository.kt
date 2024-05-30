@@ -3,8 +3,11 @@ package com.example.intercromo.dao
 import android.util.Log
 import androidx.navigation.NavController
 import com.example.intercromo.model.Intercambios
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.sql.Timestamp
+import kotlinx.coroutines.tasks.await
 
 class IntercambiosRepository(controller: NavController) {
 
@@ -13,6 +16,7 @@ class IntercambiosRepository(controller: NavController) {
     private val db = FirebaseFirestore.getInstance()
     private val intercambios = db.collection(COLECCION_INTERCAMBIOS)
     private val usuarioRepository = UsuarioRepository(controller)
+    private val auth: FirebaseAuth = Firebase.auth
 
     fun addIntercambio(
         idEmisor: String,
@@ -20,8 +24,6 @@ class IntercambiosRepository(controller: NavController) {
         idCromoRemitente: String,
         idCromoEmisor: String
     ) {
-
-        val timestamp = Timestamp(System.currentTimeMillis())
         val idEmisor = idEmisor
         val idRemitente = idRemitente
         val idCromoRemitente = idCromoRemitente
@@ -29,7 +31,6 @@ class IntercambiosRepository(controller: NavController) {
 
 
         val intercambio = Intercambios(
-            timestamp,
             idEmisor,
             idRemitente,
             idCromoEmisor,
@@ -47,5 +48,46 @@ class IntercambiosRepository(controller: NavController) {
                 Log.d("InterCromo", "Error")
             }
 
+    }
+
+    suspend fun getIntercambiosByUserId(): Pair<List<Intercambios>, List<String>> {
+        val user = auth.currentUser?.uid
+        val intercambiosRecibidos = mutableListOf<Intercambios>()
+        val cromoIds = mutableListOf<String>()
+
+        if (user != null) {
+            try {
+                val querySnapshot = intercambios
+                    .whereEqualTo("idUserRemitente", user)
+                    .get()
+                    .await()
+
+                for (document in querySnapshot.documents) {
+                    val data = document.data
+                    if (data != null) {
+                        val idUserEmisor = data["idUserEmisor"] as String
+                        val idUserRemitente = data["idUserRemitente"] as String
+                        val idCromoEmisor = data["idCromoEmisor"] as String
+                        val idCromoRemitente = data["idCromoRemitente"] as String
+                        val estado = data["estado"] as String
+
+                        val intercambio = Intercambios(
+                            idUserEmisor = idUserEmisor,
+                            idUserRemitente = idUserRemitente,
+                            idCromoEmisor = idCromoEmisor,
+                            idCromoRemitente = idCromoRemitente,
+                            estado = estado
+                        )
+
+                        intercambiosRecibidos.add(intercambio)
+                        cromoIds.add(idCromoEmisor)
+                        cromoIds.add(idCromoRemitente)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("InterCromo", "Error al obtener intercambios: ${e.localizedMessage}")
+            }
+        }
+        return Pair(intercambiosRecibidos, cromoIds)
     }
 }

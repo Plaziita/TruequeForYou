@@ -2,6 +2,7 @@
 
 package com.example.intercromo
 
+import IntercambiosViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
@@ -32,8 +33,6 @@ import com.example.intercromo.presentation.favoritos.FavoritosViewModel
 import com.example.intercromo.presentation.favoritos.PantallaFavoritos
 import com.example.intercromo.presentation.inicio.InicioViewModel
 import com.example.intercromo.presentation.inicio.PantallaInicio
-import com.example.intercromo.presentation.inicio.filtrar.FiltradoViewModel
-import com.example.intercromo.presentation.intercambios.IntercambiosViewModel
 import com.example.intercromo.presentation.intercambios.PantallaIntercambios
 import com.example.intercromo.presentation.perfil.PantallaPerfil
 import com.example.intercromo.presentation.uploadcromo.UploadCromoScreen
@@ -131,7 +130,6 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
     ){
         composable(route = BarraDeOpciones.Inicio.ruta) {
             val viewmodelinicio = InicioViewModel(cromorepository)
-            val viewmodelFiltrado = FiltradoViewModel(cromorepository)
             PantallaInicio(viewmodelinicio, navController)
         }
         composable(route = BarraDeOpciones.Favoritos.ruta) {
@@ -143,8 +141,8 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
             UploadCromoScreen(viewmodelUpload)
         }
         composable(route = BarraDeOpciones.Intercambios.ruta) {
-            val viewmodelMensajes = IntercambiosViewModel(intercambiosRepository,cromorepository)
-            PantallaIntercambios(viewmodelMensajes)
+            val viewmodelIntercambios = IntercambiosViewModel(intercambiosRepository,cromorepository)
+            PantallaIntercambios(viewmodelIntercambios)
         }
         composable(route = BarraDeOpciones.Perfil.ruta) {
             PantallaPerfil(navController)

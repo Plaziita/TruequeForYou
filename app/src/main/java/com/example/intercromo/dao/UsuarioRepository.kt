@@ -24,6 +24,7 @@ class UsuarioRepository(navController: NavController) {
 
     private val db = FirebaseFirestore.getInstance()
     private val usuarios = db.collection("usuarios")
+    private val intercambiosCollection = db.collection("intercambios")
 
     val currentUser: FirebaseUser?
         get() = auth.currentUser
@@ -286,7 +287,6 @@ class UsuarioRepository(navController: NavController) {
         }
 
     }
-
 
     fun isFavorite(cromoId: String?): Boolean {
         val user = currentUser

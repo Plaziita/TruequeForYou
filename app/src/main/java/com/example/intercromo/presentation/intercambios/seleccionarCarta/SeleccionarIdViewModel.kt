@@ -1,6 +1,5 @@
 package com.example.intercromo.presentation.intercambios.seleccionarCarta
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
@@ -31,7 +30,6 @@ class SeleccionarIdViewModel(intercambiosRepository: IntercambiosRepository, cro
     private val intercambios = MutableLiveData<List<Intercambios>>()
 
     fun createIntercambio(idEmisor: String, idRemitente: String, idCromoRemitente: String, idCromoEmisor: String): Boolean {
-
         return try{
             intercambiosRepository.addIntercambio(idEmisor,idRemitente,idCromoRemitente,idCromoEmisor)
             true

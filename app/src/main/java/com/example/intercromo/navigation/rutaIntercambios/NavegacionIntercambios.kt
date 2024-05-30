@@ -8,7 +8,6 @@ import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.dao.IntercambiosRepository
 import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.manejadorRutas.Rutas
-import com.example.intercromo.presentation.intercambios.IntercambiosViewModel
 import com.example.intercromo.presentation.intercambios.seleccionarCarta.PantallaSeleccionarCromo
 import com.example.intercromo.presentation.intercambios.seleccionarCarta.SeleccionarIdViewModel
 
