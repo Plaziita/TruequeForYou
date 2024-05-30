@@ -290,6 +290,36 @@ class CromoRepository {
         }
     }
 
+    suspend fun intercambiarCromos(cromoEmisor: Cromo, cromoRemitente: Cromo) {
+        val db = FirebaseFirestore.getInstance()
+
+        try {
+            // Referencias a los documentos de los cromos
+            val cromoEmisorRef = db.collection("cromos").document(cromoEmisor.cromoId)
+            val cromoRemitenteRef = db.collection("cromos").document(cromoRemitente.cromoId)
+
+            // Obtenemos los cromos de Firestore
+            val cromoEmisorSnapshot = cromoEmisorRef.get().await()
+            val cromoRemitenteSnapshot = cromoRemitenteRef.get().await()
+
+            if (cromoEmisorSnapshot.exists() && cromoRemitenteSnapshot.exists()) {
+                // Intercambiamos los usuarioId
+                val nuevoUsuarioIdCromoEmisor = cromoRemitente.idUsuario
+                val nuevoUsuarioIdCromoRemitente = cromoEmisor.idUsuario
+
+                // Actualizamos los documentos en Firestore
+                cromoEmisorRef.update("id_usuario", nuevoUsuarioIdCromoEmisor).await()
+                cromoRemitenteRef.update("id_usuario", nuevoUsuarioIdCromoRemitente).await()
+
+                println("Intercambio realizado con éxito.")
+            } else {
+                println("Uno de los cromos no existe en la colección.")
+            }
+        } catch (e: Exception) {
+            println("Error durante el intercambio: ${e.message}")
+        }
+    }
+
 
 
 

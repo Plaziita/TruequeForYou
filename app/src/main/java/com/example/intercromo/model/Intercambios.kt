@@ -7,6 +7,7 @@ data class Intercambios(
     val idCromoEmisor: String,
     val idCromoRemitente: String,
     val estado: String,
+    val idIntercambio:String
 ){
     fun toMap(): MutableMap<Any, Any> {
         return mutableMapOf(
@@ -14,7 +15,8 @@ data class Intercambios(
             "idUserRemitente" to this.idUserRemitente,
             "idCromoEmisor" to this.idCromoEmisor,
             "idCromoRemitente" to this.idCromoRemitente,
-            "estado" to "pendiente"
+            "estado" to "pendiente",
+            "idIntercambio" to this.idIntercambio
         )
     }
 }

@@ -35,7 +35,8 @@ class IntercambiosRepository(controller: NavController) {
             idRemitente,
             idCromoEmisor,
             idCromoRemitente,
-            "pendiente"
+            "pendiente",
+            ""
         )
 
         intercambios.add(intercambio.toMap())
@@ -59,6 +60,7 @@ class IntercambiosRepository(controller: NavController) {
             try {
                 val querySnapshot = intercambios
                     .whereEqualTo("idUserRemitente", user)
+                    .whereEqualTo("estado", "pendiente")
                     .get()
                     .await()
 
@@ -70,13 +72,15 @@ class IntercambiosRepository(controller: NavController) {
                         val idCromoEmisor = data["idCromoEmisor"] as String
                         val idCromoRemitente = data["idCromoRemitente"] as String
                         val estado = data["estado"] as String
+                        val idIntercambio = data["idIntercambio"] as String
 
                         val intercambio = Intercambios(
                             idUserEmisor = idUserEmisor,
                             idUserRemitente = idUserRemitente,
                             idCromoEmisor = idCromoEmisor,
                             idCromoRemitente = idCromoRemitente,
-                            estado = estado
+                            estado = estado,
+                            idIntercambio
                         )
 
                         intercambiosRecibidos.add(intercambio)
@@ -89,5 +93,25 @@ class IntercambiosRepository(controller: NavController) {
             }
         }
         return Pair(intercambiosRecibidos, cromoIds)
+    }
+
+    suspend fun updateIntercambio(intercambioId: String, accion: String) {
+        try {
+            // Verificar si el intercambio existe
+            val intercambioRef = intercambios.document(intercambioId).get().await()
+            if (intercambioRef.exists()) {
+                // Actualizar el estado del intercambio
+                val nuevoEstado = if (accion == "Aceptar") "aceptada" else "rechazada"
+                intercambios.document(intercambioId)
+                    .update("estado", nuevoEstado)
+                    .await()
+            } else {
+                // El intercambio no existe
+                throw IllegalStateException("El intercambio con ID $intercambioId no existe")
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            throw Exception("Error al actualizar el estado del intercambio: ${e.message}")
+        }
     }
 }

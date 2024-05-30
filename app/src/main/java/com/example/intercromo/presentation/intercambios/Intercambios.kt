@@ -29,6 +29,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,8 +52,11 @@ import com.example.intercromo.valoracion.RatingBar
 
 @Composable
 fun PantallaIntercambios(intercambiosViewModel: IntercambiosViewModel) {
-    val intercambios by intercambiosViewModel.intercambios.collectAsState()
-    val cromos by intercambiosViewModel.cromos.collectAsState()
+    //val intercambios by intercambiosViewModel.intercambios.collectAsState()
+    //val cromos by intercambiosViewModel.cromos.collectAsState()
+
+    val intercambios = intercambiosViewModel.intercambios.value
+    val cromos = intercambiosViewModel.cromos.value
 
     Column(
         modifier = Modifier
@@ -80,12 +84,16 @@ fun PantallaIntercambios(intercambiosViewModel: IntercambiosViewModel) {
             )
         }
         Spacer(modifier = Modifier.height(30.dp))
-        MostrarIntercambios(intercambios,cromos)
+        MostrarIntercambios(intercambios, cromos, intercambiosViewModel)
     }
 }
 
 @Composable
-fun MostrarIntercambios(intercambios: List<Intercambios>, cromos: List<Cromo>) {
+fun MostrarIntercambios(
+    intercambios: List<Intercambios>,
+    cromos: List<Cromo>,
+    intercambiosViewModel: IntercambiosViewModel
+) {
     LazyColumn(
         contentPadding = PaddingValues(bottom = 40.dp) // Agregar relleno en la parte inferior
     ) {
@@ -93,7 +101,12 @@ fun MostrarIntercambios(intercambios: List<Intercambios>, cromos: List<Cromo>) {
             val cromoEmisor = cromos.find { it.cromoId == intercambio.idCromoEmisor }
             val cromoRemitente = cromos.find { it.cromoId == intercambio.idCromoRemitente }
             if (cromoEmisor != null && cromoRemitente != null) {
-                ItemIntercambio(intercambio = intercambio, cromoEmisor = cromoEmisor, cromoRemitente = cromoRemitente)
+                ItemIntercambio(
+                    intercambio = intercambio,
+                    cromoEmisor = cromoEmisor,
+                    cromoRemitente = cromoRemitente,
+                    intercambiosViewModel
+                )
                 Spacer(modifier = Modifier.height(16.dp))
             } else {
                 Log.e("MostrarIntercambios", "Cromo no encontrado para intercambio: $intercambio")
@@ -104,8 +117,30 @@ fun MostrarIntercambios(intercambios: List<Intercambios>, cromos: List<Cromo>) {
 
 
 @Composable
-fun ItemIntercambio(intercambio: Intercambios, cromoEmisor: Cromo, cromoRemitente: Cromo) {
+fun ItemIntercambio(
+    intercambio: Intercambios,
+    cromoEmisor: Cromo,
+    cromoRemitente: Cromo,
+    intercambiosViewModel: IntercambiosViewModel
+) {
+
     var rating by remember { mutableStateOf(2.5) }
+    var nombreEmisor by remember { mutableStateOf("") }
+
+    val rechazar = "Rechazar"
+    val aceptar = "Aceptar"
+
+    // Obtener el nombre del usuario emisor
+    LaunchedEffect(key1 = intercambio.idUserEmisor, key2 = intercambio.idUserRemitente) {
+        intercambiosViewModel.cargarNombre(intercambio.idUserEmisor) { nombre ->
+            // Actualizar el nombre del usuario en el estado
+            nombre?.let {
+                nombreEmisor = it
+            }
+        }
+
+
+    }
 
     Card(
         modifier = Modifier
@@ -133,7 +168,10 @@ fun ItemIntercambio(intercambio: Intercambios, cromoEmisor: Cromo, cromoRemitent
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
-                            Text(text = "Username", color = Color.Black)
+                            Text(
+                                text = nombreEmisor,
+                                color = Color.Black
+                            )
                             RatingBar(
                                 modifier = Modifier
                                     .size(8.dp),
@@ -161,10 +199,12 @@ fun ItemIntercambio(intercambio: Intercambios, cromoEmisor: Cromo, cromoRemitent
                             contentColor = Color.Black
                         ),
                         onClick = {
+                            intercambiosViewModel.realizarIntercambio(cromoEmisor, cromoRemitente)
+                            intercambiosViewModel.updateIntercambio(intercambio.idIntercambio, aceptar )
                         }
                     ) {
                         Text(
-                            text = "Aceptar",
+                            text = aceptar,
                         )
                     }
                 }
@@ -197,7 +237,12 @@ fun ItemIntercambio(intercambio: Intercambios, cromoEmisor: Cromo, cromoRemitent
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
-                            Text(text = "Username 2", color = Color.Black)
+                            intercambiosViewModel.nombreLocal()?.let {
+                                Text(
+                                    text = it,
+                                    color = Color.Black
+                                )
+                            }
                             RatingBar(
                                 modifier = Modifier
                                     .size(8.dp),
@@ -225,10 +270,11 @@ fun ItemIntercambio(intercambio: Intercambios, cromoEmisor: Cromo, cromoRemitent
                             contentColor = Color.Black
                         ),
                         onClick = {
+                            intercambiosViewModel.updateIntercambio(intercambio.idIntercambio, rechazar )
                         }
                     ) {
                         Text(
-                            text = "Rechazar",
+                            text = rechazar,
                         )
                     }
                 }

@@ -28,6 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.wear.compose.material.ContentAlpha
 import com.example.intercromo.dao.CromoRepository
 import com.example.intercromo.dao.IntercambiosRepository
+import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.barraNavegacion.BarraDeOpciones
 import com.example.intercromo.presentation.favoritos.FavoritosViewModel
 import com.example.intercromo.presentation.favoritos.PantallaFavoritos
@@ -123,6 +124,7 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
     //El nuevo navController2 es el de VentanasLogin
     val cromorepository = CromoRepository()
     val intercambiosRepository = IntercambiosRepository(navController)
+    val usuarioRepository = UsuarioRepository(navController)
 
     NavHost(
         navController = controllerBarraNavegacion,
@@ -141,7 +143,7 @@ fun BotonesDeNavegar(navController: NavHostController, controllerBarraNavegacion
             UploadCromoScreen(viewmodelUpload)
         }
         composable(route = BarraDeOpciones.Intercambios.ruta) {
-            val viewmodelIntercambios = IntercambiosViewModel(intercambiosRepository,cromorepository)
+            val viewmodelIntercambios = IntercambiosViewModel(intercambiosRepository,cromorepository, usuarioRepository)
             PantallaIntercambios(viewmodelIntercambios)
         }
         composable(route = BarraDeOpciones.Perfil.ruta) {

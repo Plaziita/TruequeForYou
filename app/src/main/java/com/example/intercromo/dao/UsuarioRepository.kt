@@ -8,14 +8,19 @@ import com.example.intercromo.navigation.manejadorRutas.Rutas
 import com.example.intercromo.navigation.ventanasRegistro.VentanasLogIn
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class UsuarioRepository(navController: NavController) {
     private val auth: FirebaseAuth = Firebase.auth
@@ -311,6 +316,18 @@ class UsuarioRepository(navController: NavController) {
         }
 
         return favorito
+    }
+
+
+
+    suspend fun getNombre(userId: String): String? {
+        return try {
+            val userSnapshot = usuarios.document(userId).get().await()
+            userSnapshot.getString("name")
+        } catch (e: Exception) {
+            println("Error al obtener el nombre del usuario: ${e.message}")
+            null
+        }
     }
 
 
