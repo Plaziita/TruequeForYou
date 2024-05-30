@@ -22,6 +22,7 @@ class IntercambiosViewModel(val repository: IntercambiosRepository,val cromoRepo
 
     val intercambios: MutableState<List<Intercambios>> = mutableStateOf(listOf())
     val cromos: MutableState<List<Cromo>> = mutableStateOf(listOf())
+    val estado: MutableState<String> = mutableStateOf("")
     val nombreRemitente: MutableState<String?> = mutableStateOf("")
 
     //private val _cromos = MutableStateFlow<List<Cromo>>(emptyList())
@@ -68,6 +69,12 @@ class IntercambiosViewModel(val repository: IntercambiosRepository,val cromoRepo
 
             }
         }
+    }
+
+    fun updateEstado(cromoId:String){
+        val listaInter = intercambios.value.toMutableList() // Convertir a lista mutable
+        listaInter.removeIf { it.idIntercambio == cromoId } // Eliminar el intercambio de la lista mutable
+        intercambios.value = listaInter.toList()
     }
 
 

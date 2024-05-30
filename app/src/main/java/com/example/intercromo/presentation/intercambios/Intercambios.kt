@@ -106,6 +106,7 @@ fun MostrarIntercambios(
                     cromoEmisor = cromoEmisor,
                     cromoRemitente = cromoRemitente,
                     intercambiosViewModel
+
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             } else {
@@ -121,14 +122,17 @@ fun ItemIntercambio(
     intercambio: Intercambios,
     cromoEmisor: Cromo,
     cromoRemitente: Cromo,
-    intercambiosViewModel: IntercambiosViewModel
+    intercambiosViewModel: IntercambiosViewModel,
+
+
 ) {
 
     var rating by remember { mutableStateOf(2.5) }
     var nombreEmisor by remember { mutableStateOf("") }
 
-    val rechazar = "Rechazar"
     val aceptar = "Aceptar"
+    val rechazar = "Rechazar"
+
 
     // Obtener el nombre del usuario emisor
     LaunchedEffect(key1 = intercambio.idUserEmisor, key2 = intercambio.idUserRemitente) {
@@ -201,6 +205,8 @@ fun ItemIntercambio(
                         onClick = {
                             intercambiosViewModel.realizarIntercambio(cromoEmisor, cromoRemitente)
                             intercambiosViewModel.updateIntercambio(intercambio.idIntercambio, aceptar )
+                            intercambiosViewModel.updateEstado(intercambio.idIntercambio)
+
                         }
                     ) {
                         Text(
@@ -271,6 +277,7 @@ fun ItemIntercambio(
                         ),
                         onClick = {
                             intercambiosViewModel.updateIntercambio(intercambio.idIntercambio, rechazar )
+                            intercambiosViewModel.updateEstado(intercambio.idIntercambio)
                         }
                     ) {
                         Text(
