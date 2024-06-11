@@ -1,8 +1,6 @@
 package com.example.intercromo.presentation.favoritos
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
@@ -48,12 +49,13 @@ fun PantallaFavoritos(favoritosViewModel: FavoritosViewModel, navController: Nav
 @Composable
 fun MostrarFavoritos(favoritosViewModel: FavoritosViewModel, navController: NavController) {
     var listaCromos = favoritosViewModel.listaCromos.value
-    Log.d("listafavs",listaCromos.toString())
     var isLoading by remember { mutableStateOf(false) }
 
-    val columnSize = 2
-    val numberOfRows = (listaCromos.size + columnSize - 1) / columnSize
-    val lastRowItemCount = listaCromos.size % columnSize
+    // Calcular la altura necesaria para LazyVerticalGrid
+    val gridItemHeight = 300.dp // Altura de cada item en el grid
+    val columnSize = 2 // Número de columnas
+    val rows = (listaCromos.size + columnSize - 1) / columnSize
+    val gridHeight = (rows * gridItemHeight.value).dp // Altura total del grid
 
     LaunchedEffect(key1 = true) {
         delay(2000)
@@ -81,24 +83,15 @@ fun MostrarFavoritos(favoritosViewModel: FavoritosViewModel, navController: NavC
         )
     }
 
-    Column(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(columnSize),
         modifier = Modifier
-            .fillMaxWidth()
+            .height(gridHeight)
             .padding(8.dp)
     ) {
-        for (row in 0 until numberOfRows) {
-            Row(Modifier.fillMaxWidth()) {
-                val itemsInRow =
-                    if (row == numberOfRows - 1 && lastRowItemCount != 0) lastRowItemCount else columnSize
-                for (col in 0 until itemsInRow) {
-                    val index = row * columnSize + col
-                    if (index < listaCromos.size) {
-                        ItemCromo(cromo = listaCromos[index], navController)
-                    }
-                }
-            }
+        items(listaCromos) {
+            ItemCromo(cromo = it, navController)
         }
-
-        Spacer(modifier = Modifier.height(100.dp))
     }
 }
+

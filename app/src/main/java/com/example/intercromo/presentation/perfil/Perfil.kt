@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -190,6 +191,34 @@ fun OpcionesIntercambios(navController: NavController){
             Spacer(modifier = Modifier.width(20.dp))
             Text(
                 text = "Mis cromos",
+                color = Color.Black,
+                fontSize = 18.sp
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = "Navigation Icon",
+                tint = Color.Black
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .padding(8.dp)
+                .clickable {
+                    navController.navigate(VentanasPerfil.HistorialScreen.ruta)
+                },
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Icon(
+                imageVector = Icons.Default.Restore,
+                contentDescription = "Navigation Icon",
+                tint = Color.Black
+            )
+            Spacer(modifier = Modifier.width(20.dp))
+            Text(
+                text = "Historial",
                 color = Color.Black,
                 fontSize = 18.sp
             )

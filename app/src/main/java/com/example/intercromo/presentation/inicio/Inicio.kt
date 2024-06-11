@@ -15,6 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -25,7 +28,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.Autorenew
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -197,13 +199,6 @@ fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
                                color = Color(0xFFFFA500),
                                modifier = Modifier.alpha(0.8f)
                            )
-                           Spacer(modifier = Modifier.weight(1f))
-                           Icon(
-                               imageVector = Icons.Default.FavoriteBorder,
-                               contentDescription = "Icono favorito",
-                               tint = Color.Black,
-                               modifier = Modifier.weight(1f)
-                           )
                        }
                        Spacer(modifier = Modifier.height(8.dp))
                        Text(
@@ -268,75 +263,68 @@ fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
 
        }
 
+@Composable
+fun MostrarCromos(viewModel: InicioViewModel, navController: NavController) {
+    var listaCromos = viewModel.listaCromos.value
+    var isLoading by remember { mutableStateOf(false) }
 
-       @Composable
-       fun MostrarCromos(viewModel: InicioViewModel, navController: NavController) {
-           //Lucas tontito
-           var listaCromos = viewModel.listaCromos.value
-           var isLoading by remember { mutableStateOf(false) }
+    LaunchedEffect(true) {
+        delay(2000)
+        isLoading = true
+    }
 
-           Spacer(modifier = Modifier.height(10.dp))
+    // Calcular la altura necesaria para LazyVerticalGrid
+    val gridItemHeight = 300.dp // Altura de cada item en el grid
+    val columnSize = 2 // Número de columnas
+    val rows = (listaCromos.size + columnSize - 1) / columnSize
+    val gridHeight = (rows * gridItemHeight.value).dp // Altura total del grid
 
-           val columnSize = 2
-           val numberOfRows = (listaCromos.size + columnSize - 1) / columnSize
-           val lastRowItemCount = listaCromos.size % columnSize
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowDownward,
+                contentDescription = "Icono",
+                tint = Color.Black,
+                modifier = Modifier.size(40.dp)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = "Todos los cromos",
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                fontSize = 20.sp
+            )
+        }
 
-           LaunchedEffect(key1 = true) {
-               delay(2000)
-               isLoading = true
-           }
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(columnSize),
+            modifier = Modifier
+                .height(gridHeight)
+        ) {
+            items(listaCromos) {
+                ItemCromo(cromo = it, navController)
+            }
+        }
 
-           Row(
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .padding(8.dp),
-               verticalAlignment = Alignment.CenterVertically
-           ) {
-               Icon(
-                   imageVector = Icons.Default.ArrowDownward,
-                   contentDescription = "Icono",
-                   tint = Color.Black,
-                   modifier = Modifier.size(40.dp)
-               )
-               Spacer(modifier = Modifier.width(16.dp))
-               Text(
-                   text = "Todos los cromos",
-                   fontWeight = FontWeight.Bold,
-                   color = Color.Black,
-                   fontSize = 20.sp
-               )
-           }
-
-           Column(
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .padding(8.dp)
-           ) {
-               for (row in 0 until numberOfRows) {
-                   Row(Modifier.fillMaxWidth()) {
-                       val itemsInRow =
-                           if (row == numberOfRows - 1 && lastRowItemCount != 0) lastRowItemCount else columnSize
-                       for (col in 0 until itemsInRow) {
-                           val index = row * columnSize + col
-                           if (index < listaCromos.size) {
-                               ItemCromo(cromo = listaCromos[index], navController)
-                           }
-                       }
-                   }
-               }
-
-               if (isLoading) {
-                   Spacer(modifier = Modifier.height(50.dp))
-                   Text(
-                       text = "-No hay más cromos en este momento-",
-                       color = Color.Gray,
-                       fontSize = 18.sp,
-                       fontWeight = FontWeight.Bold,
-                       modifier = Modifier.fillMaxWidth(),
-                       textAlign = TextAlign.Center
-                   )
-                   Spacer(modifier = Modifier.height(50.dp))
-               }
-
-           }
-       }
+        if (isLoading) {
+            Spacer(modifier = Modifier.height(50.dp))
+            Text(
+                text = "-No hay más cromos en este momento-",
+                color = Color.Gray,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(50.dp))
+        }
+    }
+}

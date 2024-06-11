@@ -1,9 +1,9 @@
-package com.example.intercromo.presentation.intercambios
+package com.example.intercromo.presentation.perfil.historial
 
-import IntercambiosViewModel
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,9 +22,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AirlineStops
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -36,13 +34,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.intercromo.R
 import com.example.intercromo.model.Cromo
@@ -50,18 +48,16 @@ import com.example.intercromo.model.Intercambios
 import com.example.intercromo.valoracion.RatingBar
 
 @Composable
-fun PantallaIntercambios(intercambiosViewModel: IntercambiosViewModel) {
-    //val intercambios by intercambiosViewModel.intercambios.collectAsState()
-    //val cromos by intercambiosViewModel.cromos.collectAsState()
+fun PantallaHistorial(controller: NavController,historialViewModel: HistorialViewModel){
 
-    val intercambios = intercambiosViewModel.intercambios.value
-    val cromos = intercambiosViewModel.cromos.value
+    val intercambios = historialViewModel.intercambios.value
+    val cromos = historialViewModel.cromos.value
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(8.dp)
+            .padding(20.dp)
     ) {
         Row(
             modifier = Modifier
@@ -69,29 +65,33 @@ fun PantallaIntercambios(intercambiosViewModel: IntercambiosViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Default.ShoppingCart,
-                contentDescription = "Icono",
+                imageVector = Icons.Default.ArrowBackIosNew,
+                contentDescription = "Navigation Icon",
                 tint = Color.Black,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier
+                    .clickable {
+                        controller.popBackStack()
+                    }
+                    .size(35.dp)
             )
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = "Intercambios",
-                fontWeight = FontWeight.Bold,
+                text = "Historial",
                 color = Color.Black,
-                fontSize = 20.sp
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
             )
         }
-        Spacer(modifier = Modifier.height(30.dp))
-        MostrarIntercambios(intercambios, cromos, intercambiosViewModel)
+        Spacer(modifier = Modifier.height(16.dp))
+        MostrarHistorialIntercambios(intercambios, cromos, historialViewModel)
     }
 }
 
 @Composable
-fun MostrarIntercambios(
+fun MostrarHistorialIntercambios(
     intercambios: List<Intercambios>,
     cromos: List<Cromo>,
-    intercambiosViewModel: IntercambiosViewModel
+    historialViewModel: HistorialViewModel
 ) {
     LazyColumn(
         contentPadding = PaddingValues(bottom = 40.dp) // Agregar relleno en la parte inferior
@@ -104,8 +104,7 @@ fun MostrarIntercambios(
                     intercambio = intercambio,
                     cromoEmisor = cromoEmisor,
                     cromoRemitente = cromoRemitente,
-                    intercambiosViewModel
-
+                    historialViewModel
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             } else {
@@ -115,32 +114,25 @@ fun MostrarIntercambios(
     }
 }
 
-
 @Composable
 fun ItemIntercambio(
     intercambio: Intercambios,
     cromoEmisor: Cromo,
     cromoRemitente: Cromo,
-    intercambiosViewModel: IntercambiosViewModel,
+    historialViewModel: HistorialViewModel,
 ) {
 
     var rating by remember { mutableStateOf(2.5) }
     var nombreEmisor by remember { mutableStateOf("") }
 
-    val aceptar = "Aceptar"
-    val rechazar = "Rechazar"
-
-
     // Obtener el nombre del usuario emisor
     LaunchedEffect(key1 = intercambio.idUserEmisor, key2 = intercambio.idUserRemitente) {
-        intercambiosViewModel.cargarNombre(intercambio.idUserEmisor) { nombre ->
+        historialViewModel.cargarNombre(intercambio.idUserEmisor) { nombre ->
             // Actualizar el nombre del usuario en el estado
             nombre?.let {
                 nombreEmisor = it
             }
         }
-
-
     }
 
     Card(
@@ -191,25 +183,6 @@ fun ItemIntercambio(
                         modifier = Modifier.size(110.dp)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        modifier = Modifier
-                            .size(110.dp, 35.dp)
-                            .alpha(0.8f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFFFFA500),
-                            contentColor = Color.Black
-                        ),
-                        onClick = {
-                            intercambiosViewModel.realizarIntercambio(cromoEmisor, cromoRemitente)
-                            intercambiosViewModel.updateIntercambio(intercambio.idIntercambio, aceptar )
-                            intercambiosViewModel.updateEstado(intercambio.idIntercambio)
-
-                        }
-                    ) {
-                        Text(
-                            text = aceptar,
-                        )
-                    }
                 }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -240,7 +213,7 @@ fun ItemIntercambio(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
-                            intercambiosViewModel.nombreLocal()?.let {
+                            historialViewModel.nombreLocal()?.let {
                                 Text(
                                     text = it,
                                     color = Color.Black
@@ -264,26 +237,10 @@ fun ItemIntercambio(
                         modifier = Modifier.size(110.dp)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        modifier = Modifier
-                            .size(110.dp, 35.dp)
-                            .alpha(0.8f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFFFFA500),
-                            contentColor = Color.Black
-                        ),
-                        onClick = {
-                            intercambiosViewModel.updateIntercambio(intercambio.idIntercambio, rechazar )
-                            intercambiosViewModel.updateEstado(intercambio.idIntercambio)
-                        }
-                    ) {
-                        Text(
-                            text = rechazar,
-                        )
-                    }
                 }
 
             }
         }
     }
 }
+

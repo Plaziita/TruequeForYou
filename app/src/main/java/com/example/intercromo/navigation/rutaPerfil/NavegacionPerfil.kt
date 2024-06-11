@@ -1,16 +1,17 @@
 package com.example.intercromo.navigation.rutaPerfil
 
-import PantallaIntercambios
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.intercromo.dao.CromoRepository
+import com.example.intercromo.dao.IntercambiosRepository
 import com.example.intercromo.dao.UsuarioRepository
 import com.example.intercromo.navigation.manejadorRutas.Rutas
 import com.example.intercromo.presentation.editarCromo.EditarCromoViewModel
-import com.example.intercromo.presentation.perfil.PantallaHistorial
 import com.example.intercromo.presentation.perfil.PantallaPerfil
+import com.example.intercromo.presentation.perfil.historial.HistorialViewModel
+import com.example.intercromo.presentation.perfil.historial.PantallaHistorial
 import com.example.intercromo.presentation.perfil.misCromos.MisCromosViewModel
 import com.example.intercromo.presentation.perfil.misCromos.PantallaMisCromos
 import com.example.intercromo.presentation.perfil.modificarPerfil.ModificarPerfilScreen
@@ -22,6 +23,7 @@ fun NavGraphBuilder.NavegacionPerfil(controllerOpciones: NavHostController){
 
     val cromorepository = CromoRepository()
     val usuarioRepository = UsuarioRepository(controllerOpciones)
+    val intercambiosRepository = IntercambiosRepository(controllerOpciones)
 
     navigation(
         route = Rutas.PERFIL,
@@ -32,10 +34,8 @@ fun NavGraphBuilder.NavegacionPerfil(controllerOpciones: NavHostController){
            PantallaMisCromos(controllerOpciones,viewmodelAdquisiciones)
         }
         composable(route = VentanasPerfil.HistorialScreen.ruta) {
-            PantallaHistorial(controllerOpciones)
-        }
-        composable(route = VentanasPerfil.TransferenciasScreen.ruta) {
-            PantallaIntercambios(controllerOpciones)
+            val historialViewModel = HistorialViewModel(intercambiosRepository,cromorepository,usuarioRepository)
+            PantallaHistorial(controllerOpciones,historialViewModel)
         }
         composable(route = VentanasPerfil.ModificarScreen.ruta){
             val viewmodelModificar = ModificarViewModel(usuarioRepository)

@@ -90,17 +90,19 @@ fun PantallaCromo(controller: NavController, viewModel: CromoScreenViewModel) {
                     .size(35.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                contentDescription = "Favorite Icon",
-                tint = if (isFavorite) Color.Red else Color.Black,
-                modifier = Modifier
-                    .size(35.dp)
-                    .clickable {
-                        isFavorite = !isFavorite
-                        viewModel.updateFavoriteStatus(cromoId)
-                    }
-            )
+            if (cromo?.idUsuario != currentUser) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = "Favorite Icon",
+                    tint = if (isFavorite) Color.Red else Color.Black,
+                    modifier = Modifier
+                        .size(35.dp)
+                        .clickable {
+                            isFavorite = !isFavorite
+                            viewModel.updateFavoriteStatus(cromoId)
+                        }
+                )
+            }
             Spacer(modifier = Modifier.width(20.dp))
             if (cromo?.idUsuario == currentUser) {
                 Box(modifier = Modifier.size(35.dp)) {

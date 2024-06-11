@@ -95,6 +95,50 @@ class IntercambiosRepository(controller: NavController) {
         return Pair(intercambiosRecibidos, cromoIds)
     }
 
+    suspend fun getHistorialIntercambios(): Pair<List<Intercambios>, List<String>> {
+        val user = auth.currentUser?.uid
+        val intercambiosRecibidos = mutableListOf<Intercambios>()
+        val cromoIds = mutableListOf<String>()
+
+        if (user != null) {
+            try {
+                val querySnapshot = intercambios
+                    .whereEqualTo("idUserRemitente", user)
+                    .whereEqualTo("estado", "aceptada")
+                    .get()
+                    .await()
+
+                for (document in querySnapshot.documents) {
+                    val data = document.data
+                    if (data != null) {
+                        val idUserEmisor = data["idUserEmisor"] as String
+                        val idUserRemitente = data["idUserRemitente"] as String
+                        val idCromoEmisor = data["idCromoEmisor"] as String
+                        val idCromoRemitente = data["idCromoRemitente"] as String
+                        val estado = data["estado"] as String
+                        val idIntercambio = data["idIntercambio"] as String
+
+                        val intercambio = Intercambios(
+                            idUserEmisor = idUserEmisor,
+                            idUserRemitente = idUserRemitente,
+                            idCromoEmisor = idCromoEmisor,
+                            idCromoRemitente = idCromoRemitente,
+                            estado = estado,
+                            idIntercambio
+                        )
+
+                        intercambiosRecibidos.add(intercambio)
+                        cromoIds.add(idCromoEmisor)
+                        cromoIds.add(idCromoRemitente)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("InterCromo", "Error al obtener intercambios: ${e.localizedMessage}")
+            }
+        }
+        return Pair(intercambiosRecibidos, cromoIds)
+    }
+
     suspend fun updateIntercambio(intercambioId: String, accion: String) {
         try {
             // Verificar si el intercambio existe
