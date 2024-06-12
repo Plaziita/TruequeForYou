@@ -3,6 +3,7 @@ package com.example.intercromo.dao
 import android.util.Log
 import com.example.intercromo.model.Cromo
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -13,6 +14,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.util.Calendar
 
 class CromoRepository {
 
@@ -26,6 +29,7 @@ class CromoRepository {
     private val CAMPO_NOMBREUSUARIO = "id_usuario"
     private val CAMPO_FAVORITO = "favorito"
     private val CAMPO_ID = "cromoId"
+    private val CAMPO_TIMESTAMP = "timestamp"
 
     private val db = FirebaseFirestore.getInstance()
     private val cromos = db.collection(COLECCION_CROMOS)
@@ -43,6 +47,8 @@ class CromoRepository {
                 val nombreUsuario = document.getString(CAMPO_NOMBREUSUARIO) ?: ""
                 val favorito = document.getBoolean(CAMPO_FAVORITO) ?: false
                 val cromoId = document.getString(CAMPO_ID)  ?:""
+                val timestamp = document.getTimestamp(CAMPO_TIMESTAMP) ?: Timestamp.now()
+
 
                 val cromo = Cromo(
                     nombre,
@@ -51,7 +57,8 @@ class CromoRepository {
                     categoria,
                     nombreUsuario,
                     favorito,
-                    cromoId
+                    cromoId,
+                    timestamp
                 )
 
                 listaCromos.add(cromo)
@@ -119,6 +126,53 @@ class CromoRepository {
         } else {
             Log.d("InterCromo", "Usuario no autenticado.")
             return emptyList()
+        }
+    }
+
+    suspend fun getCromosRecientes(): List<Cromo> {
+        //Usamos corrutina para mejorar el rendimiento
+        return withContext(Dispatchers.IO) {
+            val unaSemanaAtras = Calendar.getInstance().apply {
+                add(Calendar.DAY_OF_YEAR, -7)
+            }.time
+            val timestampUnaSemanaAtras = Timestamp(unaSemanaAtras)
+
+            try {
+                val querySnapshot = cromos
+                    .whereGreaterThanOrEqualTo(CAMPO_TIMESTAMP, timestampUnaSemanaAtras)
+                    .orderBy(CAMPO_TIMESTAMP, com.google.firebase.firestore.Query.Direction.DESCENDING)
+                    .get()
+                    .await()
+
+                val listaCromosRecientes = mutableListOf<Cromo>()
+                for (document in querySnapshot) {
+                    val nombre = document.getString(CAMPO_NOMBRE) ?: ""
+                    val descripcion = document.getString(CAMPO_DESCRIPCION) ?: ""
+                    val imagen = document.getString(CAMPO_IMAGEN) ?: ""
+                    val categoria = document.getString(CAMPO_CATEGORIA) ?: ""
+                    val nombreUsuario = document.getString(CAMPO_NOMBREUSUARIO) ?: ""
+                    val favorito = document.getBoolean(CAMPO_FAVORITO) ?: false
+                    val cromoId = document.getString(CAMPO_ID) ?: ""
+                    val timestamp = document.getTimestamp(CAMPO_TIMESTAMP) ?: Timestamp.now()
+
+                    val cromo = Cromo(
+                        nombre,
+                        descripcion,
+                        imagen,
+                        categoria,
+                        nombreUsuario,
+                        favorito,
+                        cromoId,
+                        timestamp
+                    )
+
+                    listaCromosRecientes.add(cromo)
+                }
+                listaCromosRecientes
+            } catch (e: Exception) {
+                Log.e(TAG, "Error al obtener los cromos recientes", e)
+                emptyList<Cromo>()
+            }
         }
     }
 

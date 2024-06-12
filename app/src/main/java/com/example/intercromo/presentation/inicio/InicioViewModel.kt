@@ -13,27 +13,22 @@ class InicioViewModel(cromoRepository: CromoRepository) : ViewModel() {
 
     val listaCromos: MutableState<List<Cromo>> = mutableStateOf(listOf())
     val cromosFiltrados: MutableState<List<Cromo>> = mutableStateOf(listOf())
+    val cromosRecientes : MutableState<List<Cromo>> = mutableStateOf(listOf())
     val query:MutableState<String> = mutableStateOf("")
 
     init {
         viewModelScope.launch {
             listaCromos.value = cromoRepository.getCromos()
+            cromosRecientes.value = cromoRepository.getCromosRecientes()
             Log.e("query",query.value)
         }
     }
 
     fun queryChanged(queryp: String){
         query.value = queryp
+    }
 
-    }
-    fun filtrarCromos(query: String) {
-        cromosFiltrados.value = if (query.isEmpty()) {
-            emptyList()
-        } else {
-            listaCromos.value.filter { cromo ->
-                cromo.nombre.contains(query, ignoreCase = true) || cromo.categoria.contains(query, ignoreCase = true)
-            }
-        }
-    }
+
+
 
 }

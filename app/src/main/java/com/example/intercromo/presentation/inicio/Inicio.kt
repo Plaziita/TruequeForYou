@@ -220,7 +220,7 @@ fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
        fun Recientes(viewModel: InicioViewModel, navController: NavController) {
 
            //val scrollState = rememberScrollState()
-           var listaCromos = viewModel.listaCromos.value
+           var listaCromos = viewModel.cromosRecientes.value
 
            Row(
                modifier = Modifier
