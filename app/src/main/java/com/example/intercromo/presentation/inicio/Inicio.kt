@@ -66,7 +66,7 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
             .padding(8.dp)
     ) {
         Spacer(modifier = Modifier.height(8.dp))
-        SearchBar(navController,viewModel)
+        SearchBar(navController, viewModel)
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(
             modifier = Modifier
@@ -74,10 +74,10 @@ fun PantallaInicio(viewModel: InicioViewModel, navController: NavController) {
                 .background(Color.White)
         ) {
             item {
-                Recientes(viewModel,navController)
+                Recientes(viewModel, navController)
             }
             item {
-                MostrarCromos(viewModel,navController)
+                MostrarCromos(viewModel, navController)
             }
         }
     }
@@ -98,7 +98,8 @@ fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
     ) {
         TextField(
             value = query,
-            onValueChange = { viewModel.queryChanged(it)
+            onValueChange = {
+                viewModel.queryChanged(it)
             },
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
@@ -149,119 +150,121 @@ fun SearchBar(navController: NavController, viewModel: InicioViewModel) {
 }
 
 
+@Composable
+fun ItemCromo(cromo: Cromo, navController: NavController) {
+
+    Card(
+        modifier = Modifier
+            .size(200.dp, 300.dp)
+            .padding(16.dp)
+            .clickable {
+                navController.navigate(
+                    "${
+                        VentanasInicio.CromoScreen.ruta.replace(
+                            "{cromo}",
+                            cromo.cromoId
+                        )
+                    }"
+                )
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            Column(modifier = Modifier.padding(8.dp)) {
+                AsyncImage(
+                    model = cromo.imagen,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(Color.Black)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Autorenew,
+                        contentDescription = "Icono tradear",
+                        tint = Color.Black,
+                    )
+                    Text(
+                        text = cromo.categoria,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFFFA500),
+                        modifier = Modifier.alpha(0.8f)
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Carta / Cromo",
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = cromo.nombre,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun Recientes(viewModel: InicioViewModel, navController: NavController) {
+
+    //val scrollState = rememberScrollState()
+    var listaCromos = viewModel.cromosRecientes.value
+    if (listaCromos.size != 0) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Restore,
+                contentDescription = "Icono recientes",
+                tint = Color.Black,
+                modifier = Modifier.size(40.dp)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = "Recientes",
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                fontSize = 20.sp
+            )
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = "Icono",
+                tint = Color.Black,
+                modifier = Modifier.size(40.dp)
+            )
+        }
+
+        LazyRow(
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .padding(start = 8.dp)
+                .padding(end = 8.dp)
+                .fillMaxWidth()
+        ) {
+            items(listaCromos) {
+                ItemCromo(cromo = it, navController)
+            }
+        }
+    }else{
+        //do nothing
+    }
 
 
-       @Composable
-       fun ItemCromo(cromo: Cromo, navController: NavController) {
-
-           Card(
-               modifier = Modifier
-                   .size(200.dp, 300.dp)
-                   .padding(16.dp)
-                   .clickable {
-                       navController.navigate(
-                           "${
-                               VentanasInicio.CromoScreen.ruta.replace(
-                                   "{cromo}",
-                                   cromo.cromoId
-                               )
-                           }"
-                       )
-                   }
-           ) {
-               Box(
-                   modifier = Modifier
-                       .fillMaxSize()
-                       .background(Color.White)
-               ) {
-                   Column(modifier = Modifier.padding(8.dp)) {
-                       AsyncImage(
-                           model = cromo.imagen,
-                           contentDescription = null,
-                           modifier = Modifier
-                               .size(150.dp)
-                               .clip(MaterialTheme.shapes.medium)
-                               .background(Color.Black)
-                       )
-                       Spacer(modifier = Modifier.height(16.dp))
-                       Row(
-                           horizontalArrangement = Arrangement.Center,
-                           verticalAlignment = Alignment.CenterVertically
-                       ) {
-                           Icon(
-                               imageVector = Icons.Default.Autorenew,
-                               contentDescription = "Icono tradear",
-                               tint = Color.Black,
-                           )
-                           Text(
-                               text = cromo.categoria,
-                               fontWeight = FontWeight.Bold,
-                               color = Color(0xFFFFA500),
-                               modifier = Modifier.alpha(0.8f)
-                           )
-                       }
-                       Spacer(modifier = Modifier.height(8.dp))
-                       Text(
-                           text = "Carta / Cromo",
-                           fontWeight = FontWeight.Bold
-                       )
-                       Spacer(modifier = Modifier.height(8.dp))
-                       Text(
-                           text = cromo.nombre,
-                           fontWeight = FontWeight.Bold,
-                           color = Color.Black
-                       )
-                   }
-               }
-           }
-       }
-
-       @Composable
-       fun Recientes(viewModel: InicioViewModel, navController: NavController) {
-
-           //val scrollState = rememberScrollState()
-           var listaCromos = viewModel.cromosRecientes.value
-
-           Row(
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .padding(8.dp),
-               verticalAlignment = Alignment.CenterVertically
-           ) {
-               Icon(
-                   imageVector = Icons.Default.Restore,
-                   contentDescription = "Icono recientes",
-                   tint = Color.Black,
-                   modifier = Modifier.size(40.dp)
-               )
-               Spacer(modifier = Modifier.width(16.dp))
-               Text(
-                   text = "Recientes",
-                   fontWeight = FontWeight.Bold,
-                   color = Color.Black,
-                   fontSize = 20.sp
-               )
-               Icon(
-                   imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                   contentDescription = "Icono",
-                   tint = Color.Black,
-                   modifier = Modifier.size(40.dp)
-               )
-           }
-
-           LazyRow(
-               modifier = Modifier
-                   .padding(vertical = 8.dp)
-                   .padding(start = 8.dp)
-                   .padding(end = 8.dp)
-                   .fillMaxWidth()
-           ) {
-               items(listaCromos) {
-                   ItemCromo(cromo = it, navController)
-               }
-           }
-
-       }
+}
 
 @Composable
 fun MostrarCromos(viewModel: InicioViewModel, navController: NavController) {
