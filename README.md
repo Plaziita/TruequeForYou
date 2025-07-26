@@ -19,11 +19,6 @@
 - **Base de datos:** Firebase Firestore
 - **Autenticación:** Firebase Auth
 - **Almacenamiento de imágenes:** Firebase Storage
-- **Notificaciones:** Firebase Cloud Messaging (FCM)
-- **Inyección de dependencias:** Dagger Hilt / Koin (dependiendo de tu elección)
-- **Corrutinas:** Kotlin Coroutines + Flow
-- **UI:** Jetpack Compose / XML (según implementación)
+- **UI:** Jetpack Compose
 - **Navegación:** Jetpack Navigation Component
-
-## 📦 Estructura del Proyecto
 
